@@ -48,4 +48,16 @@ router.delete("/user/:id", async (req, res) => {
   res.json({ data: deletedUser, status: "success" });
 });
 
+
+// signin user
+router.post("/signin", async (req, res) => {
+  
+  const user = await User.findOne({ phone_number: req.body.phone_number });
+  // console.log(user.password)
+  if (user.password === req.body.password) {
+    res.json({ data: user, success: true });
+  } else {
+    res.json({ data: "Invalid Credentials", status: "failed" });
+  }
+});
 export default router;
