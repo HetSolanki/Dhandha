@@ -9,17 +9,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createUser } from "../../Handlers/SignUpHandler";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const newUser = await createUser(data);
+    console.log(newUser);
   };
 
   return (
@@ -51,20 +50,21 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="Username"
+                  id="phone"
+                  label="Phone Number"
+                  name="phone_number"
+                  autoComplete="Phone Number"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="phone"
-                  label="Phone Number"
-                  name="phone"
-                  autoComplete="Phone Number"
+                  id="email"
+                  label="Email"
+                  name="email"
+                  type="email"
+                  autoComplete="Email"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -82,7 +82,7 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="re-password"
+                  name="confirm-password"
                   label="Confirm Password"
                   type="password"
                   id="re-password"
@@ -93,6 +93,7 @@ export default function SignUp() {
             <Button
               type="submit"
               fullWidth
+              onSubmit={handleSubmit}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
