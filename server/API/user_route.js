@@ -4,9 +4,9 @@ import User from "./Schema/user.js";
 const router = Router();
 
 // Get All the Users
-router.get("/user", async (req, res) => {
+router.get("/userall", async (req, res) => {
   const allUsers = await User.find({});
-  res.json({ data: allUsers });
+  res.json({ data: allUsers, status: "success" });
 });
 
 // Get User by it's id
