@@ -2,7 +2,12 @@ import React from 'react'
 
 const home = () => {
   return (
-    <div>home</div>
+    <div>DP home
+
+      <form action="">
+        <textarea name="description" id=""></textarea>
+      </form>
+    </div>
   )
 }
 
