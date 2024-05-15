@@ -9,25 +9,17 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import { createUser } from "../../Handlers/SignUpHandler";
-import Success from "./Model-Popup/Success";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const newUser = await createUser(data);
 
-    if (newUser.ok) {
-      const model = document.querySelector("#statusSuccessModal");
-      model.classList.add("show", "block", "bg-black/40");
-      setTimeout(() => {
-        const model = document.querySelector("#statusSuccessModal");
-        model.classList.remove("show", "block", "bg-black/40");
-      }, 2000);
-    }
+    const newUser = await createUser(data);
   };
 
   return (
@@ -60,7 +52,7 @@ export default function SignUp() {
                   <TextField
                     required
                     fullWidth
-                    id="phone"
+                    id="phone_number"
                     label="Phone Number"
                     name="phone_number"
                     autoComplete="Phone Number"
@@ -95,7 +87,7 @@ export default function SignUp() {
                     name="confirm-password"
                     label="Confirm Password"
                     type="password"
-                    id="re-password"
+                    id="confirm-password"
                     autoComplete="Confirm Password"
                   />
                 </Grid>
@@ -120,7 +112,6 @@ export default function SignUp() {
           </Box>
         </Container>
       </ThemeProvider>
-      <Success />
     </>
   );
 }
