@@ -15,11 +15,13 @@ import { createUser } from "../../Handlers/SignUpHandler";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const newUser = await createUser(data);
+
+    console.log(await newUser.json());
   };
 
   return (
