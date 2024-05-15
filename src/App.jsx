@@ -1,7 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./Components/UI/SignIn";
 import SignUp from "./Components/UI/SignUp";
-import { Home } from "@mui/icons-material";
+import Home from "./Components/Section/Home";
 
 function App() {
   return (
@@ -9,10 +9,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-            <Route index element={<Home />} />
-            <Route path="/sign_in" element={<SignIn />} />
-            <Route path="/sign_up" element={<SignUp />} />
-            {/* <Route path="*" element={<NoPage />} /> */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </>
