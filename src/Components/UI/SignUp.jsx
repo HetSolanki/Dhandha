@@ -13,13 +13,14 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createUser } from "../../Handlers/SignUpHandler";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const formSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -39,6 +40,14 @@ export default function SignUp() {
     }
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+
+  const password = watch("password");
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -61,44 +70,68 @@ export default function SignUp() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(formSubmit)}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
+                    error={errors.phone_number}
                     required
                     fullWidth
                     id="phone_number"
                     label="Phone Number"
                     name="phone_number"
                     autoComplete="Phone Number"
+                    {...register("phone_number", {
+                      required: "Phone Number is required",
+                    })}
                   />
+                  {errors.phone_number && (
+                    <p className="error">{errors.phone_number.message}</p>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    required
+                    error={errors.email}
                     fullWidth
                     id="email"
                     label="Email"
                     name="email"
                     type="email"
                     autoComplete="Email"
+                    {...register("email", {
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Entered value does not match email format",
+                      },
+                    })}
                   />
+                  {errors.email && (
+                    <p className="error">{errors.email.message}</p>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    error={errors.password}
                     required
                     fullWidth
                     name="password"
                     label="Password"
                     type="password"
                     id="password"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
                     autoComplete="new-password"
                   />
+                  {errors.password && (
+                    <p className="error">{errors.password.message}</p>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    error={errors.confirmPassword}
                     required
                     fullWidth
                     name="confirm-password"
@@ -106,7 +139,16 @@ export default function SignUp() {
                     type="password"
                     id="confirm-password"
                     autoComplete="Confirm Password"
+                    {...register("confirmPassword", {
+                      required: "Please confirm your password",
+                      validate: (value) => {
+                        return value === password || "Passwords do not match";
+                      },
+                    })}
                   />
+                  {errors.confirmPassword && (
+                    <p className="error">{errors.confirmPassword.message}</p>
+                  )}
                 </Grid>
               </Grid>
               <Button
@@ -119,7 +161,7 @@ export default function SignUp() {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signin" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
