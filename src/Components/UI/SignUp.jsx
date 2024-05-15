@@ -11,17 +11,32 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { createUser } from "../../Handlers/SignUpHandler";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const newUser = await createUser(data);
 
-    console.log(await newUser.json());
+    if (newUser.status === "success") {
+      toast.success("Registered Successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+        onClose: () => {
+          navigate("/");
+        },
+      });
+    }
   };
 
   return (
@@ -97,7 +112,6 @@ export default function SignUp() {
               <Button
                 type="submit"
                 fullWidth
-                onSubmit={handleSubmit}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
@@ -114,6 +128,7 @@ export default function SignUp() {
           </Box>
         </Container>
       </ThemeProvider>
+      <ToastContainer />
     </>
   );
 }
