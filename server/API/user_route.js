@@ -1,57 +1,57 @@
 import { Router } from "express";
 import User from "./Schema/user.js";
+import { body } from "express-validator";
+import {
+  getAllUser,
+  getOneUser,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "./Handlers/User.js";
+import { inputErrorHandler } from "./Module/middleware.js";
 
 const router = Router();
 
 // Get All the Users
-router.get("/userall", async (req, res) => {
-  const allUsers = await User.find({});
-  res.json({ data: allUsers, status: "success" });
-});
+router.get("/userall", getAllUser);
 
 // Get User by it's id
-router.get("/user/:id", async (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.json({ data: user, status: "success" });
-});
+router.get(
+  "/user",
+  [body("phone_number").exists(), body("password").exists()],
+  inputErrorHandler,
+  getOneUser
+);
 
 // Create User
-router.post("/user", async (req, res) => {
-  console.log(req.body);
-  const newUser = await User.create({
-    phone_number: req.body.phone_number,
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  res.json({ data: newUser, status: "success" });
-});
+router.post(
+  "/user",
+  [
+    body("phone_number").exists(),
+    body("email").optional(),
+    body("password").exists(),
+  ],
+  inputErrorHandler,
+  createUser
+);
 
 // Update User
-router.put("/user/:id", async (req, res) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      phone_number: req.body.phone_number,
-      email: req.body.email,
-      password: req.body.password,
-    },
-    { new: true }
-  );
-
-  res.json({ data: updatedUser, status: "success" });
-});
+router.put(
+  "/user/:id",
+  [
+    body("phone_number").optional(),
+    body("email").optional(),
+    body("password").optional(),
+  ],
+  inputErrorHandler,
+  updateUser
+);
 
 // Delete User
-router.delete("/user/:id", async (req, res) => {
-  const deletedUser = await User.findByIdAndDelete(req.params.id);
-  res.json({ data: deletedUser, status: "success" });
-});
-
+router.delete("/user/:id", deleteUser);
 
 // signin user
 router.post("/signin", async (req, res) => {
-  
   const user = await User.findOne({ phone_number: req.body.phone_number });
   // console.log(user.password)
   if (user.password === req.body.password) {
