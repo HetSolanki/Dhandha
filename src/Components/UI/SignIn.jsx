@@ -38,6 +38,23 @@ export default function SignIn() {
         },
       });
     }
+    else if(signin.data === "Invalid Credentials"){
+      toast.error("Invalid Credentials", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+      });
+    }else if(signin.data === "Invalid Username"){
+      toast.error("Invalid Username", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+      });
+    }
 
     console.log({
       email: data.get("phone_number"),
