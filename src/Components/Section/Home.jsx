@@ -1,9 +1,11 @@
-const Home = () => {
-  return (
-    <div>
-      <h1 className="text-5xl">Home</h1>
-    </div>
-  );
-};
+import { useCookies } from 'react-cookie'
+import React from 'react'
 
-export default Home;
+const Home = () => {
+  const [cookies, setCookie] = useCookies(['username'])
+  return (
+    <div>Welcome {cookies.username}</div>
+  )
+}
+
+export default Home
