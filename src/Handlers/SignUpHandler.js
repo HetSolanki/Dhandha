@@ -5,13 +5,11 @@ export const createUser = async (data) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      phone_number: data.get("phone_number"),
-      email: data.get("email"),
-      password: data.get("password"),
+      phone_number: data.phone_number,
+      email: data.email,
+      password: data.password,
     }),
   });
 
-  console.log("Called");
-  console.log(user);
   return user.json();
 };

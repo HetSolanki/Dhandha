@@ -1,11 +1,9 @@
-import { useCookies } from 'react-cookie'
-import React from 'react'
+/* eslint-disable no-unused-vars */
+import { useCookies } from "react-cookie";
 
 const Home = () => {
-  const [cookies, setCookie] = useCookies(['username'])
-  return (
-    <div>Welcome {cookies.username}</div>
-  )
-}
+  const [cookies, setCookie] = useCookies(["token"]);
+  return <div>Welcome {cookies.token}</div>;
+};
 
-export default Home
+export default Home;

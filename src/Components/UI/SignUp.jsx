@@ -20,10 +20,8 @@ const defaultTheme = createTheme();
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const formSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
+  const formSubmit = async (data) => {
+    console.log(data);
     const newUser = await createUser(data);
 
     if (newUser.status === "success") {
@@ -37,6 +35,7 @@ export default function SignUp() {
           navigate("/");
         },
       });
+      localStorage.setItem("token", newUser.token);
     }
   };
 

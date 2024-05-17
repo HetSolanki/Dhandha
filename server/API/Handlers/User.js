@@ -1,4 +1,6 @@
+import { createJWT, hashPassword } from "../Module/auth.js";
 import User from "../Schema/user.js";
+import { comparePassword } from "../Module/auth.js";
 
 export const getAllUser = async (req, res) => {
   try {
@@ -15,13 +17,18 @@ export const getOneUser = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const newUser = await User.create({
-    phone_number: req.body.phone_number,
-    email: req.body.email,
-    password: req.body.password,
-  });
+  try {
+    const newUser = await User.create({
+      phone_number: req.body.phone_number,
+      email: req.body.email,
+      password: await hashPassword(req.body.password),
+    });
 
-  res.json({ data: newUser, status: "success" });
+    const token = createJWT(newUser);
+    res.json({ token, status: "success" });
+  } catch (error) {
+    res.json({ error });
+  }
 };
 
 export const updateUser = async (req, res) => {
@@ -41,4 +48,23 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
   res.json({ data: deletedUser, status: "success" });
+};
+
+export const signIn = async (req, res) => {
+  try {
+    const user = await User.findOne({ phone_number: req.body.phone_number });
+
+    if (user) {
+      if (await comparePassword(req.body.password, user.password)) {
+        const token = createJWT(user);
+        res.json({ token, success: true });
+      } else {
+        res.json({ data: "Invalid Credentials", status: "failed" });
+      }
+    } else {
+      res.json({ data: "Invalid Username", status: "failed" });
+    }
+  } catch (error) {
+    res.json({ error });
+  }
 };

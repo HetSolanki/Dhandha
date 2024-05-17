@@ -18,31 +18,27 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
-
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [cookies, setCookie] = useCookies(['username'])
+  const [cookies, setCookie] = useCookies(["token"]);
   let phone_numberInput = document.getElementById("phone_number");
   let passwordInput = document.getElementById("password");
   const navigate = useNavigate();
 
-//   console.log(get('username'))
- useEffect(() => {
-  if(cookies.username) {
-    navigate("/");
-  }else{
-    navigate("/signin");
-  }
-  }, [])
+  useEffect(() => {
+    if (cookies.token) {
+      navigate("/");
+    } else {
+      navigate("/signin");
+    }
+  }, []);
 
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    
+  const formSubmit = async (data) => {
     const signin = await signinuser(data);
+
     console.log(signin);
+
     if (signin.success === true) {
       toast.success("Login Successful", {
         position: "top-right",
@@ -54,11 +50,11 @@ export default function SignIn() {
           navigate("/");
         },
       });
-      phone_numberInput = data.get("phone_number");
-      passwordInput = data.get("password");
+      localStorage.setItem("token", signin.token);
+      phone_numberInput = data.phone_number;
+      passwordInput = data.password;
       console.log(phone_numberInput);
       lsRememberMe(phone_numberInput, passwordInput);
-
     } else if (signin.data === "Invalid Credentials") {
       toast.error("Invalid Credentials", {
         position: "top-right",
@@ -76,42 +72,48 @@ export default function SignIn() {
         theme: "light",
       });
     }
-
-    console.log({
-      phone_number: data.get("phone_number"),
-      password: data.get("password"),
-      success: signin.success,
-    });
   };
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      phone_number: "",
+      password: "",
+    },
+  });
 
-  
   const [rmCheck, setRmCheck] = useState(false);
   const handlecheckchange = (event) => {
-    console.log(event.target.checked)
+    console.log(event.target.checked);
     if (event.target.checked) {
       setRmCheck(true);
-    }
-    else {
+    } else {
       setRmCheck(false);
     }
   };
 
-  const lsRememberMe =  (phone_number, password) => {
-    console.log(rmCheck)
-    if (rmCheck === true && phone_number.value !== "" && password.value !== "") {
-      setCookie('username',phone_number,{ path: '/', expires: new Date(Date.now() + 900000)})
-      console.log("Cookies Set")
-      console.log(cookies.username)
+  const lsRememberMe = (phone_number, password) => {
+    let expiresdate = new Date();
+    expiresdate.setTime(expiresdate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    if (
+      rmCheck === true &&
+      phone_number.value !== "" &&
+      password.value !== ""
+    ) {
+      setCookie("token", localStorage.getItem("token"), {
+        path: "/",
+        expires: expiresdate,
+      });
+      console.log("Cookies Set");
+      console.log(cookies.username);
     } else {
-      console.log("Not checked")
+      console.log("Not checked");
     }
-  }
+  };
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -133,46 +135,58 @@ export default function SignIn() {
             </Typography>
             <Box
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(formSubmit)}
               noValidate
-              sx={{ mt: 1 }}
+              sx={{ mt: 3 }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="phone_number"
-                label="phone_number"
-                name="phone_number"
-                // autoFocus
-                // error={errors.phone_number}
-                autoComplete="Phone Number"
-                //   {...register("phone_number", {
-                //     required: "Phone Number is required",
-                //   })}
-              />
-              {/* //  {errors.phone_number && (
-              //       <p className="error">{errors.phone_number.message}</p>
-              //     )} */}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                // {...register("password", {
-                //   required: "Password is required",
-                // })}
-                // error={errors.password}
-              />
-              {/* {errors.password && (
+              <Grid container>
+                <Grid item xs={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="phone_number"
+                    label="phone_number"
+                    name="phone_number"
+                    error={errors.phone_number}
+                    autoComplete="Phone Number"
+                    {...register("phone_number", {
+                      required: "Phone Number is required",
+                    })}
+                  />
+                  {errors.phone_number && (
+                    <p className="error">{errors.phone_number.message}</p>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
+                    error={errors.password}
+                  />
+                  {errors.password && (
                     <p className="error">{errors.password.message}</p>
-                  )} */}
+                  )}
+                </Grid>
+              </Grid>
               <FormControlLabel
-                control={<Checkbox value="remember" checked={rmCheck} onChange={handlecheckchange} color="primary" />}
+                control={
+                  <Checkbox
+                    value="remember"
+                    checked={rmCheck}
+                    onChange={handlecheckchange}
+                    color="primary"
+                  />
+                }
                 label="Remember me"
               />
               <Button

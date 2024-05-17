@@ -1,5 +1,4 @@
 import { Router } from "express";
-import User from "./Schema/user.js";
 import { body } from "express-validator";
 import {
   getAllUser,
@@ -7,8 +6,10 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  signIn,
 } from "./Handlers/User.js";
 import { inputErrorHandler } from "./Module/middleware.js";
+import { protect } from "./Module/auth.js";
 
 const router = Router();
 
@@ -51,19 +52,10 @@ router.put(
 router.delete("/user/:id", deleteUser);
 
 // signin user
-router.post("/signin", async (req, res) => {
-  const user = await User.findOne({ phone_number: req.body.phone_number });
-
-
-  if (user){
-    if (user.password === req.body.password) {
-      res.json({ data: user, success: true });
-    } else {
-      res.json({ data: "Invalid Credentials", status: "failed" });
-    }
-  }else{
-    res.json({ data: "Invalid Username", status: "failed" });
-  } 
-
-});
+router.post(
+  "/signin",
+  [body("phone_number").exists(), body("password").exists()],
+  inputErrorHandler,
+  signIn
+);
 export default router;
