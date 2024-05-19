@@ -28,7 +28,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (cookies.token) {
-      navigate("/");
+      navigate("/dashboard");
     } else {
       navigate("/signin");
     }
@@ -47,7 +47,7 @@ export default function SignIn() {
         closeOnClick: true,
         theme: "light",
         onClose: () => {
-          navigate("/");
+          navigate("/dashboard");
         },
       });
       localStorage.setItem("token", signin.token);
