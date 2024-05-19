@@ -1,5 +1,5 @@
 export const createUser = async (data) => {
-  const user = await fetch("http://localhost:3001/api/user", {
+  const user = await fetch("http://localhost:3001/api/auth/user", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

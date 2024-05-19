@@ -18,8 +18,7 @@ router.get("/userall", getAllUser);
 
 // Get User by it's id
 router.get(
-  "/user",
-  inputErrorHandler,
+  "/user/:id",
   getOneUser
 );
 
