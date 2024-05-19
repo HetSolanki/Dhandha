@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CircleUser, Menu, Package2, Search, Users } from "lucide-react";
-import { Button } from "@/Components/UI/button";
+import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,15 +8,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/Components/UI/dropdown-menu";
-import { Input } from "@/Components/UI/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/Components/UI/sheet";
+} from "@/Components/UI/shadcn-UI/dropdown-menu";
+import { Input } from "@/Components/UI/shadcn-UI/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [cookies,removeCookie] = useCookies(["token"]);
+  const [cookies, removeCookie] = useCookies(["token"]);
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -143,8 +147,7 @@ const Navbar = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  if(localStorage.getItem("token")
-                  ){
+                  if (localStorage.getItem("token")) {
                     localStorage.removeItem("token");
                   }
                   navigate("/signin");

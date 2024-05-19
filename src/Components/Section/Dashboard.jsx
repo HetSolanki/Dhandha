@@ -1,15 +1,25 @@
 import { Link } from "react-router-dom";
-import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/UI/avatar";
-import { Badge } from "@/Components/UI/badge";
-import { Button } from "@/Components/UI/button";
+import {
+  Activity,
+  ArrowUpRight,
+  CreditCard,
+  DollarSign,
+  Users,
+} from "lucide-react";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/Components/UI/shadcn-UI/avatar";
+import { Badge } from "@/Components/UI/shadcn-UI/badge";
+import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/Components/UI/card";
+} from "@/Components/UI/shadcn-UI/card";
 import {
   Table,
   TableBody,
@@ -17,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/Components/UI/table";
+} from "@/Components/UI/shadcn-UI/table";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";

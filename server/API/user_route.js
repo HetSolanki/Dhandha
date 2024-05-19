@@ -61,4 +61,5 @@ router.post(
   inputErrorHandler,
   signIn
 );
+
 export default router;

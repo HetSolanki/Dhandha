@@ -9,7 +9,7 @@ export const getAllUser = async (req, res) => {
   } catch (error) {
     res.json({ message: "Error" });
   }
-};
+};    
 
 export const getOneUser = async (req, res) => {
   const user = await User.findById(req.params.id);

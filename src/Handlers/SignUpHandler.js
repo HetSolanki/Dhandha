@@ -5,6 +5,8 @@ export const createUser = async (data) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      fname: data.fname,
+      lname: data.lname,
       phone_number: data.phone_number,
       email: data.email,
       password: data.password,
