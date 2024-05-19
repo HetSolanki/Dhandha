@@ -1,11 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  CircleUser,
-  Menu,
-  Package2,
-  Search,
-  Users,
-} from "lucide-react";
+import { CircleUser, Menu, Package2, Search, Users } from "lucide-react";
 import { Button } from "@/Components/UI/button";
 import {
   DropdownMenu,
@@ -17,8 +11,12 @@ import {
 } from "@/Components/UI/dropdown-menu";
 import { Input } from "@/Components/UI/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/UI/sheet";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [cookies,removeCookie] = useCookies(["token"]);
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -29,7 +27,12 @@ const Navbar = () => {
           >
             {/* <Package2 className="h-6 w-6" />
              */}
-            <h4 className="scroll-m-20 text-xl font-semibold tracking-tight" id="titleheading">Dashboard</h4>
+            <h4
+              className="scroll-m-20 text-xl font-semibold tracking-tight"
+              id="titleheading"
+            >
+              Dashboard
+            </h4>
             <span className="sr-only">Acme Inc</span>
           </Link>
           <Link
@@ -56,7 +59,7 @@ const Navbar = () => {
           >
             Products
           </Link> */}
-        
+
           {/* <Link
             to="#"
             className="text-muted-foreground transition-colors hover:text-foreground"
@@ -138,13 +141,23 @@ const Navbar = () => {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  if(localStorage.getItem("token")
+                  ){
+                    localStorage.removeItem("token");
+                  }
+                  navigate("/signin");
+                }}
+              >
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </header>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

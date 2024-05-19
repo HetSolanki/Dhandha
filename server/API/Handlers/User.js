@@ -19,6 +19,8 @@ export const getOneUser = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const newUser = await User.create({
+      fname: req.body.fname,
+      lname: req.body.lname,
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: await hashPassword(req.body.password),
@@ -35,6 +37,8 @@ export const updateUser = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.params.id,
     {
+      fname: req.body.fname,
+      lname: req.body.lname,
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: req.body.password,

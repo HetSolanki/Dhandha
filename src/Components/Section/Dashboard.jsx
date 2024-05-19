@@ -1,11 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  Activity,
-  ArrowUpRight,
-  CreditCard,
-  DollarSign,
-  Users,
-} from "lucide-react";
+import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/UI/avatar";
 import { Badge } from "@/Components/UI/badge";
 import { Button } from "@/Components/UI/button";
@@ -27,26 +21,27 @@ import {
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Navbar from "./Navbar";
 
-export function Dashboard() { 
+export function Dashboard() {
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (cookies.token) {
       // document.getElementById("titleheading").innerHTML = cookies.token
     }
-    if(!localStorage.getItem('token')){
+    if (!localStorage.getItem("token")) {
       navigate("/signin");
-    }else{
+    } else {
       // document.getElementById("titleheading").innerHTML = "Dashboard";
-      console.log(localStorage.getItem('token'))
+      console.log(localStorage.getItem("token"));
     }
-  },[])
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-    
+      <Navbar />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card x-chunk="dashboard-01-chunk-0">
