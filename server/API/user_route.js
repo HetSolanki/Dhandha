@@ -19,7 +19,6 @@ router.get("/userall", getAllUser);
 // Get User by it's id
 router.get(
   "/user",
-  [body("phone_number").exists(), body("password").exists()],
   inputErrorHandler,
   getOneUser
 );
@@ -28,6 +27,8 @@ router.get(
 router.post(
   "/user",
   [
+    body("fname").exists(),
+    body("lname").exists(),
     body("phone_number").exists(),
     body("email").optional(),
     body("password").exists(),
@@ -40,6 +41,8 @@ router.post(
 router.put(
   "/user/:id",
   [
+    body("fname").optional(),
+    body("lname").optional(),
     body("phone_number").optional(),
     body("email").optional(),
     body("password").optional(),

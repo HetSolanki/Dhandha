@@ -2,7 +2,7 @@
 import { useCookies } from "react-cookie";
 
 const Home = () => {
-  const [cookies, setCookie] = useCookies(["token"]);
+  const [cookies] = useCookies(["token"]);
   return <div>Welcome {cookies.token}</div>;
 };
 
