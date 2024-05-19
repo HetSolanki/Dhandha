@@ -1,5 +1,5 @@
 export const signinuser = async (data) => {
-  const user = await fetch("http://localhost:3001/api/signin", {
+  const user = await fetch("http://localhost:3001/api/auth/signin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
