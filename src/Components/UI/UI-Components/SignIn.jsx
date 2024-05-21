@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { signinuser } from "@/Handlers/SignInHandler";
-import { toast } from "../shadcn-UI/use-toast";
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn-UI/button";
 import {
@@ -17,31 +16,51 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/Components/UI/shadcn-UI/form";
-
-import { Toaster } from "../shadcn-UI/toaster";
 import { Input } from "../shadcn-UI/input";
 import { Label } from "../shadcn-UI/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
   phone_number: z
-    .string({
-      message: "Username is required",
-    })
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
+  .string({
+    message: "Phone Number is required",
+  })
+  .min(10, {
+    message: "Phone Number must be of 10 digits",
+  })
+  .max(10, {
+    message: "Phone Number must be of 10 digits",
+  })
+  .regex(/^[0-9]*$/, {
+    message: "Phone Number must be numeric",
+  }),
   password: z
-    .string({
-      message: "Password is required",
-    })
-    .min(2, {
-      message: "Password must be at least 2 characters.",
-    }),
+  .string({
+    message: "Password is required",
+  })
+  .min(8, {
+    message: "Password must be at least 8 characters",
+  })
+  .max(20, {
+    message: "Password must be at most 20 characters",
+  })
+  .regex(/^(?=.*[A-Z])/, {
+    message: "Password must contain at least one uppercase letter",
+  })
+  .regex(/^(?=.*[a-z])/, {
+    message: "Password must contain at least one lowercase letter",
+  })
+  .regex(/^(?=.*\d)/, {
+    message: "Password must contain at least one number",
+  })
+  .regex(/^(?=.*[!@#$%^&*])/, {
+    message: "Password must contain at least one special character",
+  }),
 });
 
 export default function SignIn() {
@@ -69,11 +88,12 @@ export default function SignIn() {
     console.log(signin);
 
     if (signin.success === true) {
-      toast({
-        title: "Success!",
-        description: "Login Successfully",
-        variant: "default",
-        duration: 2000,
+      toast.success("Login Successful", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
       });
 
       setTimeout(() => {
@@ -86,18 +106,20 @@ export default function SignIn() {
       console.log(phone_numberInput);
       lsRememberMe(phone_numberInput, passwordInput);
     } else if (signin.data === "Invalid Credentials") {
-      toast({
-        title: "Error",
-        description: "Invalid Credentials",
-        variant: "destructive",
-        duration: 2000,
+      toast.error("Invalid Credentials", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
       });
-    } else if (signin.data === "Invalid Username") {
-      toast({
-        title: "Error",
-        description: "Invalid Username",
-        variant: "destructive",
-        duration: 2000,
+    } else if (signin.data === "Invalid Phone Number") {
+      toast.error("Invalid Phone Number", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
       });
     }
   };
@@ -126,7 +148,6 @@ export default function SignIn() {
         expires: expiresdate,
       });
       console.log("Cookies Set");
-      console.log(cookies.username);
     } else {
       console.log("Not checked");
     }
@@ -151,11 +172,17 @@ export default function SignIn() {
                       name="phone_number"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="font-semibold">
-                            Username
-                          </FormLabel>
+                          <Label className="font-semibold">
+                            Phone Number
+                          </Label>
                           <FormControl>
-                            <Input name="phone_number" {...field} />
+                            <Input name="phone_number" {...field} 
+                              className={
+                                form.formState.errors.phone_number
+                                  ? "border-red-500"
+                                  : ""
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -168,7 +195,7 @@ export default function SignIn() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
+                          <Label>
                             <div className="flex items-center">
                               <Label
                                 htmlFor="password"
@@ -183,9 +210,15 @@ export default function SignIn() {
                                 Forgot your password?
                               </Link>
                             </div>
-                          </FormLabel>
+                          </Label>
                           <FormControl>
-                            <Input id="password" type="password" {...field} />
+                            <Input id="password" type="password" {...field} 
+                              className={
+                                form.formState.errors.password
+                                  ? "border-red-500"
+                                  : ""
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -218,7 +251,7 @@ export default function SignIn() {
             </Card>
           </form>
         </Form>
-        <Toaster />
+        <ToastContainer />
       </div>
     </>
   );

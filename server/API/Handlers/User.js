@@ -1,7 +1,6 @@
 import { createJWT, hashPassword } from "../Module/auth.js";
 import User from "../Schema/user.js";
 import { comparePassword } from "../Module/auth.js";
-
 export const getAllUser = async (req, res) => {
   try {
     const allUsers = await User.find({});
@@ -9,7 +8,7 @@ export const getAllUser = async (req, res) => {
   } catch (error) {
     res.json({ message: "Error" });
   }
-};    
+};
 
 export const getOneUser = async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -18,6 +17,12 @@ export const getOneUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
+    console.log(req.body.phone_number);
+
+    if (await User.findOne({ phone_number: req.body.phone_number })) {
+      return res.json({ data: "User Already Exists", status: "failed" });
+    }
+
     const newUser = await User.create({
       fname: req.body.fname,
       lname: req.body.lname,
@@ -66,7 +71,7 @@ export const signIn = async (req, res) => {
         res.json({ data: "Invalid Credentials", status: "failed" });
       }
     } else {
-      res.json({ data: "Invalid Username", status: "failed" });
+      res.json({ data: "Invalid Phone Number", status: "failed" });
     }
   } catch (error) {
     res.json({ error });
