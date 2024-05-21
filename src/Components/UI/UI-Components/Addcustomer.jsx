@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/Components/UI/shadcn-UI/dialog";
 import { Input } from "@/Components/UI/shadcn-UI/input";
 import { PlusCircle } from "lucide-react";
@@ -46,7 +47,9 @@ const formSchema = z.object({
   }),
 });
 
-export function Addcustomer() { 
+export function Addcustomer() {
+  const [openCustomer, setOpenCustomer] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
   });
@@ -58,11 +61,15 @@ export function Addcustomer() {
     if (newcustomer.status === "success") {
       alert("Customer Added Successfully");
       form.reset();
-      
+      setOpenCustomer(false);
     }
   };
   const clearfield = () => {
     form.reset();
+  };
+
+  const handleOpen = (isOpen) => {
+    setOpenCustomer(isOpen);
   };
 
   return (
@@ -70,15 +77,17 @@ export function Addcustomer() {
       onOpenChange={() => {
         clearfield;
       }}
+      open={openCustomer}
     >
-      <DialogTrigger asChild>
-        <Button size="sm" className="h-8 gap-1">
-          <PlusCircle className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Add Customer
-          </span>
-        </Button>
-      </DialogTrigger>
+      <Button size="sm" className="h-8 gap-1">
+        <PlusCircle className="h-3.5 w-3.5" />
+        <span
+          className="sr-only sm:not-sr-only sm:whitespace-nowrap"
+          onClick={() => handleOpen(true)}
+        >
+          Add Customer
+        </span>
+      </Button>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(formSubmit)}>
@@ -126,7 +135,7 @@ export function Addcustomer() {
                       <FormControl>
                         <Input
                           id="cphone_number"
-                          type="number"
+                          type="text"
                           placeholder="Customer Phone Number"
                           {...field}
                         />
@@ -209,8 +218,19 @@ export function Addcustomer() {
                 />
               </div>
             </div>
-            <DialogFooter>
-              <Button type="submit">Add Customer</Button>
+            <DialogFooter className="flex justify-between">
+              <Button type="submit" className="font-semibold">
+                Add Customer
+              </Button>
+              <DialogClose asChild>
+                <Button
+                  variant="secondary"
+                  className="font-semibold"
+                  onClick={() => handleOpen(false)}
+                >
+                  Close
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </form>
         </Form>
