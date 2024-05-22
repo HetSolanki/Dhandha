@@ -1,17 +1,6 @@
 import {
   File,
-  // Home,
-  // LineChart,
   ListFilter,
-  // MoreHorizontal,
-  // Package,
-  // Package2,
-  // PanelLeft,
-  // PlusCircle,
-  // Search,
-  // Settings,
-  // ShoppingCart,
-  // Users2,
 } from "lucide-react";
 
 import { Button } from "@/Components/UI/shadcn-UI/button";

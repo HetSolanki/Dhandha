@@ -39,12 +39,10 @@ export function Dashboard() {
 
   useEffect(() => {
     if (cookies.token) {
-      // document.getElementById("titleheading").innerHTML = cookies.token
     }
     if (!localStorage.getItem("token")) {
       navigate("/signin");
     } else {
-      // document.getElementById("titleheading").innerHTML = "Dashboard";
       console.log(localStorage.getItem("token"));
     }
   }, []);

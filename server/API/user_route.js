@@ -45,6 +45,7 @@ router.put(
     body("phone_number").optional(),
     body("email").optional(),
     body("password").optional(),
+    body("shop_name").optional()
   ],
   inputErrorHandler,
   updateUser

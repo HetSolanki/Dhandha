@@ -1,6 +1,7 @@
 import { createJWT, hashPassword } from "../Module/auth.js";
 import User from "../Schema/user.js";
 import { comparePassword } from "../Module/auth.js";
+
 export const getAllUser = async (req, res) => {
   try {
     const allUsers = await User.find({});
@@ -17,7 +18,6 @@ export const getOneUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    console.log(req.body.phone_number);
 
     if (await User.findOne({ phone_number: req.body.phone_number })) {
       return res.json({ data: "User Already Exists", status: "failed" });
@@ -29,10 +29,11 @@ export const createUser = async (req, res) => {
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: await hashPassword(req.body.password),
+      shop_name: "Shop"
     });
 
     const token = createJWT(newUser);
-    res.json({ token, status: "success" });
+    res.json({ token, status: "success" , cid : newUser._id});
   } catch (error) {
     res.json({ error });
   }
@@ -47,6 +48,7 @@ export const updateUser = async (req, res) => {
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: req.body.password,
+      shop_name: req.body.shop_name
     },
     { new: true }
   );

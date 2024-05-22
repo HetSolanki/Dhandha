@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn-UI/button";
 import { createUser } from "@/Handlers/SignUpHandler";
@@ -24,6 +28,12 @@ import { Input } from "../shadcn-UI/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Label } from "../shadcn-UI/label";
+import { Stack, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Addshopname } from "@/Handlers/Addshopname";
+import { Email } from "@mui/icons-material";
+
+const steps = ["Sign Up", "Create Display Name", "Complate Sign Up"];
 
 const formSchema = z.object({
   fname: z.string({
@@ -42,7 +52,9 @@ const formSchema = z.object({
     .regex(/^[0-9]*$/, {
       message: "Phone Number must be numeric",
     }),
- 
+    email: z.string({
+      message: "Email is required",
+    }),
   password: z
     .string({
       message: "Password is required",
@@ -65,14 +77,44 @@ const formSchema = z.object({
     .regex(/^(?=.*[!@#$%^&*])/, {
       message: "Password must contain at least one special character",
     }),
-  confirm_password: z
-    .string({
-      message: "Confirm Password is required",
-    })
+  confirm_password: z.string({
+    message: "Confirm Password is required",
+  }),
 });
 
 export default function SignUp() {
+  const [currentpage, setCurrentpage] = useState(0);
+  const [shoperr, setShoperr] = useState(false);
+  const navigate = useNavigate();
 
+  const handlepage = (page) => {
+    setCurrentpage(page);
+  };
+
+  const handledisplaysubmit = async () => {
+    if (document.getElementById("shop_name").value === "") {
+      setShoperr(true);
+    } else {
+      const name = document.getElementById("shop_name").value;
+      const cid = localStorage.getItem("cid");
+      console.log(cid)
+      const updateduser = await Addshopname(cid, name);
+      console.log(updateduser);
+      if(updateduser.status === "success")
+      {
+        toast.success("Shop Name Added Successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          draggable: true,
+          closeOnClick: true,
+          theme: "light",
+        });
+
+        setShoperr(false);
+        handlepage(2);
+      } 
+    }
+  };
   const checkValidation = (data) => {
     if (data.password !== data.confirm_password) {
       form.setError("confirm_password", {
@@ -88,8 +130,6 @@ export default function SignUp() {
     resolver: zodResolver(formSchema),
   });
 
-  const navigate = useNavigate();
-
   const formSubmit = async (data) => {
     console.log(data);
     if (!checkValidation(data)) {
@@ -98,7 +138,7 @@ export default function SignUp() {
       console.log("Validation Passed");
     }
     const newUser = await createUser(data);
-    console.log(newUser)
+    console.log(newUser);
 
     if (newUser.status === "success") {
       toast.success("Registered Successfully", {
@@ -108,13 +148,10 @@ export default function SignUp() {
         closeOnClick: true,
         theme: "light",
       });
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
       localStorage.setItem("token", newUser.token);
-    }
-    else if (newUser.status === "failed") {
+      localStorage.setItem("cid", newUser.cid);
+      handlepage(1);
+    } else if (newUser.status === "failed") {
       toast.error("User already exists", {
         position: "top-right",
         autoClose: 2000,
@@ -122,8 +159,7 @@ export default function SignUp() {
         closeOnClick: true,
         theme: "light",
       });
-    }
-    else {
+    } else {
       toast.error("Error", {
         position: "top-right",
         autoClose: 2000,
@@ -135,210 +171,308 @@ export default function SignUp() {
   };
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(formSubmit)}>
-            <Card className="mx-auto max-w-sm">
+      <Box sx={{ width: "100%" }}>
+        <Stack spacing={2}>
+          <div className="p-10 ">
+            <Box sx={{ width: "100%" }}>
+              <Stepper activeStep={currentpage} alternativeLabel>
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            </Box>
+          </div>
+          <div
+            className={`${
+              currentpage === 0 ? "" : "hidden"
+            } flex justify-center items-center p-10`}
+          >
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(formSubmit)}>
+                <Card className="mx-auto max-w-sm  ">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-[700]">
+                      Sign Up
+                    </CardTitle>
+                    <CardDescription>
+                      Enter your information to create an account
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                          <FormField
+                            control={form.control}
+                            name="fname"
+                            render={({ field }) => (
+                              <FormItem>
+                                <Label
+                                  htmlFor="first-name"
+                                  className="font-semibold"
+                                >
+                                  First name
+                                </Label>
+                                <FormControl>
+                                  <Input
+                                    id="first-name"
+                                    placeholder="Max"
+                                    {...field}
+                                    className={
+                                      form.formState.errors.fname
+                                        ? "border-red-500"
+                                        : ""
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <FormField
+                            control={form.control}
+                            name="lname"
+                            render={({ field }) => (
+                              <FormItem>
+                                <Label
+                                  htmlFor="last-name"
+                                  className="font-semibold"
+                                >
+                                  Last name
+                                </Label>
+                                <FormControl>
+                                  <Input
+                                    id="last-name"
+                                    placeholder="Robinson"
+                                    {...field}
+                                    className={
+                                      form.formState.errors.lname
+                                        ? "border-red-500"
+                                        : ""
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid gap-2">
+                        <FormField
+                          control={form.control}
+                          name="phone_number"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Label
+                                htmlFor="phone_number"
+                                className="font-semibold"
+                              >
+                                Phone Number
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  id="phone_number"
+                                  type="text"
+                                  placeholder="Phone Number"
+                                  {...field}
+                                  className={
+                                    form.formState.errors.phone_number
+                                      ? "border-red-500"
+                                      : ""
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Label htmlFor="email" className="font-semibold">
+                                Email
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  id="email"
+                                  type="email"
+                                  placeholder="Email Address (Optional)"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <FormField
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Label
+                                htmlFor="password"
+                                className="font-semibold"
+                              >
+                                Password
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  id="password"
+                                  type="password"
+                                  placeholder="Password"
+                                  {...field}
+                                  className={
+                                    form.formState.errors.password
+                                      ? "border-red-500"
+                                      : ""
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <FormField
+                          control={form.control}
+                          name="confirm_password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Label
+                                htmlFor="confirm_password"
+                                className="font-semibold"
+                              >
+                                Confirm Password
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  id="confirm_password"
+                                  type="password"
+                                  placeholder="Confirm Password"
+                                  {...field}
+                                  className={
+                                    form.formState.errors.confirm_password
+                                      ? "border-red-500"
+                                      : ""
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <Button type="submit" className="w-full font-semibold">
+                        Create an account
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full font-semibold"
+                      >
+                        Sign up with GitHub
+                      </Button>
+                    </div>
+                    <div className="mt-4 text-center text-sm font-medium">
+                      Already have an account?{" "}
+                      <Link to="/signin" className="underline">
+                        Sign in
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </form>
+            </Form>
+          </div>
+          <div
+            className={`${
+              currentpage === 1 ? "" : "hidden"
+            } flex justify-center items-center p-10`}
+          >
+            <Card className="mx-auto max-w-sm  ">
               <CardHeader>
-                <CardTitle className="text-xl font-[700]">Sign Up</CardTitle>
+                <CardTitle className="text-xl font-[700]">
+                  Display Name
+                </CardTitle>
                 <CardDescription>
-                  Enter your information to create an account
+                  Enter your Shop information to Display Name
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <FormField
-                        control={form.control}
-                        name="fname"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Label
-                              htmlFor="first-name"
-                              className="font-semibold"
-                            >
-                              First name
-                            </Label>
-                            <FormControl>
-                              <Input
-                                id="first-name"
-                                placeholder="Max"
-                                {...field}
-                                className={
-                                  form.formState.errors.fname
-                                    ? "border-red-500"
-                                    : ""
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <FormField
-                        control={form.control}
-                        name="lname"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Label
-                              htmlFor="last-name"
-                              className="font-semibold"
-                            >
-                              Last name
-                            </Label>
-                            <FormControl>
-                              <Input
-                                id="last-name"
-                                placeholder="Robinson"
-                                {...field}
-                                className={
-                                  form.formState.errors.lname
-                                    ? "border-red-500"
-                                    : ""
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
                   <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="phone_number"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="phone_number"
-                            className="font-semibold"
-                          >
-                            Phone Number
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="phone_number"
-                              type="text"
-                              placeholder="Phone Number"
-                              {...field}
-                              className={
-                                form.formState.errors.phone_number
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    <TextField
+                      id="shop_name"
+                      label="Display Name"
+                      helperText={shoperr ? "Enter Display Name" : ""}
+                      error={shoperr}
                     />
                   </div>
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label htmlFor="email" className="font-semibold">
-                            Email
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="email"
-                              type="email"
-                              placeholder="Email Address (Optional)"
-                              {...field}
-                              className={
-                                form.formState.errors.email
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label htmlFor="password" className="font-semibold">
-                            Password
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="password"
-                              type="password"
-                              placeholder="Password"
-                              {...field}
-                              className={
-                                form.formState.errors.password
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="confirm_password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="confirm_password"
-                            className="font-semibold"
-                          >
-                            Confirm Password
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="confirm_password"
-                              type="password"
-                              placeholder="Confirm Password"
-                              {...field}
-                              className={
-                                form.formState.errors.confirm_password
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full font-semibold">
-                    Create an account
+                  <Button
+                    type="submit"
+                    onClick={handledisplaysubmit}
+                    className="w-full font-semibold"
+                  >
+                    Save And Next
                   </Button>
-                  <Button variant="outline" className="w-full font-semibold">
-                    Sign up with GitHub
-                  </Button>
-                </div>
-                <div className="mt-4 text-center text-sm font-medium">
-                  Already have an account?{" "}
-                  <Link to="/signin" className="underline">
-                    Sign in
-                  </Link>
                 </div>
               </CardContent>
             </Card>
-          </form>
-        </Form>
-      </div>
+          </div>
+          <div
+            className={`${
+              currentpage === 2 ? "" : "hidden"
+            } flex justify-center items-center p-10`}
+          >
+            <Card className="mx-auto max-w-sm  ">
+              <CardHeader>
+                <CardTitle className="text-xl font-[700]">
+                  Sign up Completed
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  <Button
+                    onClick={() => {
+                      toast.success("Registered Successfully", {
+                        position: "top-right",
+                        autoClose: 2000,
+                        draggable: true,
+                        closeOnClick: true,
+                        theme: "light",
+                      });
+                      toast.success("Go To Dashboard", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        draggable: true,
+                        closeOnClick: true,
+                        theme: "light",
+                      });
+                      setTimeout(() => {
+                        navigate("/dashboard");
+                      }, 5000);
+                    }}
+                    className="w-full font-semibold"
+                  >
+                    Go to Dashboard
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </Stack>
+      </Box>
       <ToastContainer />
     </>
   );

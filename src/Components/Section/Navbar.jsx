@@ -16,11 +16,9 @@ import {
   SheetTrigger,
 } from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [cookies, removeCookie] = useCookies(["token"]);
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
