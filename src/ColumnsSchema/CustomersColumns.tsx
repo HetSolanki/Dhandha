@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../Components/UI/shadcn-UI/dropdown-menu";
+import { Editcustomer } from "@/Components/UI/UI-Components/Editcustomer";
 
 export type Customer = {
   cname: string;
@@ -121,10 +122,11 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
+    header: "Actions",
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const customer = row.original;
 
       return (
         <DropdownMenu>
@@ -137,9 +139,12 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => {
+                console.log("Edit customer", customer._id);
+              }}
+
             >
-              Copy payment ID
+              <Editcustomer cid={customer._id}  copen={true}/>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>

@@ -27,40 +27,40 @@ import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
   phone_number: z
-  .string({
-    message: "Phone Number is required",
-  })
-  .min(10, {
-    message: "Phone Number must be of 10 digits",
-  })
-  .max(10, {
-    message: "Phone Number must be of 10 digits",
-  })
-  .regex(/^[0-9]*$/, {
-    message: "Phone Number must be numeric",
-  }),
+    .string({
+      message: "Phone Number is required",
+    })
+    .min(10, {
+      message: "Phone Number must be of 10 digits",
+    })
+    .max(10, {
+      message: "Phone Number must be of 10 digits",
+    })
+    .regex(/^[0-9]*$/, {
+      message: "Phone Number must be numeric",
+    }),
   password: z
-  .string({
-    message: "Password is required",
-  })
-  .min(8, {
-    message: "Password must be at least 8 characters",
-  })
-  .max(20, {
-    message: "Password must be at most 20 characters",
-  })
-  .regex(/^(?=.*[A-Z])/, {
-    message: "Password must contain at least one uppercase letter",
-  })
-  .regex(/^(?=.*[a-z])/, {
-    message: "Password must contain at least one lowercase letter",
-  })
-  .regex(/^(?=.*\d)/, {
-    message: "Password must contain at least one number",
-  })
-  .regex(/^(?=.*[!@#$%^&*])/, {
-    message: "Password must contain at least one special character",
-  }),
+    .string({
+      message: "Password is required",
+    })
+    .min(8, {
+      message: "Password must be at least 8 characters",
+    })
+    .max(20, {
+      message: "Password must be at most 20 characters",
+    })
+    .regex(/^(?=.*[A-Z])/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/^(?=.*[a-z])/, {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .regex(/^(?=.*\d)/, {
+      message: "Password must contain at least one number",
+    })
+    .regex(/^(?=.*[!@#$%^&*])/, {
+      message: "Password must contain at least one special character",
+    }),
 });
 
 export default function SignIn() {
@@ -172,11 +172,11 @@ export default function SignIn() {
                       name="phone_number"
                       render={({ field }) => (
                         <FormItem>
-                          <Label className="font-semibold">
-                            Phone Number
-                          </Label>
+                          <Label className="font-semibold">Phone Number</Label>
                           <FormControl>
-                            <Input name="phone_number" {...field} 
+                            <Input
+                              name="phone_number"
+                              {...field}
                               className={
                                 form.formState.errors.phone_number
                                   ? "border-red-500"
@@ -212,7 +212,10 @@ export default function SignIn() {
                             </div>
                           </Label>
                           <FormControl>
-                            <Input id="password" type="password" {...field} 
+                            <Input
+                              id="password"
+                              type="password"
+                              {...field}
                               className={
                                 form.formState.errors.password
                                   ? "border-red-500"
@@ -235,10 +238,10 @@ export default function SignIn() {
                     <span className="mb-[.1rem]">Remember me</span>
                   </div>
                   <Button type="submit" className="w-full font-semibold">
-                    Login
+                    Sign in
                   </Button>
                   <Button variant="outline" className="w-full font-semibold">
-                    Login with Google
+                    Signin with Google
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm font-medium">
