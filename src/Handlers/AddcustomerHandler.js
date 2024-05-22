@@ -16,3 +16,4 @@ export const addcustomer = async (data) => {
     return customer.json();
   };
   
+  

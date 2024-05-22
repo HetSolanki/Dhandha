@@ -99,7 +99,7 @@ export default function SignIn() {
       setTimeout(() => {
         navigate("/dashboard");
       }, 2000);
-
+      
       localStorage.setItem("token", signin.token);
       phone_numberInput = data.phone_number;
       passwordInput = data.password;

@@ -16,9 +16,15 @@ import {
   SheetTrigger,
 } from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
+import { NAVBAR } from "@/Data/Navbar";
+import { useContext } from "react";
+import { UserContext } from "@/Context/UserContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
+
+  const user = useContext(UserContext);
+
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -37,37 +43,15 @@ const Navbar = () => {
             </h4>
             <span className="sr-only">Acme Inc</span>
           </Link>
-          <Link
-            to="/dashboard"
-            className="text-foreground transition-colors hover:text-foreground"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to="/customers"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Customers
-          </Link>
-          {/* <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Orders
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Products
-          </Link> */}
-
-          {/* <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Analytics
-          </Link> */}
+          {NAVBAR.map((item, index) => (
+            <Link
+              to={item.link}
+              className="text-foreground transition-colors hover:text-foreground"
+              key={index}
+            >
+              {item.name}
+            </Link>
+          ))}
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -122,7 +106,7 @@ const Navbar = () => {
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <form className="ml-auto flex-1 sm:flex-initial">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search products..."
@@ -130,6 +114,7 @@ const Navbar = () => {
               />
             </div>
           </form>
+          <span>Kem palty 👋, {user.username}</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
