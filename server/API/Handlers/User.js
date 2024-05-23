@@ -68,7 +68,7 @@ export const signIn = async (req, res) => {
     if (user) {
       if (await comparePassword(req.body.password, user.password)) {
         const token = createJWT(user);
-        res.json({ token, success: true });
+        res.json({ token, success: true, cid: user._id});
       } else {
         res.json({ data: "Invalid Credentials", status: "failed" });
       }

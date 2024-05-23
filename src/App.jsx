@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./Components/UI/UI-Components/SignIn";
 import SignUp from "./Components/UI/UI-Components/SignUp";
-import Home from "./Components/Section/Home";
 import { Dashboard } from "./Components/Section/Dashboard";
 import Customers from "./Components/Section/Customers";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +12,7 @@ function App() {
   const user = jwtDecode(localStorage.getItem("token"));
   return (
     <>
+
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={user}>
           <BrowserRouter>
