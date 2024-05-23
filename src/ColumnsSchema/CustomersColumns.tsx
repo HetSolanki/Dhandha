@@ -141,8 +141,8 @@ export const columns: ColumnDef<Customer>[] = [
             <DropdownMenuItem
               onClick={() => {
                 console.log("Edit customer", customer._id);
+                alert("Edit customer"+customer.cname);
               }}
-
             >
               <Editcustomer cid={customer._id}  copen={true}/>
             </DropdownMenuItem>

@@ -16,8 +16,28 @@ import {
   SheetTrigger,
 } from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const cid = localStorage.getItem("cid");
+  const [data, setData] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch("http://localhost:3001/api/auth/user/" + cid);
+
+      const res_json = await res.json();
+      console.log(res_json.data);
+      setData(res_json.data.shop_name);
+    };
+    if (cid) {
+      fetchUser();
+    }
+    else {
+      navigate("/signin");
+    }
+    console.log(data.shop_name);
+  }, []);
   const navigate = useNavigate();
   return (
     <>
@@ -25,17 +45,15 @@ const Navbar = () => {
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             to="#"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
+            className="flex items-center gap-2 text-lg font-semibold md:text-base "
           >
-            {/* <Package2 className="h-6 w-6" />
-             */}
             <h4
-              className="scroll-m-20 text-xl font-semibold tracking-tight"
+              className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
               id="titleheading"
             >
-              Dashboard
+              {data}
             </h4>
-            <span className="sr-only">Acme Inc</span>
+          
           </Link>
           <Link
             to="/dashboard"
@@ -49,25 +67,6 @@ const Navbar = () => {
           >
             Customers
           </Link>
-          {/* <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Orders
-          </Link>
-          <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Products
-          </Link> */}
-
-          {/* <Link
-            to="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Analytics
-          </Link> */}
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -86,36 +85,25 @@ const Navbar = () => {
                 to="#"
                 className="flex items-center gap-2 text-lg font-semibold"
               >
-                <Package2 className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
-              <Link to="#" className="hover:text-foreground">
-                Dashboard
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
+                 <h4
+              className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
+              id="titleheading"
+            >
+              {data}
+            </h4>
               </Link>
               <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Analytics
-              </Link>
+            to="/dashboard"
+            className="text-foreground transition-colors hover:text-foreground"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/customers"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Customers
+          </Link>
             </nav>
           </SheetContent>
         </Sheet>
@@ -147,6 +135,7 @@ const Navbar = () => {
                 onClick={() => {
                   if (localStorage.getItem("token")) {
                     localStorage.removeItem("token");
+                    localStorage.removeItem("cid");
                   }
                   navigate("/signin");
                 }}

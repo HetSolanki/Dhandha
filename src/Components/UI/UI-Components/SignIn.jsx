@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { signinuser } from "@/Handlers/SignInHandler";
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn-UI/button";
@@ -68,18 +68,18 @@ export default function SignIn() {
     resolver: zodResolver(formSchema),
   });
 
-  const [cookies, setCookie] = useCookies(["token"]);
+  // const [cookies, setCookie] = useCookies(["token"]);
   let phone_numberInput = document.getElementById("phone_number");
   let passwordInput = document.getElementById("password");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (cookies.token) {
-      navigate("/dashboard");
-    } else {
-      navigate("/signin");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (cookies.token) {
+  //     navigate("/dashboard");
+  //   } else {
+  //     navigate("/signin");
+  //   }
+  // }, []);
 
   const formSubmit = async (data) => {
     console.log(data);
@@ -101,6 +101,7 @@ export default function SignIn() {
       }, 2000);
 
       localStorage.setItem("token", signin.token);
+      localStorage.setItem("cid", signin.cid);
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
       console.log(phone_numberInput);
@@ -143,10 +144,10 @@ export default function SignIn() {
       phone_number.value !== "" &&
       password.value !== ""
     ) {
-      setCookie("token", localStorage.getItem("token"), {
-        path: "/",
-        expires: expiresdate,
-      });
+      // setCookie("token", localStorage.getItem("token"), {
+      //   path: "/",
+      //   expires: expiresdate,
+      // });
       console.log("Cookies Set");
     } else {
       console.log("Not checked");
@@ -228,7 +229,7 @@ export default function SignIn() {
                       )}
                     />
                   </div>
-                  <div className="flex items-center gap-x-1">
+                  {/* <div className="flex items-center gap-x-1">
                     <input
                       type="checkbox"
                       value="remember"
@@ -236,7 +237,7 @@ export default function SignIn() {
                       onChange={handlecheckchange}
                     />
                     <span className="mb-[.1rem]">Remember me</span>
-                  </div>
+                  </div> */}
                   <Button type="submit" className="w-full font-semibold">
                     Sign in
                   </Button>
