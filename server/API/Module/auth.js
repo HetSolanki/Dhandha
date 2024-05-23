@@ -14,7 +14,7 @@ export const createJWT = (user) => {
   const token = jwt.sign(
     {
       id: user.id,
-      username: user.username,
+      username: user.phone_number,
     },
     process.env.JWT_SECRET
   );
@@ -23,7 +23,7 @@ export const createJWT = (user) => {
 };
 
 export const protect = (req, res, next) => {
-  const bearer = req.headers.authentication;
+  const bearer = req.headers.authorization;
 
   console.log(bearer);
   if (!bearer) {
@@ -42,6 +42,7 @@ export const protect = (req, res, next) => {
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(user);
     req.user = user;
     next();
   } catch (error) {

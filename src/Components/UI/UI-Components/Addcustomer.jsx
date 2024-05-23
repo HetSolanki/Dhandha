@@ -23,7 +23,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
-import { useState } from "react";
+import { useContext } from "react";
+import { CustomerContext } from "@/Context/CustomerContext";
 
 const formSchema = z.object({
   cname: z.string({
@@ -48,11 +49,11 @@ const formSchema = z.object({
 });
 
 export function Addcustomer() {
-  const [openCustomer, setOpenCustomer] = useState(false);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
   });
+
+  const [_, setCustomersList] = useContext(CustomerContext);
 
   const formSubmit = async (data) => {
     console.log(data);
@@ -60,16 +61,12 @@ export function Addcustomer() {
 
     if (newcustomer.status === "success") {
       alert("Customer Added Successfully");
+      setCustomersList(newcustomer);
       form.reset();
-      setOpenCustomer(false);
     }
   };
   const clearfield = () => {
     form.reset();
-  };
-
-  const handleOpen = (isOpen) => {
-    setOpenCustomer(isOpen);
   };
 
   return (
@@ -77,17 +74,15 @@ export function Addcustomer() {
       onOpenChange={() => {
         clearfield;
       }}
-      open={openCustomer}
     >
-      <Button size="sm" className="h-8 gap-1">
-        <PlusCircle className="h-3.5 w-3.5" />
-        <span
-          className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-          onClick={() => handleOpen(true)}
-        >
-          Add Customer
-        </span>
-      </Button>
+      <DialogTrigger asChild>
+        <Button size="sm" className="h-8 gap-1">
+          <PlusCircle className="h-3.5 w-3.5" />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Add Customer
+          </span>
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(formSubmit)}>
@@ -223,11 +218,7 @@ export function Addcustomer() {
                 Add Customer
               </Button>
               <DialogClose asChild>
-                <Button
-                  variant="secondary"
-                  className="font-semibold"
-                  onClick={() => handleOpen(false)}
-                >
+                <Button type="button" variant="secondary">
                   Close
                 </Button>
               </DialogClose>

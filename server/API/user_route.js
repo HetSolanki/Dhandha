@@ -12,15 +12,11 @@ import { inputErrorHandler } from "./Module/middleware.js";
 import { protect } from "./Module/auth.js";
 
 const router = Router();
-
 // Get All the Users
 router.get("/userall", getAllUser);
 
 // Get User by it's id
-router.get(
-  "/user/:id",
-  getOneUser
-);
+router.get("/user/:id", getOneUser);
 
 // Create User
 router.post(
@@ -45,7 +41,7 @@ router.put(
     body("phone_number").optional(),
     body("email").optional(),
     body("password").optional(),
-    body("shop_name").optional()
+    body("shop_name").optional(),
   ],
   inputErrorHandler,
   updateUser

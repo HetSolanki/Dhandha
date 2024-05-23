@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Dialog,
@@ -22,8 +23,11 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { addcustomer } from "@/Handlers/AddcustomerHandler";
-import { useState } from "react";
+import { useContext } from "react";
+import { CustomerContext } from "@/Context/CustomerContext";
+import { editcustomer } from "@/Handlers/EditcustomerHandler";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCustomer } from "@/Hooks/fetchCustomer";
 
 const formSchema = z.object({
   cname: z.string({
@@ -47,194 +51,194 @@ const formSchema = z.object({
   }),
 });
 
-export function Editcustomer({ cid , copen}) {
-  const [openCustomer, setOpenCustomer] = useState(false);
+export function Editcustomer({ id }) {
+  // console.log("Id", user.id);
+  const customerDetails = useQuery({
+    queryKey: ["customerDetail", id],
+    queryFn: fetchCustomer,
+  });
 
+  console.log(customerDetails.data);
   const form = useForm({
     resolver: zodResolver(formSchema),
   });
 
+  const [_, setCustomersList] = useContext(CustomerContext);
+
   const formSubmit = async (data) => {
+    console.log("called");
     console.log(data);
-    const newcustomer = await addcustomer(data);
+    const newcustomer = await editcustomer(data);
 
     if (newcustomer.status === "success") {
       alert("Customer Added Successfully");
+      setCustomersList(newcustomer);
       form.reset();
-      setOpenCustomer(false);
     }
   };
   const clearfield = () => {
     form.reset();
   };
 
-  const handleOpen = (isOpen) => {
-    setOpenCustomer(isOpen);
-  };
-
   return (
-    <Dialog
-      onOpenChange={() => {
-        clearfield;
-      }}
-      open={openCustomer}
-    >
-      <Button size="sm" className="h-8 gap-1">
-        <PlusCircle className="h-3.5 w-3.5" />
-        <span
-          className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-          onClick={() => handleOpen(copen)}
-        >
-          Add Customer
-        </span>
-      </Button>
-      <DialogContent className="sm:max-w-[425px]">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(formSubmit)}>
-            <DialogHeader>
-              <DialogTitle>Add New Customer</DialogTitle>
-              <DialogDescription>
-                Fill in the form below to add a new customer.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="cname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="cname" className="font-semibold">
-                        Customer Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="cname"
-                          type="text"
-                          placeholder="Customer Name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    <>
+      <Dialog
+        onOpenChange={() => {
+          clearfield;
+        }}
+      >
+        <DialogTrigger asChild>
+          <Button size="sm" className="h-8 gap-1">
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Edit Customer
+            </span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(formSubmit)}>
+              <DialogHeader>
+                <DialogTitle>Edit Customer</DialogTitle>
+                <DialogDescription>
+                  Fill in the form below to edit customer.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="cname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="cname" className="font-semibold">
+                          Customer Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="cname"
+                            type="text"
+                            placeholder="Customer Name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="cphone_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="cphone_number"
+                          className="font-semibold"
+                        >
+                          Customer Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="cphone_number"
+                            type="text"
+                            placeholder="Customer Phone Number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="caddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="caddress" className="font-semibold">
+                          Customer Address
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="caddress"
+                            type="text"
+                            placeholder="Customer Address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="bottle_price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="bottle_price"
+                          className="font-semibold"
+                        >
+                          Bottle Price
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="bottle_price"
+                            type="text"
+                            placeholder="Bottle Price"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="delivery_sequence_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="delivery_sequence_number"
+                          className="font-semibold"
+                        >
+                          Delivery Sequence Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="delivery_sequence_number"
+                            type="text"
+                            placeholder="Delivery Sequence Number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="cphone_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="cphone_number"
-                        className="font-semibold"
-                      >
-                        Customer Phone Number
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="cphone_number"
-                          type="text"
-                          placeholder="Customer Phone Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="caddress"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="caddress" className="font-semibold">
-                        Customer Address
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="caddress"
-                          type="text"
-                          placeholder="Customer Address"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="bottle_price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="bottle_price"
-                        className="font-semibold"
-                      >
-                        Bottle Price
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="bottle_price"
-                          type="text"
-                          placeholder="Bottle Price"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="delivery_sequence_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="delivery_sequence_number"
-                        className="font-semibold"
-                      >
-                        Delivery Sequence Number
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="delivery_sequence_number"
-                          type="text"
-                          placeholder="Delivery Sequence Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <DialogFooter className="flex justify-between">
-              <Button type="submit" className="font-semibold">
-                Add Customer
-              </Button>
-              <DialogClose asChild>
-                <Button
-                  variant="secondary"
-                  className="font-semibold"
-                  onClick={() => handleOpen(false)}
-                >
-                  Close
+              <DialogFooter className="flex justify-between">
+                <Button type="submit" className="font-semibold">
+                  Edit Customer
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
