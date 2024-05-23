@@ -24,6 +24,13 @@ import {
   DropdownMenuTrigger,
 } from "../Components/UI/shadcn-UI/dropdown-menu";
 import { Editcustomer } from "@/Components/UI/UI-Components/Editcustomer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTrigger,
+  DialogHeader,
+} from "@/Components/UI/shadcn-UI/dialog";
 
 export type Customer = {
   id: number;
@@ -140,7 +147,7 @@ export const columns: ColumnDef<Customer>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Editcustomer id={customer._id} />
             </DropdownMenuItem>
             <DropdownMenuSeparator />

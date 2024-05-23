@@ -9,16 +9,19 @@ import { UserContext } from "./Context/UserContext";
 
 function App() {
   const queryClient = new QueryClient();
-  const user = jwtDecode(localStorage.getItem("token"));
+
+  let user = null;
+  if (localStorage.getItem("token") !== null) {
+    user = jwtDecode(localStorage.getItem("token"));
+  }
+
   return (
     <>
-
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={user}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/home" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/customers" element={<Customers />} />

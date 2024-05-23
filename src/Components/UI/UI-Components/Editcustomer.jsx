@@ -23,55 +23,54 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CustomerContext } from "@/Context/CustomerContext";
 import { editcustomer } from "@/Handlers/EditcustomerHandler";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
+import { DropdownMenuItem } from "../shadcn-UI/dropdown-menu";
 
-const formSchema = z.object({
-  cname: z.string({
-    message: "Customer Name is required",
-  }),
-  cphone_number: z
-    .string({
-      message: "Phone Number is required",
-    })
-    .max(10, {
-      message: "Phone Number must be of 10 digits",
-    }),
-  caddress: z.string({
-    message: "Address is required",
-  }),
-  bottle_price: z.string({
-    message: "Bottle Price is required",
-  }),
-  delivery_sequence_number: z.string({
-    message: "Delivery Sequence Number is required",
-  }),
-});
+// const formSchema = z.object({
+//   cname: z.string({
+//     message: "Customer Name is required",
+//   }),
+//   cphone_number: z
+//     .string({
+//       message: "Phone Number is required",
+//     })
+//     .max(10, {
+//       message: "Phone Number must be of 10 digits",
+//     }),
+//   caddress: z.string({
+//     message: "Address is required",
+//   }),
+//   bottle_price: z.string({
+//     message: "Bottle Price is required",
+//   }),
+//   delivery_sequence_number: z.string({
+//     message: "Delivery Sequence Number is required",
+//   }),
+// });
 
 export function Editcustomer({ id }) {
-  // console.log("Id", user.id);
   const customerDetails = useQuery({
     queryKey: ["customerDetail", id],
     queryFn: fetchCustomer,
   });
 
-  console.log(customerDetails.data);
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-  });
+  // const form = useForm({
+  //   resolver: zodResolver(formSchema),
+  // });
+
+  const form = useForm();
 
   const [_, setCustomersList] = useContext(CustomerContext);
 
   const formSubmit = async (data) => {
-    console.log("called");
-    console.log(data);
-    const newcustomer = await editcustomer(data);
+    const newcustomer = await editcustomer(data, id);
 
     if (newcustomer.status === "success") {
-      alert("Customer Added Successfully");
+      alert("Customer Edited Successfully");
       setCustomersList(newcustomer);
       form.reset();
     }
@@ -88,12 +87,14 @@ export function Editcustomer({ id }) {
         }}
       >
         <DialogTrigger asChild>
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Edit Customer
-            </span>
-          </Button>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <Button size="sm" className="h-8 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Edit Customer
+              </span>
+            </Button>
+          </DropdownMenuItem>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <Form {...form}>
@@ -144,6 +145,9 @@ export function Editcustomer({ id }) {
                             id="cphone_number"
                             type="text"
                             placeholder="Customer Phone Number"
+                            defaultValue={
+                              customerDetails.data.data.cphone_number
+                            }
                             {...field}
                           />
                         </FormControl>
@@ -166,6 +170,7 @@ export function Editcustomer({ id }) {
                             id="caddress"
                             type="text"
                             placeholder="Customer Address"
+                            defaultValue={customerDetails.data.data.caddress}
                             {...field}
                           />
                         </FormControl>
@@ -191,6 +196,9 @@ export function Editcustomer({ id }) {
                             id="bottle_price"
                             type="text"
                             placeholder="Bottle Price"
+                            defaultValue={
+                              customerDetails.data.data.bottle_price
+                            }
                             {...field}
                           />
                         </FormControl>
@@ -216,6 +224,9 @@ export function Editcustomer({ id }) {
                             id="delivery_sequence_number"
                             type="text"
                             placeholder="Delivery Sequence Number"
+                            defaultValue={
+                              customerDetails.data.data.delivery_sequence_number
+                            }
                             {...field}
                           />
                         </FormControl>

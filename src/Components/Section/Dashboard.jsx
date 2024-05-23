@@ -53,6 +53,7 @@ export function Dashboard() {
     };
     fetchCustomers();
   }, []);
+  
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/signin");
