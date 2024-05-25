@@ -9,11 +9,12 @@ import {
 } from "./Handlers/Customer.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
+import { protect } from "./Module/auth.js";
 
 const router = Route();
 router.use(cors());
 // Get All the Customers
-router.get("/customerall", getAllCustomer);
+router.get("/customerall", protect, getAllCustomer);
 
 // Get Customer by it's id
 router.get("/customer/:id", getOneCustomer);

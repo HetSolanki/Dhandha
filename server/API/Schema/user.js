@@ -22,9 +22,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  shop_name:{
-    type: String
-  }
+  shop_name: {
+    type: String,
+  },
 });
 
 export default mongoose.model("User", userSchema);

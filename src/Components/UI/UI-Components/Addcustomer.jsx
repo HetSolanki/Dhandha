@@ -25,6 +25,7 @@ import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
 import { useContext } from "react";
 import { CustomerContext } from "@/Context/CustomerContext";
+import { UserContext } from "@/Context/UserContext";
 
 const formSchema = z.object({
   cname: z.string({
@@ -54,10 +55,11 @@ export function Addcustomer() {
   });
 
   const [_, setCustomersList] = useContext(CustomerContext);
+  const user = useContext(UserContext);
 
   const formSubmit = async (data) => {
     console.log(data);
-    const newcustomer = await addcustomer(data);
+    const newcustomer = await addcustomer(data, user.id);
 
     if (newcustomer.status === "success") {
       alert("Customer Added Successfully");
