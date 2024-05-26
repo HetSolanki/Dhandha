@@ -67,7 +67,7 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "cname",
-    header: "Customer Name",
+    header: () => <div className="text-left">Customer Names</div>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("cname")}</div>
     ),
@@ -76,13 +76,16 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "cphone_number",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Phone Number
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-left">
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Phone Number
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => (
@@ -91,7 +94,7 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "caddress",
-    header: () => <div className="text-right">Address</div>,
+    header: () => <div className="text-left">Address</div>,
     cell: ({ row }) => {
       return <div className="lowercase">{row.getValue("caddress")}</div>;
     },
@@ -115,13 +118,16 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "delivery_sequence_number",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Sequence Number
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-left">
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sequence Number
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => (
@@ -131,31 +137,12 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
-    header: "Actions",
+    header: () => <div className="text-left">Actions</div>,
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const customer = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <Editcustomer id={customer._id} />
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <Editcustomer id={customer._id} />;
     },
   },
 ];

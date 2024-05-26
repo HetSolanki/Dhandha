@@ -137,7 +137,7 @@ export function Dashboard() {
               </Button>
             </CardHeader>
             <CardContent>
-            <DataTable data={data} columns={columns}/>
+            {/* <DataTable data={data} columns={columns}/> */}
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-5">
