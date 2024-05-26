@@ -42,29 +42,29 @@ export type Customer = {
 };
 
 export const columns: ColumnDef<Customer>[] = [
-  {
-    id: "_id",
-    accessorKey: "_id",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "_id",
+  //   accessorKey: "_id",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "cname",
     header: () => <div className="text-left">Customer Names</div>,
@@ -76,6 +76,7 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "cphone_number",
     header: ({ column }) => {
       return (
+
         <div className="text-left">
           <Button
             variant="ghost"
@@ -89,7 +90,7 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("cphone_number")}</div>
+      <div className="capitalize text-center">{row.getValue("cphone_number")}</div>
     ),
   },
   {
@@ -101,17 +102,17 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "bottle_price",
-    header: () => <div className="text-right">Bottle Price</div>,
+    header: () => "Bottle Price",
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("bottle_price"));
 
       // Format the amount as a dollar amount
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
       }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="font-medium">{formatted}</div>;
     },
   },
   {
@@ -131,7 +132,7 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">
+      <div className="lowercase text-center">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),

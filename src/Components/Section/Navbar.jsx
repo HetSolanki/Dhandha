@@ -17,7 +17,7 @@ import {
 } from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
 import { NAVBAR } from "@/Data/Navbar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/Context/UserContext";
 
 const Navbar = () => {
