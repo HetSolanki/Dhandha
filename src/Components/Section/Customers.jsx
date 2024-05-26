@@ -40,6 +40,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useState } from "react";
 import { CustomerContext } from "@/Context/CustomerContext";
+// import { SunspotLoader } from "react-awesome-loaders";
 
 const Customers = () => {
   const customerList = useState(null);
@@ -52,7 +53,15 @@ const Customers = () => {
   return (
     <>
       <Navbar />
-      {customers.isLoading && <div>Loading</div>}
+      {customers.isLoading && <div>
+        {/* <SunspotLoader
+        gradientColors={["#6366F1", "#E0E7FF"]}
+        shadowColor={"#3730A3"}
+        desktopSize={"128px"}
+        mobileSize={"100px"}
+      /> */}
+      Loading
+        </div>}
       {!customers.isLoading && (
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
           <CustomerContext.Provider value={customerList}>
