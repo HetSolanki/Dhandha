@@ -2,7 +2,6 @@ import Customer from "../Schema/customer.js";
 
 export const getAllCustomer = async (req, res) => {
   try {
-    console.log(req.user);
     const allCustomers = await Customer.find({ uid: req.user.id }).populate(
       "uid"
     );
