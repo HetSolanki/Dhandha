@@ -7,7 +7,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,PUT,POST,DELETE",
+    credentials: true,
+  })
+);  
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello From Server" });

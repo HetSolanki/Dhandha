@@ -94,11 +94,10 @@ export default function SignIn() {
         draggable: true,
         closeOnClick: true,
         theme: "light",
+        onClose: () => {
+          navigate("/");
+        },
       });
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
       
       localStorage.setItem("token", signin.token);
       localStorage.setItem("cid", signin.cid);

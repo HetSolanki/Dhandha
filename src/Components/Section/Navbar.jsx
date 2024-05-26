@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CircleUser, Menu, Package2, Search, Users } from "lucide-react";
+import { CircleUser, Menu, Search } from "lucide-react";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   DropdownMenu,
@@ -21,44 +21,27 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/Context/UserContext";
 
 const Navbar = () => {
-  const cid = localStorage.getItem("cid");
-  const [data, setData] = useState("");
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await fetch("http://localhost:3001/api/auth/user/" + cid);
-
-      const res_json = await res.json();
-      console.log(res_json.data);
-      setData(res_json.data.shop_name);
-    };
-    if (cid) {
-      fetchUser();
-    }
-    else {
-      navigate("/signin");
-    }
-    console.log(data.shop_name);
-  }, []);
   const navigate = useNavigate();
-
   const user = useContext(UserContext);
+
+  if (!user) {
+    navigate("/signin");
+  }
 
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
-            to="#"
+            to="/"
             className="flex items-center gap-2 text-lg font-semibold md:text-base "
           >
             <h4
               className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
               id="titleheading"
             >
-              {data}
+              {user.shop_name}
             </h4>
-          
           </Link>
           {NAVBAR.map((item, index) => (
             <Link
@@ -84,28 +67,25 @@ const Navbar = () => {
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
               <Link
-                to="#"
+                to="/"
                 className="flex items-center gap-2 text-lg font-semibold"
               >
-                 <h4
-              className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
-              id="titleheading"
-            >
-              {data}
-            </h4>
+                <h4
+                  className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
+                  id="titleheading"
+                >
+                  {user.shop_name}
+                </h4>
               </Link>
-              <Link
-            to="/dashboard"
-            className="text-foreground transition-colors hover:text-foreground"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to="/customers"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Customers
-          </Link>
+              {NAVBAR.map((item, index) => (
+                <Link
+                  to={item.link}
+                  className="text-foreground transition-colors hover:text-foreground"
+                  key={index}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </nav>
           </SheetContent>
         </Sheet>

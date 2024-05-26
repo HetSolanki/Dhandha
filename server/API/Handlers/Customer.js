@@ -2,7 +2,10 @@ import Customer from "../Schema/customer.js";
 
 export const getAllCustomer = async (req, res) => {
   try {
-    const allCustomers = await Customer.find({});
+    console.log(req.user);
+    const allCustomers = await Customer.find({ uid: req.user.id }).populate(
+      "uid"
+    );
     res.json({ data: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -21,6 +24,7 @@ export const getOneCustomer = async (req, res) => {
 export const createCustomer = async (req, res) => {
   try {
     const newCustomer = await Customer.create({
+      uid: req.body.uid,
       cname: req.body.cname,
       cphone_number: req.body.cphone_number,
       caddress: req.body.caddress,
@@ -51,11 +55,10 @@ export const updateCustomer = async (req, res) => {
 };
 
 export const deleteCustomer = async (req, res) => {
-    try {
-        const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
-        res.json({ data: deletedCustomer, status: "success" });
-    }
-    catch (error) {
-        res.json({ message: "Error" });
-    }
-}
+  try {
+    const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
+    res.json({ data: deletedCustomer, status: "success" });
+  } catch (error) {
+    res.json({ message: "Error" });
+  }
+};
