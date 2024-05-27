@@ -7,15 +7,15 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/registry/new-york/ui/button"
-import { Calendar } from "@/registry/new-york/ui/calendar"
+import { Button } from "@/Components/UI/shadcn-UI/button"
+import { Calendar } from "@/Components/UI/shadcn-UI/calendar"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/registry/new-york/ui/command"
+} from "@/Components/UI/shadcn-UI/command"
 import {
   Form,
   FormControl,
@@ -24,14 +24,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/new-york/ui/form"
-import { Input } from "@/registry/new-york/ui/input"
+} from "@/Components/UI/shadcn-UI/form"
+import { Input } from "@/Components/UI/shadcn-UI/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/registry/new-york/ui/popover"
-import { toast } from "@/registry/new-york/ui/use-toast"
+} from "@/Components/UI/shadcn-UI/popover"
+import { Toast } from "@/Components/UI/shadcn-UI/toast"
 
 const languages = [
   { label: "English", value: "en" },
@@ -77,14 +77,7 @@ export function AccountForm() {
   })
 
   function onSubmit(data: AccountFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+   console.log(data)
   }
 
   return (
