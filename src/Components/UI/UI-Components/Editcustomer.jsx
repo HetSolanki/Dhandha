@@ -53,7 +53,7 @@ const formSchema = z.object({
     }),
 });
 
-export function Editcustomer({ id }) {
+export function     Editcustomer({ id }) {
   const customerDetails = useQuery({
     queryKey: ["customerDetail", id],
     queryFn: fetchCustomer,

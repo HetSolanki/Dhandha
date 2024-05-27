@@ -33,10 +33,10 @@ function App() {
                 path="/profile"
                 element={<SettingsLayout children={<SettingsProfilePage />} />}
               />
-              <Route
+              {/* <Route
                 path="/account"
                 element={<SettingsLayout children={<SettingsAccountPage />} />}
-              />
+              /> */}
             </Routes>
           </BrowserRouter>
         </UserContext.Provider>

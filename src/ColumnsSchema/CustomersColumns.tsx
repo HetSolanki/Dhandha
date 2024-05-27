@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -31,8 +30,10 @@ import {
   DialogTrigger,
   DialogHeader,
 } from "@/Components/UI/shadcn-UI/dialog";
+import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
 
 export type Customer = {
+  _id: number;
   id: number;
   cname: string;
   cphone_number: number;
@@ -76,7 +77,6 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "cphone_number",
     header: ({ column }) => {
       return (
-
         <div className="text-left">
           <Button
             variant="ghost"
@@ -90,14 +90,18 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize text-center">{row.getValue("cphone_number")}</div>
+      <div className="capitalize text-left">
+        {row.getValue("cphone_number")}
+      </div>
     ),
   },
   {
     accessorKey: "caddress",
     header: () => <div className="text-left">Address</div>,
     cell: ({ row }) => {
-      return <div className="lowercase">{row.getValue("caddress")}</div>;
+      return (
+        <div className="lowercase text-left">{row.getValue("caddress")}</div>
+      );
     },
   },
   {
@@ -132,7 +136,7 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase text-center">
+      <div className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),
@@ -143,7 +147,12 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const customer = row.original;
-      return <Editcustomer id={customer._id} />;
+      return (
+        <div className="flex gap-x-4">
+          <Editcustomer id={customer._id} />
+          <DeleteCustomer cid={customer._id} />
+        </div>
+      );
     },
   },
 ];

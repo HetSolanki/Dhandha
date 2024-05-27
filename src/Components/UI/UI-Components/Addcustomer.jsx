@@ -28,25 +28,30 @@ import { CustomerContext } from "@/Context/CustomerContext";
 import { UserContext } from "@/Context/UserContext";
 
 const formSchema = z.object({
-  cname: z.string({
-    message: "Customer Name is required",
-  }),
-  cphone_number: z
+  cname: z
     .string({
-      message: "Phone Number is required",
+      message: "Customer name is required",
     })
-    .max(10, {
-      message: "Phone Number must be of 10 digits",
+    .min(1, {
+      message: "Customer name is required",
     }),
-  caddress: z.string({
-    message: "Address is required",
-  }),
-  bottle_price: z.string({
-    message: "Bottle Price is required",
-  }),
-  delivery_sequence_number: z.string({
-    message: "Delivery Sequence Number is required",
-  }),
+  cphone_number: z
+    .string({ message: "Phone number is required" })
+    .length(10, { message: "Phone number must contains excatly 10 digits" })
+    .regex(/^\d{10}$/, "Phone number must only contain digits"),
+  caddress: z.string().min(1, { message: "Customer address is required" }),
+  bottle_price: z
+    .string()
+    .min(1, { message: "Bottle price is required" })
+    .regex(/^\d+$/, {
+      message: "Only digits are allowed",
+    }),
+  delivery_sequence_number: z
+    .string({ message: "Delivery sequence number is required" })
+    .min(1, { message: "Delivery sequence number is required" })
+    .regex(/^\d+$/, {
+      message: "Only digits are allowed",
+    }),
 });
 
 export function Addcustomer() {
