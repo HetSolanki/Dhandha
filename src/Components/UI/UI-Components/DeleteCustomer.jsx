@@ -3,7 +3,6 @@ import { UserContext } from "@/Context/UserContext";
 import { useContext } from "react";
 
 export default function DeleteCustomer({ cid }) {
-    
   const [_, setCustomerList] = useContext(CustomerContext);
 
   const deleteRecord = async (cid) => {
@@ -14,9 +13,11 @@ export default function DeleteCustomer({ cid }) {
       }
     );
 
-    if (deletedCustomer !== null) {
-      setCustomerList(deletedCustomer);
+    const res = await deletedCustomer.json();
+
+    if (res.status === "success") {
       alert("Customer Delete Successfully");
+      setCustomerList(res);
     }
   };
 
