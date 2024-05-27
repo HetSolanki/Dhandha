@@ -18,38 +18,47 @@ import {
   FormMessage,
 } from "../../UI/shadcn-UI/form";
 import { Input } from "../../UI/shadcn-UI/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../UI/shadcn-UI/select";
 import { Textarea } from "../../UI/shadcn-UI/textarea";
 import { toast } from "../../UI/shadcn-UI/use-toast";
 
 const profileFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
+  username:
+    z.string({
+      required_error: "Please enter a username.",
     }),
   email: z
     .string({
       required_error: "Please select an email to display.",
     })
     .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
+    fname: z.string({
+      message: "First Name is required",
+    }),
+    lname: z.string({
+      message: "Last Name is required",
+    }),
+    password: z
+      .string({
+        message: "Password is required",
       })
-    )
-    .optional(),
+      .min(8, {
+        message: "Password must be at least 8 characters",
+      })
+      .max(20, {
+        message: "Password must be at most 20 characters",
+      })
+      .regex(/^(?=.*[A-Z])/, {
+        message: "Password must contain at least one uppercase letter",
+      })
+      .regex(/^(?=.*[a-z])/, {
+        message: "Password must contain at least one lowercase letter",
+      })
+      .regex(/^(?=.*\d)/, {
+        message: "Password must contain at least one number",
+      })
+      .regex(/^(?=.*[!@#$%^&*])/, {
+        message: "Password must contain at least one special character",
+      }),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -89,20 +98,59 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 w-full mt-4">
+          <div className="flex flex-col justify-between items-start w-full">
+            <FormField
+              control={form.control}
+              name="fname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="First name" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is the name that will be displayed on your profile.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col justify-between items-start w-full">
+            <FormField
+              control={form.control}
+              name="lname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Last name" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is the name that will be displayed on your profile.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )} />
+          </div>
+        </div>
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="shadcn" {...field}
+                  disabled
+                />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                This is the Phone Number that will be displayed on your profile and in search results.
+                and <b>it can't be changed.</b>
               </FormDescription>
-              <FormMessage />
+
             </FormItem>
           )}
         />
@@ -112,81 +160,45 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link to={"/examples/forms"}>email settings</Link>.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
+                <Input placeholder="Enter your email"
+                  {...field} />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                You can change your email address at any time.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div>
-          {fields.map((field, index) => (
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 w-full mt-4">
+          <div className="flex flex-col justify-between items-start w-full">
             <FormField
               control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      {...field}
+                    />
                   </FormControl>
+                  <FormDescription>
+                    Choose a strong password to protect your account.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div>
-        <Button type="submit">Update profile</Button>
-      </form>
-    </Form>
-  );
+          </div>
+        </div>        
+              
+            <Button type="submit">Update profile</Button>
+          </form>
+        </Form>
+        );
 }

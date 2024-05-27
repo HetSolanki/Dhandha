@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { UserContext } from "./Context/UserContext";
 import SettingsProfilePage from "./Components/Section/forms/MainPage";
 import SettingsLayout from "./Components/Section/forms/layout";
+import SettingsAccountPage from "./Components/Section/forms/account/page";
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,6 +32,10 @@ function App() {
               <Route
                 path="/profile"
                 element={<SettingsLayout children={<SettingsProfilePage />} />}
+              />
+              <Route
+                path="/account"
+                element={<SettingsLayout children={<SettingsAccountPage />} />}
               />
             </Routes>
           </BrowserRouter>

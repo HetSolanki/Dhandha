@@ -1,5 +1,5 @@
-import { Separator } from "@/registry/new-york/ui/separator"
-import { AccountForm } from "@/app/(app)/examples/forms/account/account-form"
+import { Separator } from "../../../UI/shadcn-UI/separator";
+import { AccountForm } from "../account/account-form"
 
 export default function SettingsAccountPage() {
   return (

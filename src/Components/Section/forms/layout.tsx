@@ -1,4 +1,5 @@
 import { Separator } from "../../UI/shadcn-UI/separator";
+import Navbar from "../Navbar";
 import { SidebarNav } from "./components/sidebar-nav";
 
 export const metadata = {
@@ -9,11 +10,11 @@ export const metadata = {
 const sidebarNavItems = [
   {
     title: "Profile",
-    href: "/examples/forms",
+    href: "/profile",
   },
   {
     title: "Account",
-    href: "/examples/forms/account",
+    href: "/account",
   },
   {
     title: "Appearance",
@@ -32,6 +33,7 @@ const sidebarNavItems = [
 export default function SettingsLayout({ children }) {
   return (
     <>
+      <Navbar />
       <div className="md:hidden">
         <img
           src="/examples/forms-light.png"
@@ -48,11 +50,11 @@ export default function SettingsLayout({ children }) {
           className="hidden dark:block"
         />
       </div>
-      <div className="hidden space-y-6 p-10 pb-16 md:block">
+      <div className="hidden space-y-6 p-7 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
           <p className="text-muted-foreground">
-            Manage your account settings and set e-mail preferences.
+            Manage your account settings and set preferences.
           </p>
         </div>
         <Separator className="my-6" />

@@ -47,7 +47,7 @@ export const updateUser = async (req, res) => {
       lname: req.body.lname,
       phone_number: req.body.phone_number,
       email: req.body.email,
-      password: req.body.password,
+      password: await hashPassword(req.body.password),
       shop_name: req.body.shop_name
     },
     { new: true }
