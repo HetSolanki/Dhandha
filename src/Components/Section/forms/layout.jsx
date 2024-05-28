@@ -1,12 +1,8 @@
+/* eslint-disable react/prop-types */
 import { Separator } from "../../UI/shadcn-UI/separator";
 import Navbar from "../Navbar";
 import { SidebarNav } from "./components/sidebar-nav";
 
-export const metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
-};
-  
 const sidebarNavItems = [
   {
     title: "Profile",

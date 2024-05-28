@@ -29,7 +29,7 @@ export const createUser = async (req, res) => {
       email: req.body.email,
       password: await hashPassword(req.body.password),
     });
-    
+
     const token = createJWT(newUser);
     res.json({ token, status: "success", cid: newUser._id });
   } catch (error) {
@@ -45,8 +45,7 @@ export const updateUser = async (req, res) => {
       lname: req.body.lname,
       phone_number: req.body.phone_number,
       email: req.body.email,
-      password: await hashPassword(req.body.password),
-      shop_name: req.body.shop_name,
+      // password: await hashPassword(req.body.password),
     },
     { new: true }
   );

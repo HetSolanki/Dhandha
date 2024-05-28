@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useCustomer } from "@/Context/CustomerContext";
-import { useContext } from "react";
 
 export default function DeleteCustomer({ cid }) {
   const { updateCustomerContext } = useCustomer();
