@@ -25,6 +25,8 @@ import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
 import { useCustomer } from "@/Context/CustomerContext";
 import { useUser } from "@/Context/UserContext";
+import {toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
   cname: z
@@ -65,7 +67,12 @@ export function Addcustomer() {
     const newcustomer = await addcustomer(data, user.uid._id);
 
     if (newcustomer.status === "success") {
-      alert("Customer Added Successfully");
+      toast.success("Customer Added Successfully", {
+        position: "bottom-right",
+        autoClose: 1000,
+        theme: "light",
+        draggable: true,
+      });
       updateCustomerContext();
       form.reset();
     }
@@ -75,162 +82,164 @@ export function Addcustomer() {
   };
 
   return (
-    <Dialog
-      onOpenChange={() => {
-        clearfield;
-      }}
-    >
-      <DialogTrigger asChild>
-        <Button size="sm" className="h-8 gap-1">
-          <PlusCircle className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Add Customer
-          </span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(formSubmit)}>
-            <DialogHeader>
-              <DialogTitle>Add New Customer</DialogTitle>
-              <DialogDescription>
-                Fill in the form below to add a new customer.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="cname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="cname" className="font-semibold">
-                        Customer Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="cname"
-                          type="text"
-                          placeholder="Customer Name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    <>
+      <Dialog
+        onOpenChange={() => {
+          clearfield;
+        }}
+      >
+        <DialogTrigger asChild>
+          <Button size="sm" className="h-8 gap-1">
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Add Customer
+            </span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(formSubmit)}>
+              <DialogHeader>
+                <DialogTitle>Add New Customer</DialogTitle>
+                <DialogDescription>
+                  Fill in the form below to add a new customer.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="cname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="cname" className="font-semibold">
+                          Customer Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="cname"
+                            type="text"
+                            placeholder="Customer Name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="cphone_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="cphone_number"
+                          className="font-semibold"
+                        >
+                          Customer Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="cphone_number"
+                            type="text"
+                            placeholder="Customer Phone Number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="caddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor="caddress" className="font-semibold">
+                          Customer Address
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="caddress"
+                            type="text"
+                            placeholder="Customer Address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="bottle_price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="bottle_price"
+                          className="font-semibold"
+                        >
+                          Bottle Price
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="bottle_price"
+                            type="text"
+                            placeholder="Bottle Price"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2 items-center ">
+                  <FormField
+                    control={form.control}
+                    name="delivery_sequence_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="delivery_sequence_number"
+                          className="font-semibold"
+                        >
+                          Delivery Sequence Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="delivery_sequence_number"
+                            type="text"
+                            placeholder="Delivery Sequence Number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="cphone_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="cphone_number"
-                        className="font-semibold"
-                      >
-                        Customer Phone Number
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="cphone_number"
-                          type="text"
-                          placeholder="Customer Phone Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="caddress"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="caddress" className="font-semibold">
-                        Customer Address
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="caddress"
-                          type="text"
-                          placeholder="Customer Address"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="bottle_price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="bottle_price"
-                        className="font-semibold"
-                      >
-                        Bottle Price
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="bottle_price"
-                          type="text"
-                          placeholder="Bottle Price"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-center ">
-                <FormField
-                  control={form.control}
-                  name="delivery_sequence_number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="delivery_sequence_number"
-                        className="font-semibold"
-                      >
-                        Delivery Sequence Number
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="delivery_sequence_number"
-                          type="text"
-                          placeholder="Delivery Sequence Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <DialogFooter className="flex justify-between">
-              <Button type="submit" className="font-semibold">
-                Add Customer
-              </Button>
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Close
+              <DialogFooter className="flex justify-between">
+                <Button type="submit" className="font-semibold">
+                  Add Customer
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

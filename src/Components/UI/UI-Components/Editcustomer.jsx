@@ -29,6 +29,8 @@ import { editcustomer } from "@/Handlers/EditcustomerHandler";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
 import { DropdownMenuItem } from "../shadcn-UI/dropdown-menu";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
   cname: z.string().min(1, {
@@ -80,7 +82,12 @@ export function Editcustomer({ id }) {
     const newcustomer = await editcustomer(data, id);
 
     if (newcustomer.status === "success") {
-      alert("Customer Edited Successfully");
+      toast.success("Customer Edited Successfully", {
+        position: "bottom-right",
+        autoClose: 1000,
+        theme: "light",
+        draggable: true,
+      });
       updateCustomerContext();
       form.reset();
     }
@@ -247,7 +254,7 @@ export function Editcustomer({ id }) {
               </div>
               <DialogFooter className="flex justify-between">
                 <Button type="submit" className="font-semibold">
-                  Edit Customer
+                  Update Customer
                 </Button>
                 <DialogClose asChild>
                   <Button type="button" variant="secondary">

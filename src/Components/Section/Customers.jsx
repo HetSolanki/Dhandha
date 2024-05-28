@@ -39,6 +39,8 @@ import { columns } from "../../ColumnsSchema/CustomersColumns";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useCustomer } from "@/Context/CustomerContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // import { SunspotLoader } from "react-awesome-loaders";
 
@@ -49,6 +51,7 @@ const Customers = () => {
     queryKey: ["customers", customer],
     queryFn: fetchCustomers,
   });
+
 
   return (
     <>
@@ -139,6 +142,7 @@ const Customers = () => {
               </main>
             </div>
           </TooltipProvider>
+          <ToastContainer />
         </div>
       )}
     </>
