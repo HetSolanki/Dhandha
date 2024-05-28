@@ -19,20 +19,26 @@ import { updateUser } from "@/Handlers/UpdateUser";
 import { toast, ToastContainer } from "react-toastify";
 
 const profileFormSchema = z.object({
-  phone_number: z.string({
-    required_error: "Please enter a username.",
-  }),
+  phone_number: z
+    .string({
+      required_error: "Please enter a valid phone number.",
+    })
+    .min(1, { message: "Phone number is required" }),
   email: z
     .string({
       required_error: "Please select an email to display.",
     })
     .email(),
-  fname: z.string({
-    message: "First Name is required",
-  }),
-  lname: z.string({
-    message: "Last Name is required",
-  }),
+  fname: z
+    .string({
+      required_error: "First Name is required",
+    })
+    .min(1, { message: "First Name is required" }),
+  lname: z
+    .string({
+      required_error: "Last Name is required",
+    })
+    .min(1, { message: "Last Name is required" }),
 });
 
 export function ProfileForm() {
