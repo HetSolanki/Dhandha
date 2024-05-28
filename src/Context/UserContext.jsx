@@ -26,13 +26,30 @@ export default function UserProvider({ children }) {
       );
 
       const userRes = await userDetails.json();
-      setUser(userRes);
+      setUser(userRes.data);
     };
 
     fetchUserData();
   }, []);
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  const updateUserContext = async () => {
+    const token = localStorage.getItem("token");
+    const userToken = jwtDecode(token);
+    const userDetails = await fetch(
+      `http://localhost:3001/api/shop/getshop/${userToken.id}`,
+      {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    );
+    const userRes = await userDetails.json();
+    setUser(userRes.data);
+  };
+
+  const value = { user, updateUserContext };
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 export const useUser = () => {

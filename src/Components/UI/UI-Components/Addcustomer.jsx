@@ -23,9 +23,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
-import { useContext } from "react";
-import { CustomerContext } from "@/Context/CustomerContext";
-import { UserContext } from "@/Context/UserContext";
+import { useCustomer } from "@/Context/CustomerContext";
+import { useUser } from "@/Context/UserContext";
 
 const formSchema = z.object({
   cname: z
@@ -59,16 +58,15 @@ export function Addcustomer() {
     resolver: zodResolver(formSchema),
   });
 
-  const [_, setCustomersList] = useContext(CustomerContext);
-  const user = useContext(UserContext);
+  const { updateCustomerContext } = useCustomer();
+  const { user } = useUser();
 
   const formSubmit = async (data) => {
-    console.log(data);
-    const newcustomer = await addcustomer(data, user.id);
+    const newcustomer = await addcustomer(data, user.uid._id);
 
     if (newcustomer.status === "success") {
       alert("Customer Added Successfully");
-      setCustomersList(newcustomer);
+      updateCustomerContext();
       form.reset();
     }
   };

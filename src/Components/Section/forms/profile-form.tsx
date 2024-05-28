@@ -20,7 +20,7 @@ import {
 import { Input } from "../../UI/shadcn-UI/input";
 import { toast } from "../../UI/shadcn-UI/use-toast";
 import { useContext, useDebugValue } from "react";
-import { UserContext } from "@/Context/UserContext";
+import { useUser } from "@/Context/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/Hooks/fetchUser";
 
@@ -64,7 +64,7 @@ const profileFormSchema = z.object({
 });
 
 export function ProfileForm() {
-  const user = useContext(UserContext);
+  const { user } = useUser();
 
   console.log(user);
   const userDetails = useQuery({

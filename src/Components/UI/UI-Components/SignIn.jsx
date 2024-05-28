@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "@/Context/UserContext";
 
 const formSchema = z.object({
   phone_number: z
@@ -72,6 +73,7 @@ export default function SignIn() {
   let phone_numberInput = document.getElementById("phone_number");
   let passwordInput = document.getElementById("password");
   const navigate = useNavigate();
+  const { updateUserContext } = useUser();
 
   // useEffect(() => {
   //   if (cookies.token) {
@@ -95,9 +97,12 @@ export default function SignIn() {
           navigate("/");
         },
       });
-      
+
       localStorage.setItem("token", signin.token);
       localStorage.setItem("cid", signin.cid);
+
+      updateUserContext();
+
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
       console.log(phone_numberInput);

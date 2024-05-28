@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { custom, z } from "zod";
 import { useContext, useEffect, useState } from "react";
-import { CustomerContext } from "@/Context/CustomerContext";
+import { useCustomer } from "@/Context/CustomerContext";
 import { editcustomer } from "@/Handlers/EditcustomerHandler";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
@@ -53,7 +53,7 @@ const formSchema = z.object({
     }),
 });
 
-export function     Editcustomer({ id }) {
+export function Editcustomer({ id }) {
   const customerDetails = useQuery({
     queryKey: ["customerDetail", id],
     queryFn: fetchCustomer,
@@ -74,14 +74,14 @@ export function     Editcustomer({ id }) {
     } = customerDetails.data.data;
   }
 
-  const [_, setCustomersList] = useContext(CustomerContext);
+  const { updateCustomerContext } = useCustomer();
 
   const formSubmit = async (data) => {
     const newcustomer = await editcustomer(data, id);
 
     if (newcustomer.status === "success") {
       alert("Customer Edited Successfully");
-      setCustomersList(newcustomer);
+      updateCustomerContext();
       form.reset();
     }
   };

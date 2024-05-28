@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { CustomerContext } from "@/Context/CustomerContext";
+import { useCustomer } from "@/Context/CustomerContext";
 import { useContext } from "react";
 
 export default function DeleteCustomer({ cid }) {
-  const [_, setCustomerList] = useContext(CustomerContext);
+  const { updateCustomerContext } = useCustomer();
 
   const deleteRecord = async (cid) => {
     const deletedCustomer = await fetch(
@@ -18,7 +18,7 @@ export default function DeleteCustomer({ cid }) {
 
     if (res.status === "success") {
       alert("Customer Delete Successfully");
-      setCustomerList(res);
+      updateCustomerContext();
     }
   };
 
