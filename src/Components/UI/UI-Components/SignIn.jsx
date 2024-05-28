@@ -82,10 +82,7 @@ export default function SignIn() {
   // }, []);
 
   const formSubmit = async (data) => {
-    console.log(data);
     const signin = await signinuser(data);
-
-    console.log(signin);
 
     if (signin.success === true) {
       toast.success("Login Successful", {

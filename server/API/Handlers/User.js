@@ -18,7 +18,6 @@ export const getOneUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-
     if (await User.findOne({ phone_number: req.body.phone_number })) {
       return res.json({ data: "User Already Exists", status: "failed" });
     }
@@ -29,11 +28,10 @@ export const createUser = async (req, res) => {
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: await hashPassword(req.body.password),
-      shop_name: "Shop"
     });
-
+    
     const token = createJWT(newUser);
-    res.json({ token, status: "success" , cid : newUser._id});
+    res.json({ token, status: "success", cid: newUser._id });
   } catch (error) {
     res.json({ error });
   }
@@ -48,7 +46,7 @@ export const updateUser = async (req, res) => {
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: await hashPassword(req.body.password),
-      shop_name: req.body.shop_name
+      shop_name: req.body.shop_name,
     },
     { new: true }
   );
@@ -66,9 +64,10 @@ export const signIn = async (req, res) => {
     const user = await User.findOne({ phone_number: req.body.phone_number });
 
     if (user) {
+      console.log(user);
       if (await comparePassword(req.body.password, user.password)) {
         const token = createJWT(user);
-        res.json({ token, success: true, cid: user._id});
+        res.json({ token, success: true, cid: user._id });
       } else {
         res.json({ data: "Invalid Credentials", status: "failed" });
       }

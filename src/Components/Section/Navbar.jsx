@@ -17,16 +17,13 @@ import {
 } from "@/Components/UI/shadcn-UI/sheet";
 import { useNavigate } from "react-router-dom";
 import { NAVBAR } from "@/Data/Navbar";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "@/Context/UserContext";
+import { useUser } from "@/Context/ShopContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const user = useContext(UserContext);
+  const user = useUser();
 
-  if (!user) {
-    navigate("/signin");
-  }
+  console.log(user);
 
   return (
     <>
@@ -40,7 +37,7 @@ const Navbar = () => {
               className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
               id="titleheading"
             >
-              {user.shop_name}
+              {user?.data?.shop_name}
             </h4>
           </Link>
           {NAVBAR.map((item, index) => (
@@ -74,7 +71,7 @@ const Navbar = () => {
                   className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
                   id="titleheading"
                 >
-                  {user.shop_name}
+                  {user?.data?.shop_name}
                 </h4>
               </Link>
               {NAVBAR.map((item, index) => (
@@ -100,7 +97,9 @@ const Navbar = () => {
               />
             </div>
           </form>
-          <span>Kem palty 👋, {user.username}</span>
+          <span>
+            Kem palty 👋, {user?.data.uid.fname + " " + user?.data.uid.lname}
+          </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">

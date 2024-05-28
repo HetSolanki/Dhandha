@@ -9,7 +9,6 @@ import {
   signIn,
 } from "./Handlers/User.js";
 import { inputErrorHandler } from "./Module/middleware.js";
-import { protect } from "./Module/auth.js";
 
 const router = Router();
 // Get All the Users

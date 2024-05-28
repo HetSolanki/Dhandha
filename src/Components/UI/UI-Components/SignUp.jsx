@@ -31,7 +31,7 @@ import { Label } from "../shadcn-UI/label";
 import { Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Addshopname } from "@/Handlers/Addshopname";
-import { Email } from "@mui/icons-material";
+import { createShop } from "@/Handlers/AddShop";
 
 const steps = ["Sign Up", "Create Display Name", "Complate Sign Up"];
 
@@ -52,9 +52,9 @@ const formSchema = z.object({
     .regex(/^[0-9]*$/, {
       message: "Phone Number must be numeric",
     }),
-    email: z.string({
-      message: "Email is required",
-    }),
+  email: z.string({
+    message: "Email is required",
+  }),
   password: z
     .string({
       message: "Password is required",
@@ -82,6 +82,12 @@ const formSchema = z.object({
   }),
 });
 
+const shopSchema = z.object({
+  shop_name: z
+    .string({ message: "Shop name is required" })
+    .min(1, { message: "Shop name is required" }),
+});
+
 export default function SignUp() {
   const [currentpage, setCurrentpage] = useState(0);
   const [shoperr, setShoperr] = useState(false);
@@ -91,30 +97,30 @@ export default function SignUp() {
     setCurrentpage(page);
   };
 
-  const handledisplaysubmit = async () => {
-    if (document.getElementById("shop_name").value === "") {
-      setShoperr(true);
-    } else {
-      const name = document.getElementById("shop_name").value;
-      const cid = localStorage.getItem("cid");
-      console.log(cid)
-      const updateduser = await Addshopname(cid, name);
-      console.log(updateduser);
-      if(updateduser.status === "success")
-      {
-        toast.success("Shop Name Added Successfully", {
-          position: "top-right",
-          autoClose: 2000,
-          draggable: true,
-          closeOnClick: true,
-          theme: "light",
-        });
+  // const handledisplaysubmit = async () => {
+  //   if (document.getElementById("shop_name").value === "") {
+  //     setShoperr(true);
+  //   } else {
+  //     const name = document.getElementById("shop_name").value;
+  //     const cid = localStorage.getItem("cid");
+  //     console.log(cid);
+  //     const updateduser = await Addshopname(cid, name);
+  //     console.log(updateduser);
+  //     if (updateduser.status === "success") {
+  //       toast.success("Shop Name Added Successfully", {
+  //         position: "top-right",
+  //         autoClose: 2000,
+  //         draggable: true,
+  //         closeOnClick: true,
+  //         theme: "light",
+  //       });
 
-        setShoperr(false);
-        handlepage(2);
-      } 
-    }
-  };
+  //       setShoperr(false);
+  //       handlepage(2);
+  //     }
+  //   }
+  // };
+
   const checkValidation = (data) => {
     if (data.password !== data.confirm_password) {
       form.setError("confirm_password", {
@@ -130,15 +136,32 @@ export default function SignUp() {
     resolver: zodResolver(formSchema),
   });
 
+  const shopForm = useForm({
+    resolver: zodResolver(shopSchema),
+  });
+
+  const shopSubmit = async (data) => {
+    const newShop = await createShop(data);
+
+    if (newShop.status === "success") {
+      toast.success("Shop-Name Added", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+      });
+    }
+    handlepage(2);
+  };
+
   const formSubmit = async (data) => {
-    console.log(data);
     if (!checkValidation(data)) {
       return;
     } else {
       console.log("Validation Passed");
     }
     const newUser = await createUser(data);
-    console.log(newUser);
 
     if (newUser.status === "success") {
       toast.success("Registered Successfully", {
@@ -400,35 +423,57 @@ export default function SignUp() {
               currentpage === 1 ? "" : "hidden"
             } flex justify-center items-center p-10`}
           >
-            <Card className="mx-auto max-w-sm  ">
-              <CardHeader>
-                <CardTitle className="text-xl font-[700]">
-                  Display Name
-                </CardTitle>
-                <CardDescription>
-                  Enter your Shop information to Display Name
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <TextField
-                      id="shop_name"
-                      label="Display Name"
-                      helperText={shoperr ? "Enter Display Name" : ""}
-                      error={shoperr}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    onClick={handledisplaysubmit}
-                    className="w-full font-semibold"
-                  >
-                    Save And Next
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <Form {...shopForm}>
+              <form onSubmit={shopForm.handleSubmit(shopSubmit)}>
+                <Card className="mx-auto max-w-sm  ">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-[700]">
+                      Display Name
+                    </CardTitle>
+                    <CardDescription>
+                      Enter your Shop information to Display Name
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      <div className="grid gap-2">
+                        <FormField
+                          control={shopForm.control}
+                          name="shop_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Label
+                                htmlFor="shopName"
+                                className="font-semibold"
+                              >
+                                Shop Name
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  id="shop_name"
+                                  type="text"
+                                  placeholder="Shop Name"
+                                  {...field}
+                                  className={
+                                    form.formState.errors.shop_name
+                                      ? "border-red-500"
+                                      : ""
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <Button type="submit" className="w-full font-semibold">
+                        Save And Next
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </form>
+            </Form>
           </div>
           <div
             className={`${
@@ -448,13 +493,6 @@ export default function SignUp() {
                       toast.success("Registered Successfully", {
                         position: "top-right",
                         autoClose: 2000,
-                        draggable: true,
-                        closeOnClick: true,
-                        theme: "light",
-                      });
-                      toast.success("Go To Dashboard", {
-                        position: "top-right",
-                        autoClose: 5000,
                         draggable: true,
                         closeOnClick: true,
                         theme: "light",

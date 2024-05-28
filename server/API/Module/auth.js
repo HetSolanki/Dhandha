@@ -15,7 +15,6 @@ export const createJWT = (user) => {
     {
       id: user.id,
       username: user.phone_number,
-      shop_name: user.shop_name,
     },
     process.env.JWT_SECRET
   );
@@ -43,7 +42,6 @@ export const protect = (req, res, next) => {
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(user);
     req.user = user;
     next();
   } catch (error) {
