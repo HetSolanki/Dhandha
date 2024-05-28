@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Router, useNavigate } from "react-router-dom";
 
 const UserContext = createContext({
   user: null,
@@ -11,7 +12,11 @@ export default function UserProvider({ children }) {
 
   const token = localStorage.getItem("token");
 
-  const userToken = jwtDecode(token);
+  if (token !== null) {
+    var userToken = jwtDecode(token);
+  } else {
+    userToken = null;
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,12 +34,15 @@ export default function UserProvider({ children }) {
       setUser(userRes.data);
     };
 
-    fetchUserData();
+    if (userToken !== null) {
+      fetchUserData();
+    }
   }, []);
 
   const updateUserContext = async () => {
     const token = localStorage.getItem("token");
     const userToken = jwtDecode(token);
+
     const userDetails = await fetch(
       `http://localhost:3001/api/shop/getshop/${userToken.id}`,
       {

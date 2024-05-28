@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import SignIn from "./Components/UI/UI-Components/SignIn";
 import SignUp from "./Components/UI/UI-Components/SignUp";
 import { Dashboard } from "./Components/Section/Dashboard";
