@@ -7,6 +7,7 @@ import Customers from "./Components/Section/Customers";
 import SettingsProfilePage from "./Components/Section/forms/MainPage";
 import SettingsLayout from "./Components/Section/forms/layout";
 import SettingsShopDetailsPage from "./Components/Section/forms/shopdeatis/page";
+import CustomerEntry from "./Components/Section/CustomerEntry";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/customers" element={<Customers />} />
+          <Route path="/data" element={<CustomerEntry />} />
           <Route
             path="/profile"
             element={<SettingsLayout children={<SettingsProfilePage />} />}

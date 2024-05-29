@@ -44,41 +44,46 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "delivery_sequence_number",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Sr
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-left">
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sr
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase text-center">
+      <div className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),
   },
   {
     accessorKey: "cname",
-    header: "Customer Name",
+    header: () => <div className="text-left">Customer Name</div>,
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("cname")}</div>
+      <div className="capitalize text-left">{row.getValue("cname")}</div>
     ),
   },
   {
     accessorKey: "caddress",
-    header: "Address",
+    header: () => <div className="text-left">Address</div>,
     cell: ({ row }) => {
-      return <div className="lowercase">{row.getValue("caddress")}</div>;
+      return (
+        <div className="lowercase text-left">{row.getValue("caddress")}</div>
+      );
     },
   },
   {
     accessorKey: "bottle_price",
-    header: "Bottle Price",
+    header: () => <div className="text-left">Bottle Price</div>,
     cell: ({ row }) => {
       return (
-        <div>
+        <div className="text-left">
           <TextField
             variant="outlined"
             size="small"
@@ -93,7 +98,7 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     header: () => {
-      return <div className="text-center">Qty</div>;
+      return <div className="text-left pl-7">Quantity</div>;
     },
     accessorKey: "no_of_bottle",
     id: "no_of_bottle",
@@ -102,7 +107,7 @@ export const columns: ColumnDef<Customer>[] = [
       const customer = row.original;
       return (
         <>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center justify-start space-x-1">
             <div
               className="cursor-pointer"
               onClick={() => {
