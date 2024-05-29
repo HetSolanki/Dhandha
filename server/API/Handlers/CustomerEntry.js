@@ -12,6 +12,20 @@ export const getAllCustomerEntry = async (req, res) => {
   }
 };
 
+export const getAllCustomerEntryByDate = async (req, res) => {
+  try {
+    const allCustomerEntry = await CustomerEntry.find({
+      delivery_date: req.params.date,
+    });
+    if (!allCustomerEntry) {
+      return res.json({ message: "No Customer Entry Found", status: "error" });
+    }
+    res.json({ data: allCustomerEntry, status: "success" });
+  } catch (error) {
+    res.json({ message: "Error" });
+  }
+}
+
 export const getOneCustomerEntry = async (req, res) => {
   try {
     const customerEntry = await CustomerEntry.findById(req.params.id);

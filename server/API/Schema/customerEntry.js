@@ -10,7 +10,7 @@ const customerEntrySchema = new mongoose.Schema({
     required: true,
   },
   delivery_date: {
-    type: Date,
+    type: String,
     required: true,
   },
   delivery_status: {

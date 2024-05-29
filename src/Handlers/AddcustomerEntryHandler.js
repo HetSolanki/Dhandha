@@ -7,7 +7,7 @@ export const addcustomerEntry = async (data) => {
         body: JSON.stringify({
             cid: data.cid,
             bottle_count: data.no_of_bottles,
-            delivery_date: Date.now(),
+            delivery_date: new Date().toISOString().split("T")[0],
             delivery_status: data.delivery_status,
         }),
     });
