@@ -1,5 +1,4 @@
 import { File, ListFilter } from "lucide-react";
-
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
@@ -42,8 +41,6 @@ import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// import { SunspotLoader } from "react-awesome-loaders";
-
 const Customers = () => {
   const { customer } = useCustomer();
   
@@ -57,12 +54,6 @@ const Customers = () => {
       <Navbar />
       {customers.isLoading && (
         <div>
-          {/* <SunspotLoader
-        gradientColors={["#6366F1", "#E0E7FF"]}
-        shadowColor={"#3730A3"}
-        desktopSize={"128px"}
-        mobileSize={"100px"}
-      /> */}
           Loading
         </div>
       )}

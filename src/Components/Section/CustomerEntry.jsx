@@ -12,7 +12,6 @@ import {
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "../UI/shadcn-UI/button";
-import { AvatarImage, AvatarFallback, Avatar } from "../UI/shadcn-UI/avatar";
 
 export default function CustomerEntry() {
   const { customer } = useCustomer();
