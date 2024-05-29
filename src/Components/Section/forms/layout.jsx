@@ -9,8 +9,8 @@ const sidebarNavItems = [
     href: "/profile",
   },
   {
-    title: "Account",
-    href: "/account",
+    title: "Shop Details",
+    href: "/shopdetails",
   },
   {
     title: "Appearance",

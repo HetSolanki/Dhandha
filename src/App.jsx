@@ -7,6 +7,7 @@ import Customers from "./Components/Section/Customers";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SettingsProfilePage from "./Components/Section/forms/MainPage";
 import SettingsLayout from "./Components/Section/forms/layout";
+import SettingsShopDetailsPage from "./Components/Section/forms/shopdeatis/page";
 
 function App() {
   const queryClient = new QueryClient();
@@ -24,10 +25,10 @@ function App() {
               path="/profile"
               element={<SettingsLayout children={<SettingsProfilePage />} />}
             />
-            {/* <Route
-                path="/account"
-                element={<SettingsLayout children={<SettingsAccountPage />} />}
-              /> */}
+            <Route
+                path="/shopdetails"
+                element={<SettingsLayout children={<SettingsShopDetailsPage />} />}
+              />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
