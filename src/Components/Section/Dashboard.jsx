@@ -34,25 +34,21 @@ import { columns } from "../../ColumnsSchema/CustomersEntryColumns";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
+import { useCustomer } from "@/Context/CustomerContext";
 
 export function Dashboard() {
   // const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const [data, setData] = useState({});
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      const res = await fetch(
-        "http://localhost:3001/api/customers/customerall"
-      );
-
-      const res_json = await res.json();
-
-      setData(res_json.data);
-      console.log(data);
-    };
-    fetchCustomers();
-  }, []);
+  const { customer } = useCustomer();
+  console.log(customer);
+  const customers = useQuery({
+    queryKey: ["customers", customer],
+    queryFn: fetchCustomers,
+  });
   
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -137,7 +133,7 @@ export function Dashboard() {
               </Button>
             </CardHeader>
             <CardContent>
-            {/* <DataTable data={data} columns={columns}/> */}
+            <DataTable data={customers?.data?.data} columns={columns}/>
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-5">

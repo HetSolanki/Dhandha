@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -49,13 +49,13 @@ export const columns: ColumnDef<Customer>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Sequence
+          Sr
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">
+      <div className="lowercase text-center">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),
@@ -75,34 +75,74 @@ export const columns: ColumnDef<Customer>[] = [
     },
   },
   {
-    header: "No of Bottles",
+    accessorKey: "bottle_price",
+    header: "Bottle Price",
+    cell: ({ row }) => {
+      return <div >
+          <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              value={row.getValue("bottle_price")}
+              className="w-20 text-center"
+              disabled
+            />
+        </div>;
+    },
+
+  },
+  {
+    header: () => {
+      return (<div className="text-center">Qty</div>)
+    },
+    accessorKey: "no_of_bottle",
     id: "no_of_bottle",
     enableHiding: false,
     cell: ({ row }) => {
       const customer = row.original;
       return (
         <>
-          <TextField
-            id={customer._id}
-            variant="outlined"
-            size="small"
-            type="text"
-            className="w-20"
-          />
-          {/* <input
-            type="number"
-            id="no_of_bottles"
-            className="w-20"
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              padding: "6px 10px",
-              width: "50%",
-              margin: "8px 0",
-              display: "inline-block",
-              boxSizing: "border-box",
-            }}
-          /> */}
+          <div className="flex items-center space-x-1">
+            <div className="cursor-pointer" onClick={
+              () => {
+                const no_of_bottles = document.getElementById(customer._id);
+                if (no_of_bottles.value !== "") {
+                  no_of_bottles.value = parseInt(no_of_bottles.value) + 1;
+                }
+              }
+            }>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clipRule="evenodd" />
+              </svg>
+            </div>
+
+            <TextField
+              id={customer._id}
+              variant="outlined"
+              size="small"
+              type="text"
+              value={0}
+              className="w-14"
+            />
+            <div className="cursor-pointer" onClick={
+              () => {
+                const no_of_bottles = document.getElementById(customer._id);
+                if (no_of_bottles.value !== "") {
+                  if (parseInt(no_of_bottles.value) > 0) {
+                    no_of_bottles.value = parseInt(no_of_bottles.value) - 1;
+                  }
+                  else {
+                    no_of_bottles.value = 0;
+                  }
+                }
+              }
+
+            }>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div >
         </>
       );
     },
@@ -133,7 +173,6 @@ export const columns: ColumnDef<Customer>[] = [
               onClick={() => {
                 console.log("View");
                 alert(customer.cname);
-                alert(document.getElementById("no_of_bottles"));
               }}
             >
               <EyeIcon />
