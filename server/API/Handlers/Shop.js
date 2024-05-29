@@ -21,14 +21,15 @@ export const createShop = async (req, res) => {
 };
 
 export const updateShop = async (req, res) => {
-  const updatedShop = await Shop.findByIdAndUpdate(
-    req.params.id,
+  const updatedShop = await Shop.findOneAndUpdate(
+    { uid: req.user.id },
     {
       shop_name: req.body.shop_name,
       shop_address: req.body.shop_address,
     },
     { new: true }
   );
+  console.log(updateShop);
 
   res.json({ data: updatedShop, status: "success" });
 };

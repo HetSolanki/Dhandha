@@ -46,12 +46,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Customers = () => {
   const { customer } = useCustomer();
-  console.log(customer);
+  
   const customers = useQuery({
     queryKey: ["customers", customer],
     queryFn: fetchCustomers,
   });
-
 
   return (
     <>

@@ -1,6 +1,6 @@
 export const updateshop = async (data, uid) => {
   console.log(uid);
-  const user = await fetch(`http://localhost:3001/api/shop/updateshop/${uid}`, {
+  const user = await fetch(`http://localhost:3001/api/shop/updateshop`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -11,5 +11,6 @@ export const updateshop = async (data, uid) => {
       shop_address: data.shop_address,
     }),
   });
+
   return user.json();
 };

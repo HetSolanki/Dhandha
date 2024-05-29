@@ -39,8 +39,10 @@ export function ShopForm() {
 
   async function onSubmit(data) {
     const uid = user.uid._id;
+    console.log("called");
     const updatedUser = await updateshop(data, uid);
     console.log(updatedUser);
+    updateUserContext();
     if (updatedUser.status === "success") {
       await updateUserContext();
       toast.success("Shop Details Updated Successfully", {
@@ -52,52 +54,48 @@ export function ShopForm() {
     }
   }
 
-  console.log(user?.shop_name);
-
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="shop_name"
-          defaultValue={
-            user?.shop_name ? user?.shop_name : "Shop Name"
-          }
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Shop Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Shop Name" {...field} className="w-80" />
-              </FormControl>
-              <FormDescription>
-                Your shop name should be unique and easy to remember.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="shop_address"
-          defaultValue={
-            user?.shop_address ? user?.shop_address : "Shop Address"
-          }
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Shop Address</FormLabel>
-              <FormControl>
-                <Input placeholder="Shop Address" {...field} />
-              </FormControl>
-              <FormDescription>
-                Your shop address should be unique and easy to remember.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    user && (
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="shop_name"
+            defaultValue={user?.shop_name}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Shop Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Shop Name" {...field} className="w-80" />
+                </FormControl>
+                <FormDescription>
+                  Your shop name should be unique and easy to remember.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shop_address"
+            defaultValue={user?.shop_address}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Shop Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Shop Address" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Your shop address should be unique and easy to remember.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit">Update Shop Details</Button>
-      </form>
-    </Form>
+          <Button type="submit">Update Shop Details</Button>
+        </form>
+      </Form>
+    )
   );
 }

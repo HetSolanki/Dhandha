@@ -32,24 +32,17 @@ import { DataTable } from "../UI/shadcn-UI/DataTable";
 import { columns } from "../../ColumnsSchema/CustomersEntryColumns";
 // import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Navbar from "./Navbar";
-import { useQuery } from "@tanstack/react-query";
-import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useCustomer } from "@/Context/CustomerContext";
 
 export function Dashboard() {
   // const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
 
   const { customer } = useCustomer();
-  console.log(customer);
-  const customers = useQuery({
-    queryKey: ["customers", customer],
-    queryFn: fetchCustomers,
-  });
-  
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/signin");
@@ -133,7 +126,7 @@ export function Dashboard() {
               </Button>
             </CardHeader>
             <CardContent>
-            <DataTable data={customers?.data?.data} columns={columns}/>
+              {customer && <DataTable data={customer} columns={columns} />}
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-5">

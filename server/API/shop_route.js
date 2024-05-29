@@ -25,8 +25,8 @@ router.post(
 
 // Update Shop
 router.put(
-  "/updateshop/:id",
-  [body("shop_name").optional(), body("shop_address").optional()],
+  "/updateshop",
+  [body("shop_  name").optional(), body("shop_address").optional()],
   inputErrorHandler,
   protect,
   updateShop
