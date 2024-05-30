@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { NAVBAR } from "@/Data/Navbar";
 import { useUser } from "@/Context/UserContext";
 import { NavbarItems } from "./NavbarItems";
+import { ModeToggle } from "../UI/UI-Components/ModeToggle";
 
 
 const Navbar = () => {
@@ -92,6 +93,7 @@ const Navbar = () => {
               />
             </div>
           </form>
+          <ModeToggle />
           <span>Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

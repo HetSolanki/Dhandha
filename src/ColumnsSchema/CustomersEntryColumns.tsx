@@ -20,7 +20,8 @@ import {
 import { Button } from "../Components/UI/shadcn-UI/button";
 import { Stack, TextField } from "@mui/material";
 import { addcustomerEntry } from "../Handlers/AddcustomerEntryHandler"
-
+import { Input } from "@/Components/UI/shadcn-UI/input";
+import '../index.css'
 
 export type Customer = {
   cname: string;
@@ -172,12 +173,11 @@ export const columns: ColumnDef<Customer>[] = [
               </svg>
             </div>
 
-            <TextField
+            <Input
               id={customer._id}
-              variant="outlined"
-              size="small"
-              type="text"
-              className="w-14"
+              className="w-14 remove-arrow"
+              type="number"
+              step={1}
             />
 
             <div

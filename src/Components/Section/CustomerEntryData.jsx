@@ -27,8 +27,10 @@ import { useState } from "react";
 import { DataTable } from "../UI/shadcn-UI/DataTable";
 import { columns } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
+import { useNavigate } from "react-router-dom";
 
 const CustomerEntryData = () => {
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState([
     {
       _id: "6658b554fd6f74a6b9627d0a",
@@ -125,10 +127,10 @@ const CustomerEntryData = () => {
                               <span
                                 className="sr-only sm:not-sr-only sm:whitespace-nowrap"
                                 onClick={() => {
-                                  console.log("Download");
+                                  navigate('/customerentry');
                                 }}
                               >
-                                Download
+                                Back to Entry 
                               </span>
                             </Button>
                           </div>
