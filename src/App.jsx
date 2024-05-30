@@ -8,6 +8,7 @@ import SettingsProfilePage from "./Components/Section/forms/MainPage";
 import SettingsLayout from "./Components/Section/forms/layout";
 import SettingsShopDetailsPage from "./Components/Section/forms/shopdeatis/page";
 import CustomerEntry from "./Components/Section/CustomerEntry";
+import CustomerEntryData from "./Components/Section/CustomerEntryData";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/customers" element={<Customers />} />
-          <Route path="/data" element={<CustomerEntry />} />
+          <Route path="/customerentry" element={<CustomerEntry />} />
+          <Route path="/customerentrydata" element={<CustomerEntryData />} />
           <Route
             path="/profile"
             element={<SettingsLayout children={<SettingsProfilePage />} />}

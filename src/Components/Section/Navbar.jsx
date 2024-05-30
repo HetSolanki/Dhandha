@@ -18,6 +18,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { NAVBAR } from "@/Data/Navbar";
 import { useUser } from "@/Context/UserContext";
+import { NavbarItems } from "./NavbarItems";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -40,15 +42,8 @@ const Navbar = () => {
               {user?.shop_name}
             </h4>
           </Link>
-          {NAVBAR.map((item, index) => (
-            <Link
-              to={item.link}
-              className="text-foreground transition-colors hover:text-foreground"
-              key={index}
-            >
-              {item.name}
-            </Link>
-          ))}
+         
+          <NavbarItems />
         </nav>
         <Sheet>
           <SheetTrigger asChild>

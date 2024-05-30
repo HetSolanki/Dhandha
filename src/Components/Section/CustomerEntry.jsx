@@ -9,8 +9,9 @@ import {
   CardDescription,
   CardContent,
 } from "@/Components/UI/shadcn-UI/card";
-import { DatePickerForm } from "../UI/UI-Components/Datepicker";
-
+import { Button } from "../UI/shadcn-UI/button";
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
 export default function CustomerEntry() {
   const { customer } = useCustomer();
 
@@ -26,17 +27,12 @@ export default function CustomerEntry() {
                 List of all the customers and their entries
               </CardDescription>
             </div>
-            {/* <Button asChild size="sm" className="ml-auto gap-1">
-              <Link to="#">
+            <Button asChild size="sm" className="ml-auto gap-1">
+              <Link to="/data">
                 View All
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </Button>
-             */}
-            <div
-              className="ml-auto flex flex-row">
-              <DatePickerForm />
-            </div>
           </CardHeader>
           <CardContent>
             {customer && <DataTable data={customer} columns={columns} />}

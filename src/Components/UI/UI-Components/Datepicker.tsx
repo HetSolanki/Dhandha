@@ -23,6 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/Components/UI/shadcn-UI/popover"
+import { useContext } from "react"
+import CustomerEntryContext from "@/Context/CustomerEntryContext"
 
 const FormSchema = z.object({
   delivery_date: z.date({
@@ -31,6 +33,9 @@ const FormSchema = z.object({
 })
 
 export function DatePickerForm() {
+
+  const {customers, setCustomers} = useContext(CustomerEntryContext)
+
   const token = localStorage.getItem("token");
   const getData = async (date) => {
     const customers = await fetch(
@@ -45,12 +50,14 @@ export function DatePickerForm() {
     const res = await customers.json();
     if (res.status === "success") {
       console.log(res.data);
+      setCustomers(res.data)
     }
     else {
       console.log(res)
     }
   }
   const getdeliverydateData = (date) => {
+      // getData("2024-05-29")
     getData(format(date, "yyyy-MM-dd"))
   }
 
@@ -104,7 +111,7 @@ export function DatePickerForm() {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-
+                select a date to view the customer entry
               </FormDescription>
               <FormMessage />
             </FormItem>

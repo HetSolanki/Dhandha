@@ -17,68 +17,54 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/Components/UI/shadcn-UI/dropdown-menu";
-
-import {
-  Tabs,
-  TabsContent,
-  // TabsList,
-  // TabsTrigger,
-} from "@/Components/UI/shadcn-UI/tabs";
-import {
-  // Tooltip,
-  // TooltipContent,
-  // TooltipTrigger,
-  TooltipProvider,
-} from "@/Components/UI/shadcn-UI/tooltip";
+import { Tabs, TabsContent } from "@/Components/UI/shadcn-UI/tabs";
+import { TooltipProvider } from "@/Components/UI/shadcn-UI/tooltip";
 import Navbar from "./Navbar";
-import { Addcustomer } from "../UI/UI-Components/Addcustomer";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
-import { columns } from "../../ColumnsSchema/CustomersColumns";
-// import { useContext, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
-import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { RotatingLines } from "react-loader-spinner";
+import { DatePickerForm } from "../UI/UI-Components/Datepicker";
+import { useState } from "react";
+import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { columns } from "@/ColumnsSchema/CustomersEntryDataColums";
+import CustomerEntryContext from "@/Context/CustomerEntryContext";
 
-const Customers = () => {
-  const { customer } = useCustomer();
+const CustomerEntryData = () => {
+  const [customers, setCustomers] = useState([
+    {
+      _id: "6658b554fd6f74a6b9627d0a",
+      cid: "665623917f6c573a26bec389",
+      bottle_count: 30,
+      delivery_date: "2024-05-30",
+      delivery_status: "Presenet",
+      __v: 0,
+    },
+  ]);
 
-  const customers = useQuery({
-    queryKey: ["customers", customer],
-    queryFn: fetchCustomers,
-  });
+  const getallfilteredcustomers = (option) => {
+
+    if (option === "Absent") {
+      const absentcustomers = customers.filter((customer) => {
+        return customer.delivery_status === "Absent";
+      });
+
+      setCustomers(absentcustomers);
+      return;
+    }
+
+    if (option === "Presenet") {
+      const presentcustomers = customers.filter((customer) => {
+        return customer.delivery_status === "Presenet";
+      });
+
+      setCustomers(presentcustomers);
+      return;
+    }
+  };
 
   return (
     <>
-      <Navbar />
-      {customers.isLoading && (
-        <div
-          className="
-        flex
-        items-center
-        justify-center
-        min-h-screen
-        mx-auto
-        w-screen
-        flex-col
-        bg-muted/40
-        "
-        >
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-            wrapperStyle={{}}
-          />
-        </div>
-      )}
-      {!customers.isLoading && (
+      <CustomerEntryContext.Provider value={{ customers, setCustomers }}>
+        <Navbar />
         <div className="flex min-h-screen mx-auto w-screen flex-col bg-muted/40">
           <TooltipProvider>
             <div className="flex flex-col sm:gap-4 sm:py-4">
@@ -88,7 +74,7 @@ const Customers = () => {
                     <Card x-chunk="dashboard-06-chunk-0">
                       <CardHeader>
                         <CardTitle>
-                          Customers
+                          Customers Entry Data
                           <div className="ml-auto flex items-center gap-2 float-end">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -106,15 +92,23 @@ const Customers = () => {
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuCheckboxItem checked>
-                                  Active
+                                <DropdownMenuCheckboxItem
+                                  onClick={() => {
+                                    getallfilteredcustomers('Presenet');
+                                  }}
+                                >
+                                  Present
                                 </DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>
-                                  Draft
+                                <DropdownMenuCheckboxItem
+                                  onClick={() => {
+                                    getallfilteredcustomers('Absent');
+                                  }}
+                                >
+                                  Absent
                                 </DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>
-                                  Archived
-                                </DropdownMenuCheckboxItem>
+                                {/* <DropdownMenuCheckboxItem>
+                                Archived
+                              </DropdownMenuCheckboxItem> */}
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <Button
@@ -127,19 +121,27 @@ const Customers = () => {
                                 Export
                               </span>
                             </Button>
-                            <Addcustomer />
+                            <Button size="sm" className="h-8 gap-1">
+                              <span
+                                className="sr-only sm:not-sr-only sm:whitespace-nowrap"
+                                onClick={() => {
+                                  console.log("Download");
+                                }}
+                              >
+                                Download
+                              </span>
+                            </Button>
                           </div>
                         </CardTitle>
                         <CardDescription>
-                          Manage your customers and view their sales
-                          performance.
+                          <div className=" mt-4 flex items-center gap-1 float-end">
+                            <DatePickerForm />
+                          </div>
+                          List of all the customers and their entries
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <DataTable
-                          data={customers?.data?.data}
-                          columns={columns}
-                        />
+                        <DataTable data={customers} columns={columns} />
                       </CardContent>
                       <CardFooter>
                         <div className="text-xs text-muted-foreground">
@@ -155,9 +157,9 @@ const Customers = () => {
           </TooltipProvider>
           <ToastContainer />
         </div>
-      )}
+      </CustomerEntryContext.Provider>
     </>
   );
 };
 
-export default Customers;
+export default CustomerEntryData;
