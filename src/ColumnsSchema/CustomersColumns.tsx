@@ -10,7 +10,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, EyeIcon, MoreHorizontal } from "lucide-react";
+import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums"
 
 import { Button } from "../Components/UI/shadcn-UI/button";
 import { Checkbox } from "../Components/UI/shadcn-UI/checkbox";
@@ -29,8 +30,12 @@ import {
   DialogDescription,
   DialogTrigger,
   DialogHeader,
+  DialogTitle,
 } from "@/Components/UI/shadcn-UI/dialog";
 import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
+import { DataTable } from "@/Components/UI/shadcn-UI/DataTable";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/UI/shadcn-UI/sheet";
+import React from "react";
 
 export type Customer = {
   _id: number;
@@ -136,7 +141,7 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase text-left">
+      <div className="lowercase text-left ">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),
@@ -147,10 +152,65 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const customer = row.original;
+      const [customerentrydetails, setCustomerentrydetails] = React.useState([]);
+
       return (
-        <div className="flex gap-x-4">
+        <div className="flex gap-x-3">
           <Editcustomer id={customer._id} />
           <DeleteCustomer cid={customer._id} />
+          <div className="cursor-pointer w-5 h-5" >
+          <Sheet>
+            <SheetTrigger onClick={
+              async () => {
+                const response = await fetch(`http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`, {
+                  method: "GET",
+                  headers: {
+                    authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                });
+
+                const data = await response.json();
+                setCustomerentrydetails(data.data);
+              }
+            }><EyeIcon strokeWidth={3} /></SheetTrigger>
+            <SheetContent
+              className="p-4  w-auto h-auto overflow-y-auto"
+            >
+              <SheetHeader>
+                <SheetTitle>
+                  Customer Details
+                </SheetTitle>
+                <SheetDescription>
+                  <div className="text-left">
+                    <div className="flex justify-between">
+                      <div className="font-medium">Name</div>
+                      <div className="font-light">{customer.cname}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Phone Number</div>
+                      <div className="font-light">{customer.cphone_number}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Address</div>
+                      <div className="font-light">{customer.caddress}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Bottle Price</div>
+                      <div className="font-light">{customer.bottle_price}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Sequence Number</div>
+                      <div className="font-light">{customer.delivery_sequence_number}</div>
+                    </div>
+                  </div>
+                  <div>
+                    <DataTable columns={columns1} data={customerentrydetails} />
+                  </div>
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        </div >
         </div>
       );
     },

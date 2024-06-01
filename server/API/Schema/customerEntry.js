@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const customerEntrySchema = new mongoose.Schema({
   cid: {
     type: mongoose.Schema.ObjectId,
-    ref: "customer",
+    ref: "Customer",
   },
   bottle_count: {
     type: Number,

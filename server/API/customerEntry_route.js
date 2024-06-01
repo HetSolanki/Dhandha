@@ -18,7 +18,7 @@ router.use(cors());
 // Get All the Customer Entry
 router.get("/getallcustomerentry/:id", protect, getAllCustomerEntry);
 
-// Get All the Customer Entry by it's Date
+// Get All the Customer Entry 
 router.get("/getallcustomerentrys/", protect, getAllCustomerEntrys);
 
 // Get Customer Entry by it's id
@@ -28,7 +28,6 @@ router.get("/getallcustomerentrys/", protect, getAllCustomerEntrys);
 router.post(
   "/addcustomerentry",
   [
-    body("cid").exists(),
     body("bottle_count").exists(),
     body("delivery_date").exists(),
     body("delivery_status").exists(),

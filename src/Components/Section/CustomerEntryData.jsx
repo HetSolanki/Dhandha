@@ -25,7 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
 import { useState } from "react";
 import { DataTable } from "../UI/shadcn-UI/DataTable";
-import { columns } from "@/ColumnsSchema/CustomersEntryDataColums";
+import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 import { useNavigate } from "react-router-dom";
 
@@ -144,7 +144,7 @@ const CustomerEntryData = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <DataTable data={customers} columns={columns} />
+                        <DataTable data={customers} columns={columns1} />
                       </CardContent>
                       <CardFooter>
                         <div className="text-xs text-muted-foreground">

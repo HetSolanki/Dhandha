@@ -14,14 +14,13 @@ import {
 
 
 export type Customer = {
-    cid: string;
+    cid: string,
     bottle_count: number,
     delivery_date: string,
     delivery_status: string,
-
 };
 
-export const columns: ColumnDef<Customer>[] = [
+export const columns1: ColumnDef<Customer>[] = [
     {
         accessorKey: "cid",
         header: () => <div className="text-left">Customer ID</div>,

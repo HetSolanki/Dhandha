@@ -28,7 +28,7 @@ export type Customer = {
   cphone_number: number;
   caddress: string;
   bottle_price: number;
-  id: number;
+  uid: string;
   no_of_bottle: number;
   delivery_sequence_number: number;
 };
@@ -38,18 +38,19 @@ const handleEntry = async (customer) => {
   if (no_of_bottles.value !== "") {
     if (parseInt(no_of_bottles.value) > 0) {
       const newEntry = await addcustomerEntry({
-        cid: customer._id,
         no_of_bottles: parseInt(no_of_bottles.value),
         delivery_status: "Present",
-      });
+      }, customer._id);
 
       if (newEntry.status === "success") {
         alert("Entry added successfully");
+        console.log(newEntry)
       }
       else {
         alert("Entry could not be added");
       }
     } else {
+      console.log(customer)
       no_of_bottles.value = 0;
     }
   } else {
@@ -73,8 +74,6 @@ const handleAbsentEntry = async (customer) => {
   }
 };
 
-
-
 export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: "delivery_sequence_number",
@@ -96,14 +95,16 @@ export const columns: ColumnDef<Customer>[] = [
       <div className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
       </div>
-    ),
+    ),  
   },
+
   {
     accessorKey: "cname",
     header: () => <div className="text-left">Customer Name</div>,
     cell: ({ row }) => (
       <div className="capitalize text-left">{row.getValue("cname")}</div>
     ),
+
   },
   {
     accessorKey: "caddress",
@@ -228,7 +229,7 @@ export const columns: ColumnDef<Customer>[] = [
             >
               <ClipboardXIcon />
             </Button>
-            <Button
+            {/* <Button
               size="icon"
               className="h-8 gap-1"
               onClick={() => {
@@ -236,7 +237,7 @@ export const columns: ColumnDef<Customer>[] = [
               }}
             >
               <EyeIcon />
-            </Button>
+            </Button> */}
           </Stack>
         </>
       );
