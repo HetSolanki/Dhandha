@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/UI/shadcn-UI/alert-dialog";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function DeleteCustomer({ cid }) {
@@ -25,9 +25,7 @@ export default function DeleteCustomer({ cid }) {
         method: "DELETE",
       }
     );
-
     const res = await deletedCustomer.json();
-
     if (res.status === "success") {
       toast.success("Customer Delete Successfully", {
         position: "bottom-right",
@@ -73,6 +71,7 @@ export default function DeleteCustomer({ cid }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <ToastContainer />
     </>
   );
 }

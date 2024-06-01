@@ -15,7 +15,7 @@ import {
 } from "@/Components/UI/shadcn-UI/form";
 import { Input } from "@/Components/UI/shadcn-UI/input";
 import { useUser } from "@/Context/UserContext";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { updateshop } from "@/Handlers/UpdateShop";
 
 const ShopFormSchema = z.object({
@@ -44,18 +44,20 @@ export function ShopForm() {
     console.log(updatedUser);
     updateUserContext();
     if (updatedUser.status === "success") {
-      await updateUserContext();
       toast.success("Shop Details Updated Successfully", {
         position: "bottom-right",
         autoClose: 1000,
         theme: "light",
         draggable: true,
       });
+      await updateUserContext();
     }
   }
 
   return (
+    
     user && (
+      <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -96,6 +98,8 @@ export function ShopForm() {
           <Button type="submit">Update Shop Details</Button>
         </form>
       </Form>
+    <ToastContainer />
+    </>
     )
   );
 }

@@ -19,6 +19,9 @@ import {
 } from "lucide-react";
 import { Button } from "../Components/UI/shadcn-UI/button";
 import { Stack, TextField } from "@mui/material";
+import { addcustomerEntry } from "../Handlers/AddcustomerEntryHandler"
+import { Input } from "@/Components/UI/shadcn-UI/input";
+import '../index.css'
 
 export type Customer = {
   cname: string;
@@ -30,14 +33,48 @@ export type Customer = {
   delivery_sequence_number: number;
 };
 
-const handleEntry = (customer) => {
+const handleEntry = async (customer) => {
   const no_of_bottles = document.getElementById(customer._id);
   if (no_of_bottles.value !== "") {
-    alert(no_of_bottles.value);
+    if (parseInt(no_of_bottles.value) > 0) {
+      const newEntry = await addcustomerEntry({
+        cid: customer._id,
+        no_of_bottles: parseInt(no_of_bottles.value),
+        delivery_status: "Presenet",
+      });
+
+      if (newEntry.status === "success") {
+        alert("Entry added successfully");
+      }
+      else {
+        alert("Entry could not be added");
+      }
+
+    } else {
+      no_of_bottles.value = 0;
+    }
   } else {
-    alert("Please enter the number of bottles");
+    alert("Please enter the quantity");
+    no_of_bottles.value = 0;
   }
 };
+const handleAbsentEntry = async (customer) => {
+  const no_of_bottles = document.getElementById(customer._id);
+  const newEntry = await addcustomerEntry({
+    cid: customer._id,
+    no_of_bottles: 0,
+    delivery_status: "Absent",
+  });
+
+  if (newEntry.status === "success") {
+    alert("Absent Entry added successfully");
+  }
+  else {
+    alert("Entry could not be added");
+  }
+};
+
+
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -112,14 +149,15 @@ export const columns: ColumnDef<Customer>[] = [
               className="cursor-pointer"
               onClick={() => {
                 const no_of_bottles = document.getElementById(customer._id);
-                if (no_of_bottles.value !== "") {
-                  if (parseInt(no_of_bottles.value) > 0) {
-                    no_of_bottles.value = parseInt(no_of_bottles.value) - 1;
-                  } else {
-                    no_of_bottles.value = 0;
-                  }
+                if (no_of_bottles.value === "") {
+                  no_of_bottles.value = 0;
                 }
-              }}
+                no_of_bottles.value = parseInt(no_of_bottles.value) - 1;
+                if (parseInt(no_of_bottles.value) < 0) {
+                  no_of_bottles.value = 0;
+                }
+              }
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,22 +173,21 @@ export const columns: ColumnDef<Customer>[] = [
               </svg>
             </div>
 
-            <TextField
+            <Input
               id={customer._id}
-              variant="outlined"
-              size="small"
-              type="text"
-              value={0}
-              className="w-14"
+              className="w-14 remove-arrow"
+              type="number"
+              step={1}
             />
 
             <div
               className="cursor-pointer"
               onClick={() => {
                 const no_of_bottles = document.getElementById(customer._id);
-                if (no_of_bottles.value !== "") {
-                  no_of_bottles.value = parseInt(no_of_bottles.value) + 1;
+                if (no_of_bottles.value === "") {
+                  no_of_bottles.value = 0;
                 }
+                no_of_bottles.value = parseInt(no_of_bottles.value) + 1;
               }}
             >
               <svg
@@ -166,7 +203,7 @@ export const columns: ColumnDef<Customer>[] = [
                 />
               </svg>
             </div>
-          </div>
+          </div >
         </>
       );
     },
@@ -188,7 +225,11 @@ export const columns: ColumnDef<Customer>[] = [
             >
               <ClipboardCheckIcon />
             </Button>
-            <Button size="icon" className="h-8 gap-1">
+            <Button size="icon" className="h-8 gap-1"
+              onClick={() => {
+                handleAbsentEntry(customer);
+              }}
+            >
               <ClipboardXIcon />
             </Button>
             <Button
