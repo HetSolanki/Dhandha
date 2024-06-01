@@ -1,5 +1,4 @@
 export const updateshop = async (data, uid) => {
-  console.log(uid);
   const user = await fetch(`http://localhost:3001/api/shop/updateshop`, {
     method: "PUT",
     headers: {

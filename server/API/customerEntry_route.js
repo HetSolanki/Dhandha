@@ -2,7 +2,7 @@ import { Router as Route } from "express";
 import { body } from "express-validator";
 import {
   getAllCustomerEntry,
-  getOneCustomerEntry,
+  // getOneCustomerEntry,
   createCustomerEntry,
   updateCustomerEntry,
   deleteCustomerEntry,
@@ -22,7 +22,7 @@ router.get("/getallcustomerentry/:id", protect, getAllCustomerEntry);
 router.get("/getallcustomerentrys/", protect, getAllCustomerEntrys);
 
 // Get Customer Entry by it's id
-router.get("/getcustomerentry/:id", getOneCustomerEntry);
+// router.get("/getcustomerentry/:id", getOneCustomerEntry);
 
 // Create Customer Entry
 router.post(

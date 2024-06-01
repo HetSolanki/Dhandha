@@ -21,12 +21,9 @@ import { useUser } from "@/Context/UserContext";
 import { NavbarItems } from "./NavbarItems";
 import { ModeToggle } from "../UI/UI-Components/ModeToggle";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useUser();
-
-  console.log(user);
 
   return (
     <>
@@ -43,7 +40,7 @@ const Navbar = () => {
               {user?.shop_name}
             </h4>
           </Link>
-         
+
           <NavbarItems />
         </nav>
         <Sheet>

@@ -97,30 +97,6 @@ export default function SignUp() {
     setCurrentpage(page);
   };
 
-  // const handledisplaysubmit = async () => {
-  //   if (document.getElementById("shop_name").value === "") {
-  //     setShoperr(true);
-  //   } else {
-  //     const name = document.getElementById("shop_name").value;
-  //     const cid = localStorage.getItem("cid");
-  //     console.log(cid);
-  //     const updateduser = await Addshopname(cid, name);
-  //     console.log(updateduser);
-  //     if (updateduser.status === "success") {
-  //       toast.success("Shop Name Added Successfully", {
-  //         position: "top-right",
-  //         autoClose: 2000,
-  //         draggable: true,
-  //         closeOnClick: true,
-  //         theme: "light",
-  //       });
-
-  //       setShoperr(false);
-  //       handlepage(2);
-  //     }
-  //   }
-  // };
-
   const checkValidation = (data) => {
     if (data.password !== data.confirm_password) {
       form.setError("confirm_password", {

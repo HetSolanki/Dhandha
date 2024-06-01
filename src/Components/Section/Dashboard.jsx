@@ -46,9 +46,7 @@ export function Dashboard() {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/signin");
-    } else {
-      console.log(localStorage.getItem("token"));
-    }
+    } 
   }, []);
 
   return (

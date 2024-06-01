@@ -232,7 +232,6 @@ export const columns: ColumnDef<Customer>[] = [
               size="icon"
               className="h-8 gap-1"
               onClick={() => {
-                console.log("View");
                 alert(customer.cname);
               }}
             >

@@ -2,12 +2,15 @@ import Shop from "../Schema/shop.js";
 
 export const getShop = async (req, res) => {
   const shop = await Shop.findOne({ uid: req.params.id }).populate("uid");
-  console.log("SHOP", shop);
+
+  if (!shop) {
+    return res.json({ data: "No Shop Found", status: "failed" });
+  }
+
   res.json({ data: shop, status: "success" });
 };
 
 export const createShop = async (req, res) => {
-  console.log(req.user);
   try {
     const newShop = await Shop.create({
       shop_name: req.body.shop_name,
@@ -29,12 +32,16 @@ export const updateShop = async (req, res) => {
     },
     { new: true }
   );
-  console.log(updateShop);
 
   res.json({ data: updatedShop, status: "success" });
 };
 
 export const deleteShop = async (req, res) => {
   const deletedShop = await Shop.findByIdAndDelete(req.params.id);
+
+  if (!deletedShop) {
+    return res.json({ data: "No Shop Found", status: "failed" });
+  }
+
   res.json({ data: deletedShop, status: "success" });
 };

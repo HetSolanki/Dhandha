@@ -5,6 +5,11 @@ export const getAllCustomer = async (req, res) => {
     const allCustomers = await Customer.find({ uid: req.user.id }).populate(
       "uid"
     );
+
+    if(!allCustomers){
+      return res.json({ data: "No Customer Found", status: "failed" });
+    }
+
     res.json({ data: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -14,6 +19,12 @@ export const getAllCustomer = async (req, res) => {
 export const getOneCustomer = async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id);
+
+    if (!customer) {
+      return res.json({ data: "No Customer Found", status: "failed" });
+    }
+    
+
     res.json({ data: customer, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -56,6 +67,11 @@ export const updateCustomer = async (req, res) => {
 export const deleteCustomer = async (req, res) => {
   try {
     const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
+
+    if (!deletedCustomer) {
+      return res.json({ data: "No Customer Found", status: "failed" });
+    }
+
     res.json({ data: deletedCustomer, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });

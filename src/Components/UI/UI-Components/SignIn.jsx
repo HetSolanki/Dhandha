@@ -105,7 +105,6 @@ export default function SignIn() {
 
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
-      console.log(phone_numberInput);
       lsRememberMe(phone_numberInput, passwordInput);
     } else if (signin.data === "Invalid Credentials") {
       toast.error("Invalid Credentials", {
@@ -128,7 +127,6 @@ export default function SignIn() {
 
   const [rmCheck, setRmCheck] = useState(false);
   const handlecheckchange = (event) => {
-    console.log(event.target.checked);
     if (event.target.checked) {
       setRmCheck(true);
     } else {
