@@ -40,7 +40,7 @@ const handleEntry = async (customer) => {
       const newEntry = await addcustomerEntry({
         cid: customer._id,
         no_of_bottles: parseInt(no_of_bottles.value),
-        delivery_status: "Presenet",
+        delivery_status: "Present",
       });
 
       if (newEntry.status === "success") {
@@ -49,7 +49,6 @@ const handleEntry = async (customer) => {
       else {
         alert("Entry could not be added");
       }
-
     } else {
       no_of_bottles.value = 0;
     }
@@ -121,10 +120,7 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-left">
-          <TextField
-            variant="outlined"
-            size="small"
-            type="text"
+          <Input
             value={row.getValue("bottle_price")}
             className="w-20 text-center"
             disabled
@@ -178,8 +174,8 @@ export const columns: ColumnDef<Customer>[] = [
               className="w-14 remove-arrow"
               type="number"
               step={1}
+              defaultValue={0}
             />
-
             <div
               className="cursor-pointer"
               onClick={() => {

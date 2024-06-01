@@ -6,7 +6,7 @@ import {
   createCustomerEntry,
   updateCustomerEntry,
   deleteCustomerEntry,
-  getAllCustomerEntryByDate,
+  getAllCustomerEntrys,
 } from "./Handlers/CustomerEntry.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
@@ -19,7 +19,7 @@ router.use(cors());
 router.get("/getallcustomerentry/:id", protect, getAllCustomerEntry);
 
 // Get All the Customer Entry by it's Date
-router.get("/getallcustomerentrybydate/:date", protect, getAllCustomerEntryByDate);
+router.get("/getallcustomerentrys/", protect, getAllCustomerEntrys);
 
 // Get Customer Entry by it's id
 router.get("/getcustomerentry/:id", getOneCustomerEntry);

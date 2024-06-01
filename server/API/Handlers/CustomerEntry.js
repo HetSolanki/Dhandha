@@ -12,10 +12,9 @@ export const getAllCustomerEntry = async (req, res) => {
   }
 };
 
-export const getAllCustomerEntryByDate = async (req, res) => {
+export const getAllCustomerEntrys = async (req, res) => {
   try {
     const allCustomerEntry = await CustomerEntry.find({
-      delivery_date: req.params.date,
     });
     if (!allCustomerEntry) {
       return res.json({ message: "No Customer Entry Found", status: "error" });

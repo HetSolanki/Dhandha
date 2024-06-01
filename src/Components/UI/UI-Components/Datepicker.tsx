@@ -39,7 +39,7 @@ export function DatePickerForm() {
   const token = localStorage.getItem("token");
   const getData = async (date) => {
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentrybydate/${date}`,
+      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
       {
         method: "GET",
         headers: {
@@ -49,8 +49,11 @@ export function DatePickerForm() {
     );
     const res = await customers.json();
     if (res.status === "success") {
-      console.log(res.data);
-      setCustomers(res.data)
+      const selectedcustomers = res.data.filter((customer) => {
+        return customer.delivery_date === date;
+      });
+      console.log(selectedcustomers)
+      setCustomers(selectedcustomers)
     }
     else {
       console.log(res)

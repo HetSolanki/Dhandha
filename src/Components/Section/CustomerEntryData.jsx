@@ -29,6 +29,7 @@ import { columns } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 import { useNavigate } from "react-router-dom";
 
+
 const CustomerEntryData = () => {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([
@@ -37,7 +38,7 @@ const CustomerEntryData = () => {
       cid: "665623917f6c573a26bec389",
       bottle_count: 30,
       delivery_date: "2024-05-30",
-      delivery_status: "Presenet",
+      delivery_status: "Present",
       __v: 0,
     },
   ]);
@@ -53,9 +54,9 @@ const CustomerEntryData = () => {
       return;
     }
 
-    if (option === "Presenet") {
+    if (option === "Present") {
       const presentcustomers = customers.filter((customer) => {
-        return customer.delivery_status === "Presenet";
+        return customer.delivery_status === "Present";
       });
 
       setCustomers(presentcustomers);
@@ -96,7 +97,7 @@ const CustomerEntryData = () => {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuCheckboxItem
                                   onClick={() => {
-                                    getallfilteredcustomers('Presenet');
+                                    getallfilteredcustomers('Present');
                                   }}
                                 >
                                   Present

@@ -498,7 +498,7 @@ export default function SignUp() {
                         theme: "light",
                       });
                       setTimeout(() => {
-                        navigate("/dashboard");
+                        navigate("/");
                       }, 5000);
                     }}
                     className="w-full font-semibold"

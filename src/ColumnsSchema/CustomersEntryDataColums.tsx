@@ -1,3 +1,4 @@
+import { Badge } from "@/Components/UI/shadcn-UI/badge";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -46,7 +47,14 @@ export const columns: ColumnDef<Customer>[] = [
         accessorKey: "delivery_status",
         header: () => <div className="text-left">Delivery Status</div>,
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("delivery_status")}</div>
+            <>
+                {row.getValue("delivery_status") === "Present" ? (
+                    <Badge variant="default">Present</Badge>
+                ) : (
+                    <Badge variant="destructive">Abset</Badge>
+                )}
+            </>
+
         ),
     },
 ];
