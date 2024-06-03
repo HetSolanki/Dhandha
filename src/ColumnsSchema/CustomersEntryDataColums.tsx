@@ -15,6 +15,7 @@ import {
 
 export type Customer = {
     cid: string,
+    cname: string,
     bottle_count: number,
     delivery_date: string,
     delivery_status: string,
@@ -23,10 +24,13 @@ export type Customer = {
 export const columns1: ColumnDef<Customer>[] = [
     {
         accessorKey: "cid",
-        header: () => <div className="text-left">Customer ID</div>,
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("cid")}</div>
-        ),
+        header: () => <div className="text-left">Customer Name</div>,
+        cell: ({ row }) => {
+            return (
+            <div className="capitalize">{
+                row.getValue("cid")?.cname}</div>
+            )
+        },
     },
     {
         accessorKey: "bottle_count",

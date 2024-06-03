@@ -2,10 +2,11 @@ import CustomerEntry from "../Schema/customerEntry.js";
 
 export const getAllCustomerEntry = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id });
+    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({ message: "No Customer's Entry Found", status: "error" });
     }
+    console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -15,7 +16,7 @@ export const getAllCustomerEntry = async (req, res) => {
 export const getAllCustomerEntrys = async (req, res) => {
   try {
     const allCustomerEntry = await CustomerEntry.find({
-    });
+    }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({ message: "No any Customer's Entry Found", status: "error" });
     }
