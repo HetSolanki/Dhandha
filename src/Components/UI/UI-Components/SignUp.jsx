@@ -19,8 +19,10 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   // Label,
   FormMessage,
 } from "@/Components/UI/shadcn-UI/form";
@@ -32,8 +34,14 @@ import { Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Addshopname } from "@/Handlers/Addshopname";
 import { createShop } from "@/Handlers/AddShop";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../shadcn-UI/input-otp";
 
-const steps = ["Sign Up", "Create Display Name", "Complate Sign Up"];
+const steps = [
+  "Sign Up",
+  "OTP Verification",
+  "Create Display Name",
+  "Complate Sign Up",
+];
 
 const formSchema = z.object({
   fname: z.string({
@@ -79,6 +87,12 @@ const formSchema = z.object({
     }),
   confirm_password: z.string({
     message: "Confirm Password is required",
+  }),
+});
+
+const formSchema1 = z.object({
+  pin: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
   }),
 });
 
@@ -128,6 +142,18 @@ export default function SignUp() {
         theme: "light",
       });
     }
+    handlepage(3);
+  };
+
+  const form1 = useForm({
+    resolver: zodResolver(formSchema1),
+    defaultValues: {
+      pin: "121223",
+    },
+  });
+
+  const verifyotp = (data) => {
+    console.log(data);
     handlepage(2);
   };
 
@@ -168,6 +194,7 @@ export default function SignUp() {
       });
     }
   };
+
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -399,6 +426,59 @@ export default function SignUp() {
               currentpage === 1 ? "" : "hidden"
             } flex justify-center items-center p-10`}
           >
+            {/* <div className="h-screen flex justify-center items-center "> */}
+              <Form {...form1}>
+                <form1 onSubmit={form1.handleSubmit(verifyotp)}>
+                  <Card className="mx-auto max-w-sm">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-[700]">
+                        OTP Verification
+                      </CardTitle>
+                      <CardDescription>
+                        Enter your OTP below to Verify your Phone Number
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <form className="w-2/3 space-y-6">
+                        <FormField
+                          control={form1.control}
+                          name="pin"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>One-Time Password</FormLabel>
+                              <FormControl>
+                                <InputOTP maxLength={6} {...field}>
+                                  <InputOTPGroup>
+                                    <InputOTPSlot index={0} />
+                                    <InputOTPSlot index={1} />
+                                    <InputOTPSlot index={2} />
+                                    <InputOTPSlot index={3} />
+                                    <InputOTPSlot index={4} />
+                                    <InputOTPSlot index={5} />
+                                  </InputOTPGroup>
+                                </InputOTP>
+                              </FormControl>
+                              <FormDescription>
+                                Please enter the one-time password sent to your
+                                phone.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button>Submit</Button>
+                      </form>
+                    </CardContent>
+                  </Card>
+                </form1>
+              </Form>
+            </div>
+          {/* </div> */}
+          <div
+            className={`${
+              currentpage === 2 ? "" : "hidden"
+            } flex justify-center items-center p-10`}
+          >
             <Form {...shopForm}>
               <form onSubmit={shopForm.handleSubmit(shopSubmit)}>
                 <Card className="mx-auto max-w-sm  ">
@@ -453,7 +533,7 @@ export default function SignUp() {
           </div>
           <div
             className={`${
-              currentpage === 2 ? "" : "hidden"
+              currentpage === 3 ? "" : "hidden"
             } flex justify-center items-center p-10`}
           >
             <Card className="mx-auto max-w-sm  ">

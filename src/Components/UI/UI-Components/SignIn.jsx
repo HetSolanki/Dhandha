@@ -14,8 +14,10 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/Components/UI/shadcn-UI/form";
 import { Input } from "../shadcn-UI/input";
@@ -25,6 +27,7 @@ import { z } from "zod";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "@/Context/UserContext";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../shadcn-UI/input-otp";
 
 const formSchema = z.object({
   phone_number: z
@@ -64,9 +67,24 @@ const formSchema = z.object({
     }),
 });
 
+const formSchema1 = z.object({
+  pin: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+});
+
 export default function SignIn() {
+  const [otpvisible, setOtpvisible] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
+  });
+
+  const form1 = useForm({
+    resolver: zodResolver(formSchema1),
+    defaultValues: {
+      pin: "121223",
+    },
   });
 
   // const [cookies, setCookie] = useCookies(["token"]);
@@ -87,25 +105,16 @@ export default function SignIn() {
     const signin = await signinuser(data);
 
     if (signin.success === true) {
-      toast.success("Login Successful", {
-        position: "top-right",
-        autoClose: 2000,
-        draggable: true,
-        closeOnClick: true,
-        theme: "light",
-        onClose: () => {
-          navigate("/");
-        },
-      });
-
+     
       localStorage.setItem("token", signin.token);
-      localStorage.setItem("cid", signin.cid);
 
       updateUserContext();
 
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
-      lsRememberMe(phone_numberInput, passwordInput);
+      // lsRememberMe(phone_numberInput, passwordInput);
+
+      setOtpvisible(true);
     } else if (signin.data === "Invalid Credentials") {
       toast.error("Invalid Credentials", {
         position: "top-right",
@@ -123,6 +132,23 @@ export default function SignIn() {
         theme: "light",
       });
     }
+  };
+
+  const verifyotp = (data) => {
+    console.log(data);
+
+    toast.success("Login Successful", {
+      position: "top-right",
+      autoClose: 2000,
+      draggable: true,
+        closeOnClick: true,
+        theme: "light",
+        onClose: () => {
+          setOtpvisible(false)
+          navigate("/");
+        },
+      });
+
   };
 
   const [rmCheck, setRmCheck] = useState(false);
@@ -154,81 +180,84 @@ export default function SignIn() {
   };
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(formSubmit)}>
-            <Card className="mx-auto max-w-sm">
-              <CardHeader>
-                <CardTitle className="text-2xl font-[700]">Login</CardTitle>
-                <CardDescription>
-                  Enter your email below to login to your account
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="phone_number"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label className="font-semibold">Phone Number</Label>
-                          <FormControl>
-                            <Input
-                              name="phone_number"
-                              {...field}
-                              className={
-                                form.formState.errors.phone_number
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label>
-                            <div className="flex items-center">
-                              <Label
-                                htmlFor="password"
-                                className="font-semibold"
-                              >
-                                Password
-                              </Label>
-                              <Link
-                                to="#"
-                                className="ml-auto inline-block text-sm underline"
-                              >
-                                Forgot your password?
-                              </Link>
-                            </div>
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="password"
-                              type="password"
-                              {...field}
-                              className={
-                                form.formState.errors.password
-                                  ? "border-red-500"
-                                  : ""
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {/* <div className="flex items-center gap-x-1">
+      {otpvisible === false ? (
+        <div className="h-screen flex justify-center items-center ">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(formSubmit)}>
+              <Card className="mx-auto max-w-sm">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-[700]">Login</CardTitle>
+                  <CardDescription>
+                    Enter your email below to login to your account
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4">
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="phone_number"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Label className="font-semibold">
+                              Phone Number
+                            </Label>
+                            <FormControl>
+                              <Input
+                                name="phone_number"
+                                {...field}
+                                className={
+                                  form.formState.errors.phone_number
+                                    ? "border-red-500"
+                                    : ""
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Label>
+                              <div className="flex items-center">
+                                <Label
+                                  htmlFor="password"
+                                  className="font-semibold"
+                                >
+                                  Password
+                                </Label>
+                                <Link
+                                  to="#"
+                                  className="ml-auto inline-block text-sm underline"
+                                >
+                                  Forgot your password?
+                                </Link>
+                              </div>
+                            </Label>
+                            <FormControl>
+                              <Input
+                                id="password"
+                                type="password"
+                                {...field}
+                                className={
+                                  form.formState.errors.password
+                                    ? "border-red-500"
+                                    : ""
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    {/* <div className="flex items-center gap-x-1">
                     <input
                       type="checkbox"
                       value="remember"
@@ -237,25 +266,76 @@ export default function SignIn() {
                     />
                     <span className="mb-[.1rem]">Remember me</span>
                   </div> */}
-                  <Button type="submit" className="w-full font-semibold">
-                    Sign in
-                  </Button>
-                  <Button variant="outline" className="w-full font-semibold">
-                    Signin with Google
-                  </Button>
-                </div>
-                <div className="mt-4 text-center text-sm font-medium">
-                  Don&apos;t have an account?{" "}
-                  <Link to="/signup" className="underline font-medium">
-                    Sign up
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </form>
-        </Form>
-        <ToastContainer />
-      </div>
+                    <Button type="submit" className="w-full font-semibold">
+                      Sign in
+                    </Button>
+                    <Button variant="outline" className="w-full font-semibold">
+                      Signin with Google
+                    </Button>
+                  </div>
+                  <div className="mt-4 text-center text-sm font-medium">
+                    Don&apos;t have an account?{" "}
+                    <Link to="/signup" className="underline font-medium">
+                      Sign up
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </form>
+          </Form>
+        </div>
+      ) : (
+        <>
+          <div className="h-screen flex justify-center items-center ">
+            <Form {...form1}>
+              <form1 onSubmit={form1.handleSubmit(verifyotp)}>
+                <Card className="mx-auto max-w-sm">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-[700]">
+                      OTP Verification
+                    </CardTitle>
+                    <CardDescription>
+                      Enter your OTP below to Verify your Phone Number
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form className="w-2/3 space-y-6">
+                      <FormField
+                        control={form1.control}
+                        name="pin"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>One-Time Password</FormLabel>
+                            <FormControl>
+                              <InputOTP maxLength={6} {...field}>
+                                <InputOTPGroup>
+                                  <InputOTPSlot index={0} />
+                                  <InputOTPSlot index={1} />
+                                  <InputOTPSlot index={2} />
+                                  <InputOTPSlot index={3} />
+                                  <InputOTPSlot index={4} />
+                                  <InputOTPSlot index={5} />
+                                </InputOTPGroup>
+                              </InputOTP>
+                            </FormControl>
+                            <FormDescription>
+                              Please enter the one-time password sent to your
+                              phone.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button>Submit</Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </form1>
+            </Form>
+          </div>
+        </>
+      )}
+      <ToastContainer />
     </>
   );
 }
