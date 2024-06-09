@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, EyeIcon, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, EyeIcon, File, MoreHorizontal, PlusCircle } from "lucide-react";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums"
 
 import { Button } from "../Components/UI/shadcn-UI/button";
@@ -35,7 +35,10 @@ import {
 import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
 import { DataTable } from "@/Components/UI/shadcn-UI/DataTable";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/UI/shadcn-UI/sheet";
-import React from "react";
+import React, { RefAttributes, useRef } from "react";
+import Invoice from "@/Components/Section/Invoice";
+import { useNavigate } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
 
 export type Customer = {
   _id: number;
@@ -153,65 +156,104 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       const customer = row.original;
       const [customerentrydetails, setCustomerentrydetails] = React.useState([]);
-
+      // const navigate = useNavigate();
+      const componentRef = useRef();
+      const handleprint = useReactToPrint({
+        content: () => componentRef.current,
+      });
+      
       return (
-        <div className="flex gap-x-3">
-          <Editcustomer id={customer._id} />
-          <DeleteCustomer cid={customer._id} />
-          <div className="cursor-pointer w-5 h-5" >
-          <Sheet>
-            <SheetTrigger onClick={
-              async () => {
-                const response = await fetch(`http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`, {
-                  method: "GET",
-                  headers: {
-                    authorization: "Bearer " + localStorage.getItem("token"),
-                  },
-                });
+        <>
+          <div className="flex gap-x-3">
+            <Editcustomer id={customer._id} />
+            <DeleteCustomer cid={customer._id} />
+            <div className="cursor-pointer w-5 h-5" >
+              <Sheet>
+                <SheetTrigger onClick={
+                  async () => {
+                    const response = await fetch(`http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`, {
+                      method: "GET",
+                      headers: {
+                        authorization: "Bearer " + localStorage.getItem("token"),
+                      },
+                    });
 
-                const data = await response.json();
-                setCustomerentrydetails(data.data);
-              }
-            }><EyeIcon strokeWidth={3} /></SheetTrigger>
-            <SheetContent
-              className="p-4  w-auto h-auto overflow-y-auto"
-            >
-              <SheetHeader>
-                <SheetTitle>
-                  Customer Details
-                </SheetTitle>
-                <SheetDescription>
-                  <div className="text-left">
-                    <div className="flex justify-between">
-                      <div className="font-medium">Name</div>
-                      <div className="font-light">{customer.cname}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="font-medium">Phone Number</div>
-                      <div className="font-light">{customer.cphone_number}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="font-medium">Address</div>
-                      <div className="font-light">{customer.caddress}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="font-medium">Bottle Price</div>
-                      <div className="font-light">{customer.bottle_price}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="font-medium">Sequence Number</div>
-                      <div className="font-light">{customer.delivery_sequence_number}</div>
-                    </div>
-                  </div>
-                  <div>
-                    <DataTable columns={columns1} data={customerentrydetails} />
-                  </div>
-                </SheetDescription>
-              </SheetHeader>
-            </SheetContent>
-          </Sheet>
-        </div >
-        </div>
+                    const data = await response.json();
+                    setCustomerentrydetails(data.data);
+                  }
+                }><EyeIcon strokeWidth={3} /></SheetTrigger>
+                <SheetContent
+                  className="p-4  w-auto h-auto overflow-y-auto"
+                >
+                  <SheetHeader>
+                    <SheetTitle>
+                      Customer Details
+                    </SheetTitle>
+                    <SheetDescription>
+                      <div className="text-left">
+                        <div className="flex justify-between">
+                          <div className="font-medium">Name</div>
+                          <div className="font-light">{customer.cname}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Phone Number</div>
+                          <div className="font-light">{customer.cphone_number}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Address</div>
+                          <div className="font-light">{customer.caddress}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Bottle Price</div>
+                          <div className="font-light">{customer.bottle_price}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Sequence Number</div>
+                          <div className="font-light">{customer.delivery_sequence_number}</div>
+                        </div>
+                      </div>
+                      <div className="ml-auto flex items-center gap-2 float-start m-3">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1"
+                        >
+                          <File className="h-3.5 w-3.5" />
+                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            Export
+                          </span>
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1"
+                          onClick={handleprint}
+                        >
+                          <PlusCircle className="h-3.5 w-3.5" />
+                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            Generate Invoice
+                          </span>
+                        </Button>
+                        {/* <Button size="sm" className="h-8 gap-1">
+                        <PlusCircle className="h-3.5 w-3.5" />
+                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                          Genarate Invoice
+                        </span>
+                      </Button> */}
+                      </div>
+                      <div className="items-center float-start" id="datatable1">
+                        <DataTable columns={columns1} data={customerentrydetails} />
+                      </div>
+                    </SheetDescription>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
+            </div >
+          </div>
+          <div className="hidden">
+          
+          </div>
+        </>
       );
     },
   },

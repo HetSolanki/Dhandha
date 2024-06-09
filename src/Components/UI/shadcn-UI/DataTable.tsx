@@ -75,7 +75,7 @@ export function DataTable({ data, columns }) {
           }
           className="max-w-sm"
         /> */}
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
@@ -100,7 +100,7 @@ export function DataTable({ data, columns }) {
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>
