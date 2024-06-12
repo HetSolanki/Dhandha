@@ -3,21 +3,33 @@ import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 const Invoice = () => {
-  const [customers, setCustomers] = useState([{
-    _id: "",
-    cid: "",
-    bottle_count: 30,
-    delivery_date: "2024-05-30",
-    delivery_status: "Present",
-  }])
-  
-  const { bottle_count, cid, delivery_date, delivery_status, _id } = customers[0];
-console.log(customers[0])
+  const [customers, setCustomers] = useState([
+    {
+      _id: "",
+      cid: {
+        _id: "",
+        cname: "",
+        caddress: "",
+        cphone_number: "",
+        bottle_price: 0,
+      },
+      bottle_count: 30,
+      delivery_date: "2024-06-30",
+      delivery_status: "Present",
+    },
+  ]);
+
+  // const {
+  //   cid,
+  //   bottle_count,
+  //   delivery_date,
+  //   delivery_status,
+  // } = customers[0];
+
   const token = localStorage.getItem("token");
   const getData = async (date) => {
-    alert("ff")
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+      `http://localhost:3001/api/customerentry/getallcustomerentry/665623917f6c573a26bec389`,
       {
         method: "GET",
         headers: {
@@ -27,11 +39,8 @@ console.log(customers[0])
     );
     const res = await customers.json();
     if (res.status === "success") {
-      const selectedcustomers = res.data.filter((customer) => {
-        return customer.delivery_date === date;
-      });
-      console.log(await selectedcustomers);
-      setCustomers(selectedcustomers);
+      //get all current month data function
+      setCustomers(res.data);
     } else {
       console.log(res);
     }
@@ -55,27 +64,46 @@ console.log(customers[0])
 
   // Function to get the dates in the current month
   const getDatesInMonth = (month, year) => {
-    const date = new Date(year, month, 1);
-    const dates = [];
-    while (date.getMonth() === month) {
-      dates.push(date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' }));
-      date.setDate(date.getDate() + 1);
-    }
-    return dates;
+
+      const date = new Date(customers[0].delivery_date);
+      const dates = [];
+      while (date.getMonth() === month && date.getFullYear() === year) {
+        dates.push(new Date(date).toISOString().split("T")[0]);
+        date.setDate(date.getDate());
+      }
+      return dates;
+  
   };
 
   const currentDate = new Date();
-  const datesInMonth = getDatesInMonth(currentDate.getMonth(), currentDate.getFullYear());
+  const datesInMonth = getDatesInMonth(
+    currentDate.getMonth(),
+    currentDate.getFullYear()
+  );
 
+  console.log(datesInMonth);
   // Split the numbers into three parts
   const thirdIndex = Math.ceil(datesInMonth.length / 3);
   const firstPart = datesInMonth.slice(0, thirdIndex);
   const secondPart = datesInMonth.slice(thirdIndex, thirdIndex * 2);
   const thirdPart = datesInMonth.slice(thirdIndex * 2);
 
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const selectedCustomers = customers.filter((customer) => {
+    const deliveryDate = new Date(customer.delivery_date);
+    console.log(deliveryDate.getMonth());
+    console.log(currentMonth);
+    return (
+      deliveryDate.getMonth() === currentMonth &&
+      deliveryDate.getFullYear() === currentYear
+    );
+  });
+
   const handleprint = useReactToPrint({
     content: () => componentRef.current,
   });
+  
   return (
     <>
       <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10 ">
@@ -120,7 +148,6 @@ console.log(customers[0])
                 LOGO
                 <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600 dark:text-white">
                   Shop Name
-                  
                 </h1>
               </div>
               {/* <!-- Col --> */}
@@ -153,7 +180,8 @@ console.log(customers[0])
                   Bill to:
                 </h3>
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-200">
-                  {cid.cname}
+                  {/* Customer Name */}
+                  {customers[0].cid.cname}
                 </h3>
                 <address className="mt-2 not-italic text-gray-500 dark:text-neutral-500">
                   {/* 280 Suzanne Throughway,
@@ -162,9 +190,9 @@ console.log(customers[0])
                   <br />
                   United States
                   <br /> */}
-                  {cid.caddress}
+                  {customers[0].cid.caddress}
                   <br />
-                  {cid.cphone_number}
+                  {customers[0].cid.cphone_number}
                 </address>
               </div>
               {/* <!-- Col --> */}
@@ -209,9 +237,10 @@ console.log(customers[0])
 
                 <div className=" sm:block border-b border-gray-200 dark:border-neutral-700"></div>
 
-                {firstPart.map((number) => (
+                {firstPart.map((customer) => (
+                  // if
                   <div
-                    key={number}
+                    // key={customer._id}
                     className="grid grid-cols-2 sm:grid-cols-2 gap-2"
                   >
                     <div>
@@ -219,21 +248,24 @@ console.log(customers[0])
                         Date
                       </h5>
                       <p className="font-medium text-gray-800 dark:text-neutral-200">
-                        {number}
+                        {/* {customer.delivery_date} */}
                       </p>
                     </div>
                     <div>
                       <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Qty
                       </h5>
-                      <p className="text-gray-800 dark:text-neutral-200">1</p>
+                      <p className="text-gray-800 dark:text-neutral-200">
+                        {/* {console.log(selectedCustomers)}
+                        {customer.bottle_count} */}
+                      </p>
                     </div>
                   </div>
                 ))}
                 <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
               </div>
 
-              <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
+              {/* <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
                 <div className="hidden sm:grid sm:grid-cols-2 ">
                   <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                     Date
@@ -269,6 +301,7 @@ console.log(customers[0])
 
                 <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
               </div>
+
               <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
                 <div className="hidden sm:grid sm:grid-cols-2 ">
                   <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
@@ -304,7 +337,7 @@ console.log(customers[0])
                 ))}
 
                 <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
-              </div>
+              </div> */}
             </div>
             {/* <!-- End Table --> */}
 
@@ -315,10 +348,10 @@ console.log(customers[0])
                 <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                   <dl className="grid sm:grid-cols-5 gap-x-3">
                     <dt className="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">
-                      Bottle Price  :
+                      Bottle Price :
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {cid.bottle_price}
+                      {customers[0].cid.bottle_price}
                     </dd>
                   </dl>
                   <dl className="grid sm:grid-cols-5 gap-x-3">
@@ -326,7 +359,7 @@ console.log(customers[0])
                       Total Delivered Bottle :
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {bottle_count}
+                      {/* {bottle_count} */}
                     </dd>
                   </dl>
                   <dl className="grid sm:grid-cols-5 gap-x-3">
@@ -334,7 +367,7 @@ console.log(customers[0])
                       Subtotal:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                     {cid.bottle_price * bottle_count}
+                      {/* {cid.bottle_price * bottle_count} */}
                     </dd>
                   </dl>
 
@@ -343,7 +376,7 @@ console.log(customers[0])
                       Total:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {cid.bottle_price * bottle_count}
+                      {/* {cid.bottle_price * bottle_count} */}
                     </dd>
                   </dl>
 
@@ -352,7 +385,7 @@ console.log(customers[0])
                       Amount paid:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {cid.bottle_price * bottle_count}
+                      {/* {cid.bottle_price * bottle_count} */}
                     </dd>
                   </dl>
 
@@ -398,11 +431,11 @@ console.log(customers[0])
           <div className="mt-6 flex justify-end gap-x-3">
             <button
               className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-             onClick={()=>{
-              alert("Fetch Data")
-              getdeliverydateData("2024-05-29")
-             }}
-            > 
+              onClick={() => {
+                alert("Fetch Data");
+                getdeliverydateData("2024-06-10");
+              }}
+            >
               <svg
                 className="flex-shrink-0 size-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -425,12 +458,6 @@ console.log(customers[0])
               className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
               onClick={() => {
                 alert("Download");
-               console.log(
-                bottle_count,
-                cid.bottle_price,              
-                delivery_date,
-                delivery_status,            
-               )
               }}
             >
               <svg
