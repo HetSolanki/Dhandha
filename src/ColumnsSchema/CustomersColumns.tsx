@@ -12,33 +12,17 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, EyeIcon, File, MoreHorizontal, PlusCircle } from "lucide-react";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums"
-
 import { Button } from "../Components/UI/shadcn-UI/button";
-import { Checkbox } from "../Components/UI/shadcn-UI/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../Components/UI/shadcn-UI/dropdown-menu";
 import { Editcustomer } from "@/Components/UI/UI-Components/Editcustomer";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTrigger,
-  DialogHeader,
-  DialogTitle,
-} from "@/Components/UI/shadcn-UI/dialog";
 import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
 import { DataTable } from "@/Components/UI/shadcn-UI/DataTable";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/UI/shadcn-UI/sheet";
-import React, { RefAttributes, useRef } from "react";
-import Invoice from "@/Components/Section/Invoice";
+import React, { useRef } from "react";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { useNavigate } from "react-router-dom";
-import { useReactToPrint } from "react-to-print";
+import Invoice from "@/Components/Section/Invoice";
+
+
 
 export type Customer = {
   _id: number;
@@ -161,7 +145,6 @@ export const columns: ColumnDef<Customer>[] = [
       const handleprint = useReactToPrint({
         content: () => componentRef.current,
       });
-      
       return (
         <>
           <div className="flex gap-x-3">
@@ -217,6 +200,10 @@ export const columns: ColumnDef<Customer>[] = [
                           size="sm"
                           variant="outline"
                           className="h-8 gap-1"
+                          onClick={() => {
+                            console.log(customer._id)
+                          }}
+
                         >
                           <File className="h-3.5 w-3.5" />
                           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -251,7 +238,7 @@ export const columns: ColumnDef<Customer>[] = [
             </div >
           </div>
           <div className="hidden">
-          
+            <Invoice ref={componentRef} c_id={customer._id} />
           </div>
         </>
       );

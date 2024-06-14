@@ -1,8 +1,11 @@
-import { format } from "date-fns";
-import { useEffect, useRef, useState } from "react";
+import { useUser } from "@/Context/UserContext";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
-const Invoice = () => {
+const Invoice = React.forwardRef((props, ref) => {
+  const user = useUser();
+  console.log();
   const [customers, setCustomers] = useState([
     {
       _id: "",
@@ -19,17 +22,22 @@ const Invoice = () => {
     },
   ]);
 
-  // const {
-  //   cid,
-  //   bottle_count,
-  //   delivery_date,
-  //   delivery_status,
-  // } = customers[0];
+  console.log(props.c_id);
+
+  useEffect(() => {
+    console.log(new Date(Date.now()).toISOString().split("T")[0]);
+    const date = new Date(Date.now()).toISOString().split("T")[0];
+    getdeliverydateData(
+      // date.split("-")[0],
+      // date.split("-")[2].split("T")[0]
+      date
+    );
+  }, []);
 
   const token = localStorage.getItem("token");
-  const getData = async (date) => {
+  const getData = async (deliveryDate) => {
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentry/665623917f6c573a26bec389`,
+      `http://localhost:3001/api/customerentry/getallcustomerentry/${props.c_id}`,
       {
         method: "GET",
         headers: {
@@ -39,19 +47,35 @@ const Invoice = () => {
     );
     const res = await customers.json();
     if (res.status === "success") {
-      //get all current month data function
-      setCustomers(res.data);
+      // Get the current month and year
+      const currentMonth = moment().month() + 1; // moment().month() is zero-indexed
+      const currentYear = moment().year();
+
+      // Function to check if the delivery date is in the current month
+      const isCurrentMonth = (deliveryDate) => {
+        const dateObj = moment(deliveryDate, "YYYY-MM-DD");
+        return (
+          dateObj.month() + 1 === currentMonth && dateObj.year() === currentYear
+        );
+      };
+
+      // Filter the entries for the current month
+      const filteredEntries = res.data.filter((entry) =>
+        isCurrentMonth(entry.delivery_date)
+      );
+      console.log(filteredEntries);
+      setCustomers(filteredEntries);
     } else {
       console.log(res);
     }
   };
 
   const getdeliverydateData = (date) => {
-    getData(format(date, "yyyy-MM-dd"));
+    getData(date);
+    console.log(date);
   };
 
-  const componentRef = useRef();
-
+  // Get the current date
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -61,49 +85,27 @@ const Invoice = () => {
   const newInvoiceNumber = `${prefix}-${year}${month}${day}-${String(
     sequenceNumber
   ).padStart(4, "0")}`;
+  // Add 5 days to the current date
+  const futureDate = new Date(date);
+  futureDate.setDate(date.getDate() + 5);
+  // Format the date as needed (e.g., YYYY-MM-DD)
+  const formattedDate = futureDate.toISOString().split("T")[0];
 
-  // Function to get the dates in the current month
-  const getDatesInMonth = (month, year) => {
-
-      const date = new Date(customers[0].delivery_date);
-      const dates = [];
-      while (date.getMonth() === month && date.getFullYear() === year) {
-        dates.push(new Date(date).toISOString().split("T")[0]);
-        date.setDate(date.getDate());
-      }
-      return dates;
-  
-  };
-
-  const currentDate = new Date();
-  const datesInMonth = getDatesInMonth(
-    currentDate.getMonth(),
-    currentDate.getFullYear()
+  const totalBottles = customers.reduce(
+    (total, customer) => total + customer.bottle_count,
+    0
   );
 
-  console.log(datesInMonth);
-  // Split the numbers into three parts
-  const thirdIndex = Math.ceil(datesInMonth.length / 3);
-  const firstPart = datesInMonth.slice(0, thirdIndex);
-  const secondPart = datesInMonth.slice(thirdIndex, thirdIndex * 2);
-  const thirdPart = datesInMonth.slice(thirdIndex * 2);
-
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const selectedCustomers = customers.filter((customer) => {
-    const deliveryDate = new Date(customer.delivery_date);
-    console.log(deliveryDate.getMonth());
-    console.log(currentMonth);
-    return (
-      deliveryDate.getMonth() === currentMonth &&
-      deliveryDate.getFullYear() === currentYear
-    );
-  });
+  // // Split the numbers into three parts
+  const thirdIndex = Math.ceil(customers.length / 3);
+  const firstPart = customers.slice(0, thirdIndex);
+  const secondPart = customers.slice(thirdIndex, thirdIndex * 2);
+  const thirdPart = customers.slice(thirdIndex * 2);
 
   const handleprint = useReactToPrint({
     content: () => componentRef.current,
   });
-  
+
   return (
     <>
       <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10 ">
@@ -112,7 +114,7 @@ const Invoice = () => {
           {/* <!-- Card --> */}
           <div
             className="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-neutral-800"
-            ref={componentRef}
+            ref={ref}
           >
             {/* <!-- Grid --> */}
             <div className="flex justify-between">
@@ -145,9 +147,9 @@ const Invoice = () => {
                     className="fill-blue-600 dark:fill-white"
                   />
                 </svg> */}
-                LOGO
+  
                 <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600 dark:text-white">
-                  Shop Name
+                  {user.user.shop_name}
                 </h1>
               </div>
               {/* <!-- Col --> */}
@@ -166,7 +168,7 @@ const Invoice = () => {
                   KW5 8NW, London
                   <br />
                   United Kingdom <br /> */}
-                  Shop Address
+                  {user.user.shop_address}
                 </address>
               </div>
               {/* <!-- Col --> */}
@@ -205,7 +207,7 @@ const Invoice = () => {
                       Invoice date:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      03/10/2018
+                      {new Date(Date.now()).toISOString().split("T")[0]}
                     </dd>
                   </dl>
                   <dl className="grid sm:grid-cols-5 gap-x-3">
@@ -213,7 +215,7 @@ const Invoice = () => {
                       Due date:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      03/11/2018
+                      {formattedDate}
                     </dd>
                   </dl>
                 </div>
@@ -237,7 +239,7 @@ const Invoice = () => {
 
                 <div className=" sm:block border-b border-gray-200 dark:border-neutral-700"></div>
 
-                {firstPart.map((customer) => (
+                {customers.map((customer) => (
                   // if
                   <div
                     // key={customer._id}
@@ -248,7 +250,7 @@ const Invoice = () => {
                         Date
                       </h5>
                       <p className="font-medium text-gray-800 dark:text-neutral-200">
-                        {/* {customer.delivery_date} */}
+                        {customer.delivery_date}
                       </p>
                     </div>
                     <div>
@@ -256,8 +258,7 @@ const Invoice = () => {
                         Qty
                       </h5>
                       <p className="text-gray-800 dark:text-neutral-200">
-                        {/* {console.log(selectedCustomers)}
-                        {customer.bottle_count} */}
+                        {customer.bottle_count}
                       </p>
                     </div>
                   </div>
@@ -359,7 +360,7 @@ const Invoice = () => {
                       Total Delivered Bottle :
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {/* {bottle_count} */}
+                      {totalBottles}
                     </dd>
                   </dl>
                   <dl className="grid sm:grid-cols-5 gap-x-3">
@@ -367,7 +368,7 @@ const Invoice = () => {
                       Subtotal:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {/* {cid.bottle_price * bottle_count} */}
+                      {customers[0].cid.bottle_price * totalBottles}
                     </dd>
                   </dl>
 
@@ -376,7 +377,7 @@ const Invoice = () => {
                       Total:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {/* {cid.bottle_price * bottle_count} */}
+                      {customers[0].cid.bottle_price * totalBottles}
                     </dd>
                   </dl>
 
@@ -385,7 +386,7 @@ const Invoice = () => {
                       Amount paid:
                     </dt>
                     <dd className="col-span-2 text-gray-500 dark:text-neutral-500">
-                      {/* {cid.bottle_price * bottle_count} */}
+                      {customers[0].cid.bottle_price * totalBottles}
                     </dd>
                   </dl>
 
@@ -412,11 +413,15 @@ const Invoice = () => {
                 following contact information:
               </p>
               <div className="mt-2">
-                <p className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                  Shop Email
+                <p  className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
+                {
+                  user.user.uid.phone_number
+                }
                 </p>
                 <p className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                  Shop Phone Number
+                {
+                  user.user.uid.email
+                }
                 </p>
               </div>
             </div>
@@ -433,7 +438,7 @@ const Invoice = () => {
               className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
               onClick={() => {
                 alert("Fetch Data");
-                getdeliverydateData("2024-06-10");
+               
               }}
             >
               <svg
@@ -446,7 +451,7 @@ const Invoice = () => {
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
@@ -470,7 +475,7 @@ const Invoice = () => {
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
@@ -492,7 +497,7 @@ const Invoice = () => {
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               >
                 <polyline points="6 9 6 2 18 2 18 9" />
                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
@@ -507,6 +512,5 @@ const Invoice = () => {
       </div>
     </>
   );
-};
-
+});
 export default Invoice;
