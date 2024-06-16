@@ -1,16 +1,22 @@
 import { useUser } from "@/Context/UserContext";
-import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 const Invoice = React.forwardRef((props, ref) => {
+  const [firstPartCustomers, setFirstPartCustomers] = useState([]);
+  const [secondPartCustomers, setSecondPartCustomers] = useState([]);
+  const [thirdPartCustomers, setThirdPartCustomers] = useState([]);
+
+  // const getDaysInMonth = (month, year) => {
+  //   return new Array(31).fill('').map((v, i) => new Date(year, month, i + 1).getMonth() === month ? i + 1 : 0).filter(f => f);
+  // }
+
   const user = useUser();
-  console.log();
   const [customers, setCustomers] = useState([
     {
-      _id: "",
+      _id: "666ca8dc0ce9a41b959a5347",
       cid: {
-        _id: "",
+        _id: "665b66ece293adb9a2ebdd32",
         cname: "",
         caddress: "",
         cphone_number: "",
@@ -18,20 +24,17 @@ const Invoice = React.forwardRef((props, ref) => {
       },
       bottle_count: 30,
       delivery_date: "2024-06-30",
-      delivery_status: "Present",
+      delivery_status: "Absent",
     },
   ]);
-
-  console.log(props.c_id);
 
   useEffect(() => {
     console.log(new Date(Date.now()).toISOString().split("T")[0]);
     const date = new Date(Date.now()).toISOString().split("T")[0];
-    getdeliverydateData(
-      // date.split("-")[0],
-      // date.split("-")[2].split("T")[0]
-      date
-    );
+    getdeliverydateData(date);
+    document.title = `Invoice - ${user.user.shop_name} - ${
+      new Date().toISOString().split("T")[0]
+    }`;
   }, []);
 
   const token = localStorage.getItem("token");
@@ -47,24 +50,30 @@ const Invoice = React.forwardRef((props, ref) => {
     );
     const res = await customers.json();
     if (res.status === "success") {
-      // Get the current month and year
-      const currentMonth = moment().month() + 1; // moment().month() is zero-indexed
-      const currentYear = moment().year();
+      console.log(res.data);
 
-      // Function to check if the delivery date is in the current month
-      const isCurrentMonth = (deliveryDate) => {
-        const dateObj = moment(deliveryDate, "YYYY-MM-DD");
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+      const selectedCustomers = res.data.filter((customer) => {
+        const deliveryDate = new Date(customer.delivery_date);
         return (
-          dateObj.month() + 1 === currentMonth && dateObj.year() === currentYear
+          deliveryDate.getMonth() === currentMonth-1 &&
+          deliveryDate.getFullYear() === currentYear
         );
-      };
+      });
 
-      // Filter the entries for the current month
-      const filteredEntries = res.data.filter((entry) =>
-        isCurrentMonth(entry.delivery_date)
+      const sortedCustomers = selectedCustomers.sort(
+        (a, b) => new Date(a.delivery_date) - new Date(b.delivery_date)
       );
-      console.log(filteredEntries);
-      setCustomers(filteredEntries);
+
+      const thirdIndex = Math.ceil(sortedCustomers.length / 3);
+      setFirstPartCustomers(sortedCustomers.slice(0, thirdIndex));
+      setSecondPartCustomers(sortedCustomers.slice(thirdIndex, thirdIndex * 2));
+      setThirdPartCustomers(sortedCustomers.slice(thirdIndex * 2));
+
+      setCustomers(sortedCustomers);
+      console.log(sortedCustomers);
     } else {
       console.log(res);
     }
@@ -96,12 +105,6 @@ const Invoice = React.forwardRef((props, ref) => {
     0
   );
 
-  // // Split the numbers into three parts
-  const thirdIndex = Math.ceil(customers.length / 3);
-  const firstPart = customers.slice(0, thirdIndex);
-  const secondPart = customers.slice(thirdIndex, thirdIndex * 2);
-  const thirdPart = customers.slice(thirdIndex * 2);
-
   const handleprint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -119,35 +122,8 @@ const Invoice = React.forwardRef((props, ref) => {
             {/* <!-- Grid --> */}
             <div className="flex justify-between">
               <div>
-                {/* <svg
-                  className="size-10"
-                  width="26"
-                  height="26"
-                  viewBox="0 0 26 26"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1 26V13C1 6.37258 6.37258 1 13 1C19.6274 1 25 6.37258 25 13C25 19.6274 19.6274 25 13 25H12"
-                    className="stroke-blue-600 dark:stroke-white"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M5 26V13.16C5 8.65336 8.58172 5 13 5C17.4183 5 21 8.65336 21 13.16C21 17.6666 17.4183 21.32 13 21.32H12"
-                    className="stroke-blue-600 dark:stroke-white"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <circle
-                    cx="13"
-                    cy="13.0214"
-                    r="5"
-                    fill="currentColor"
-                    className="fill-blue-600 dark:fill-white"
-                  />
-                </svg> */}
-  
+                {/* Logo */}
+
                 <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600 dark:text-white">
                   {user.user.shop_name}
                 </h1>
@@ -239,10 +215,86 @@ const Invoice = React.forwardRef((props, ref) => {
 
                 <div className=" sm:block border-b border-gray-200 dark:border-neutral-700"></div>
 
-                {customers.map((customer) => (
+                {firstPartCustomers.map((customer) => (
                   // if
                   <div
-                    // key={customer._id}
+                    key={customer._id}
+                    className="grid grid-cols-2 sm:grid-cols-2 gap-2"
+                  >
+                    <div>
+                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Date
+                      </h5>
+                      <p className="font-medium text-gray-800 dark:text-neutral-200">
+                        {customer.delivery_date}
+                      </p>
+                    </div>
+                    <div>
+                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Qty
+                      </h5>
+                      <p className="text-gray-800 dark:text-neutral-200">
+                        {customer.bottle_count}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
+              </div>
+              <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
+                <div className="hidden sm:grid sm:grid-cols-2 ">
+                  <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                    Date
+                  </div>
+                  <div className="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                    Qty
+                  </div>
+                </div>
+
+                <div className=" sm:block border-b border-gray-200 dark:border-neutral-700"></div>
+
+                {secondPartCustomers.map((customer) => (
+                  // if
+                  <div
+                    key={customer._id}
+                    className="grid grid-cols-2 sm:grid-cols-2 gap-2"
+                  >
+                    <div>
+                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Date
+                      </h5>
+                      <p className="font-medium text-gray-800 dark:text-neutral-200">
+                        {customer.delivery_date}
+                      </p>
+                    </div>
+                    <div>
+                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Qty
+                      </h5>
+                      <p className="text-gray-800 dark:text-neutral-200">
+                        {customer.bottle_count}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
+              </div>
+              <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
+                <div className="hidden sm:grid sm:grid-cols-2 ">
+                  <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                    Date
+                  </div>
+                  <div className="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                    Qty
+                  </div>
+                </div>
+
+                <div className=" sm:block border-b border-gray-200 dark:border-neutral-700"></div>
+
+                {thirdPartCustomers.map((customer) => (
+                  // if
+                  <div
+                    key={customer._id}
                     className="grid grid-cols-2 sm:grid-cols-2 gap-2"
                   >
                     <div>
@@ -266,79 +318,6 @@ const Invoice = React.forwardRef((props, ref) => {
                 <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
               </div>
 
-              {/* <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
-                <div className="hidden sm:grid sm:grid-cols-2 ">
-                  <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                    Date
-                  </div>
-                  <div className="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                    Qty
-                  </div>
-                </div>
-
-                <div className="hidden sm:block border-b border-gray-200 dark:border-neutral-700"></div>
-
-                {secondPart.map((number) => (
-                  <div
-                    key={number}
-                    className="grid grid-cols-2 sm:grid-cols-2 gap-2"
-                  >
-                    <div>
-                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Date
-                      </h5>
-                      <p className="font-medium text-gray-800 dark:text-neutral-200">
-                        {number}
-                      </p>
-                    </div>
-                    <div>
-                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Qty
-                      </h5>
-                      <p className="text-gray-800 dark:text-neutral-200">1</p>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
-              </div>
-
-              <div className="border border-gray-200 p-4 rounded-lg space-y-1 h-full dark:border-neutral-700 sm:w-1/2">
-                <div className="hidden sm:grid sm:grid-cols-2 ">
-                  <div className="text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                    Date
-                  </div>
-                  <div className="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                    Qty
-                  </div>
-                </div>
-
-                <div className="hidden sm:block border-b border-gray-200 dark:border-neutral-700"></div>
-
-                {thirdPart.map((number) => (
-                  <div
-                    key={number}
-                    className="grid grid-cols-2 sm:grid-cols-2 gap-2"
-                  >
-                    <div>
-                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Date
-                      </h5>
-                      <p className="font-medium text-gray-800 dark:text-neutral-200">
-                        {number}
-                      </p>
-                    </div>
-                    <div>
-                      <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Qty
-                      </h5>
-                      <p className="text-gray-800 dark:text-neutral-200">1</p>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
-              </div> */}
             </div>
             {/* <!-- End Table --> */}
 
@@ -413,15 +392,11 @@ const Invoice = React.forwardRef((props, ref) => {
                 following contact information:
               </p>
               <div className="mt-2">
-                <p  className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                {
-                  user.user.uid.phone_number
-                }
+                <p className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
+                  {user.user.uid.phone_number}
                 </p>
                 <p className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                {
-                  user.user.uid.email
-                }
+                  {user.user.uid.email}
                 </p>
               </div>
             </div>
@@ -438,7 +413,6 @@ const Invoice = React.forwardRef((props, ref) => {
               className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
               onClick={() => {
                 alert("Fetch Data");
-               
               }}
             >
               <svg

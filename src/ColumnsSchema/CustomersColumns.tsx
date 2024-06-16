@@ -138,12 +138,25 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const [isLoading, setIsLoading] = React.useState(true);  // Loading state
       const customer = row.original;
       const [customerentrydetails, setCustomerentrydetails] = React.useState([]);
       // const navigate = useNavigate();
       const componentRef = useRef();
       const handleprint = useReactToPrint({
         content: () => componentRef.current,
+        onBeforeGetContent: () => {
+          alert("Content will Load now");
+          // setLoadinvoice(true);
+        },
+        onBeforePrint() {
+          alert("Printing will start now");
+        },
+        onAfterPrint() {
+          // setLoadinvoice(false);
+        },
+        // pageStyle: "@page { size: auto;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+
       });
       return (
         <>
@@ -154,6 +167,7 @@ export const columns: ColumnDef<Customer>[] = [
               <Sheet>
                 <SheetTrigger onClick={
                   async () => {
+                    setIsLoading(true);  // Start loading
                     const response = await fetch(`http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`, {
                       method: "GET",
                       headers: {
@@ -163,6 +177,7 @@ export const columns: ColumnDef<Customer>[] = [
 
                     const data = await response.json();
                     setCustomerentrydetails(data.data);
+                    setIsLoading(false);  // End loading
                   }
                 }><EyeIcon strokeWidth={3} /></SheetTrigger>
                 <SheetContent
@@ -221,12 +236,6 @@ export const columns: ColumnDef<Customer>[] = [
                             Generate Invoice
                           </span>
                         </Button>
-                        {/* <Button size="sm" className="h-8 gap-1">
-                        <PlusCircle className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                          Genarate Invoice
-                        </span>
-                      </Button> */}
                       </div>
                       <div className="items-center float-start" id="datatable1">
                         <DataTable columns={columns1} data={customerentrydetails} />
@@ -238,7 +247,14 @@ export const columns: ColumnDef<Customer>[] = [
             </div >
           </div>
           <div className="hidden">
-            <Invoice ref={componentRef} c_id={customer._id} />
+
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="loader">Loading</div> {/* Add your loader component or spinner here */}
+              </div>
+            ) : (<Invoice ref={componentRef} c_id={customer._id} />
+            )}
+
           </div>
         </>
       );
