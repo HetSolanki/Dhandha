@@ -22,7 +22,7 @@ const sidebarNavItems = [
   },
   {
     title: "Display",
-    href: "/examples/forms/display",
+    href: "/displaydetails",
   },
 ];
 

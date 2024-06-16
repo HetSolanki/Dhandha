@@ -10,11 +10,16 @@ import {
   CardContent,
 } from "@/Components/UI/shadcn-UI/card";
 import { Button } from "../UI/shadcn-UI/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 
 export default function CustomerEntry() {
+  const navigate = useNavigate();
   const { customer } = useCustomer();
+
+  const handleNavigate = () => {
+    navigate('/customerentrydata', { state: customer });
+  };
 
   // const getintialdata = async () => {
   //   alert(new Date().toISOString().split("T")[0]);
@@ -54,16 +59,9 @@ export default function CustomerEntry() {
                 List of all the customers and their entries
               </CardDescription>
             </div>
-            <Button asChild size="sm" className="ml-auto gap-1">
-              <Link
-                to="/customerentrydata"
-                // onClick={() => {
-                //   getintialdata();
-                // }}
-              >
+            <Button  size="sm" className="ml-auto gap-1" onClick={handleNavigate}>
                 View All
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
             </Button>
           </CardHeader>
           <CardContent>

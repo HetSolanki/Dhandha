@@ -53,12 +53,13 @@ const Invoice = React.forwardRef((props, ref) => {
       console.log(res.data);
 
       const currentMonth = new Date().getMonth();
+      console.log(currentMonth)
       const currentYear = new Date().getFullYear();
       // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
       const selectedCustomers = res.data.filter((customer) => {
         const deliveryDate = new Date(customer.delivery_date);
         return (
-          deliveryDate.getMonth() === currentMonth-1 &&
+          deliveryDate.getMonth() === currentMonth &&
           deliveryDate.getFullYear() === currentYear
         );
       });
