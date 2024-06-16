@@ -1,5 +1,4 @@
 export const updateUser = async (data, uid) => {
-  console.log(uid);
   const user = await fetch(`http://localhost:3001/api/auth/user/${uid}`, {
     method: "PUT",
     headers: {

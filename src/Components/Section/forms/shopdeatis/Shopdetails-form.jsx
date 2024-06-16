@@ -39,9 +39,7 @@ export function ShopForm() {
 
   async function onSubmit(data) {
     const uid = user.uid._id;
-    console.log("called");
     const updatedUser = await updateshop(data, uid);
-    console.log(updatedUser);
     updateUserContext();
     if (updatedUser.status === "success") {
       toast.success("Shop Details Updated Successfully", {

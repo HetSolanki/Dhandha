@@ -15,13 +15,13 @@ import { Link } from "react-router-dom"
 
 const records: { title: string; href: string; description: string }[] = [
     {
-        title: "Customer Entry Records", 
+        title: "Customer Entry Records",
         href: "/customerentrydata",
         description:
             "Records of all the customers that have been entered into the system.",
     },
     {
-        title: "Customer Data Records", 
+        title: "Customer Data Records",
         href: "/",
         description:
             "Records of all the customers that have been entered into the system.",
@@ -62,25 +62,25 @@ export function NavbarItems() {
         <NavigationMenu>
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <Link to="/" >
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/" >
                             Dashboard
-                        </NavigationMenuLink>
-                    </Link>
+                        </Link>
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <Link to="/customers" >
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/customers" >
                             Customers
-                        </NavigationMenuLink>
-                    </Link>
+                        </Link>
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <Link to="/customerentry" >
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/customerentry" >
                             Customer Entry
-                        </NavigationMenuLink>
-                    </Link>
+                        </Link>
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
                 {/* <NavigationMenuItem>
                     <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
@@ -138,28 +138,28 @@ export function NavbarItems() {
     )
 }
 
-const ListItem = React.forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-    return (
-        <li>
-            <NavigationMenuLink asChild>
-                <a
-                    ref={ref}
-                    className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        className
-                    )}
-                    {...props}
-                >
-                    <div className="text-sm font-medium leading-none">{title}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {children}
-                    </p>
-                </a>
-            </NavigationMenuLink>
-        </li>
-    )
-})
-ListItem.displayName = "ListItem"
+// const ListItem = React.forwardRef<
+//     React.ElementRef<"a">,
+//     React.ComponentPropsWithoutRef<"a">
+// >(({ className, title, children, ...props }, ref) => {
+//     return (
+//         <li>
+//             <NavigationMenuLink asChild>
+//                 <Link
+//                     ref={ref}
+//                     className={cn(
+//                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+//                         className
+//                     )}
+//                     {...props}
+//                 >
+//                     <div className="text-sm font-medium leading-none">{title}</div>
+//                     <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+//                         {children}
+//                     </p>
+//                 </Link>
+//             </NavigationMenuLink>
+//         </li>
+//     )
+// })
+// ListItem.displayName = "ListItem"

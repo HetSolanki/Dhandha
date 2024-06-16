@@ -28,53 +28,52 @@ export type Customer = {
   cphone_number: number;
   caddress: string;
   bottle_price: number;
-  id: number;
+  uid: string;
   no_of_bottle: number;
   delivery_sequence_number: number;
 };
 
-const handleEntry = async (customer) => {
+const handleEntry = async (customer, status) => {
   const no_of_bottles = document.getElementById(customer._id);
-  if (no_of_bottles.value !== "") {
-    if (parseInt(no_of_bottles.value) > 0) {
-      const newEntry = await addcustomerEntry({
-        cid: customer._id,
-        no_of_bottles: parseInt(no_of_bottles.value),
-        delivery_status: "Presenet",
-      });
 
-      if (newEntry.status === "success") {
-        alert("Entry added successfully");
-      }
-      else {
-        alert("Entry could not be added");
-      }
+  if (status === "Present") {
+    if (no_of_bottles.value !== "") {
+      if (parseInt(no_of_bottles.value) > 0) {
+        const newEntry = await addcustomerEntry({
+          no_of_bottles: parseInt(no_of_bottles.value),
+          delivery_status: "Present",
+        }, customer._id);
 
+        if (newEntry.status === "success") {
+          alert("Entry added successfully");
+          console.log(newEntry)
+        }
+        else {
+          alert("Entry could not be added");
+        }
+      } else {
+        console.log(customer)
+        no_of_bottles.value = 0;
+      }
     } else {
+      alert("Please enter the quantity");
       no_of_bottles.value = 0;
     }
-  } else {
-    alert("Please enter the quantity");
-    no_of_bottles.value = 0;
+  }
+
+  if (status === "Absent") {
+    const newEntry = await addcustomerEntry({
+      no_of_bottles: 0,
+      delivery_status: "Absent",
+    }, customer._id,);
+    if (newEntry.status === "success") {
+      alert("Absent Entry added successfully");
+    }
+    else {
+      alert("Entry could not be added");
+    }
   }
 };
-const handleAbsentEntry = async (customer) => {
-  const no_of_bottles = document.getElementById(customer._id);
-  const newEntry = await addcustomerEntry({
-    cid: customer._id,
-    no_of_bottles: 0,
-    delivery_status: "Absent",
-  });
-
-  if (newEntry.status === "success") {
-    alert("Absent Entry added successfully");
-  }
-  else {
-    alert("Entry could not be added");
-  }
-};
-
-
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -97,14 +96,16 @@ export const columns: ColumnDef<Customer>[] = [
       <div className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
       </div>
-    ),
+    ),  
   },
+
   {
     accessorKey: "cname",
     header: () => <div className="text-left">Customer Name</div>,
     cell: ({ row }) => (
       <div className="capitalize text-left">{row.getValue("cname")}</div>
     ),
+
   },
   {
     accessorKey: "caddress",
@@ -121,10 +122,7 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-left">
-          <TextField
-            variant="outlined"
-            size="small"
-            type="text"
+          <Input
             value={row.getValue("bottle_price")}
             className="w-20 text-center"
             disabled
@@ -178,8 +176,8 @@ export const columns: ColumnDef<Customer>[] = [
               className="w-14 remove-arrow"
               type="number"
               step={1}
+              defaultValue={0}
             />
-
             <div
               className="cursor-pointer"
               onClick={() => {
@@ -221,27 +219,26 @@ export const columns: ColumnDef<Customer>[] = [
             <Button
               size="icon"
               className="h-8 gap-1 inl"
-              onClick={() => handleEntry(customer)}
+              onClick={() => handleEntry(customer,"Present")}
             >
               <ClipboardCheckIcon />
             </Button>
             <Button size="icon" className="h-8 gap-1"
               onClick={() => {
-                handleAbsentEntry(customer);
+                handleEntry(customer,"Absent");
               }}
             >
               <ClipboardXIcon />
             </Button>
-            <Button
+            {/* <Button
               size="icon"
               className="h-8 gap-1"
               onClick={() => {
-                console.log("View");
                 alert(customer.cname);
               }}
             >
               <EyeIcon />
-            </Button>
+            </Button> */}
           </Stack>
         </>
       );

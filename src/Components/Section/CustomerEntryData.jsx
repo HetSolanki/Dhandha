@@ -25,25 +25,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
 import { useState } from "react";
 import { DataTable } from "../UI/shadcn-UI/DataTable";
-import { columns } from "@/ColumnsSchema/CustomersEntryDataColums";
+import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CustomerEntryData = () => {
+  const location = useLocation();
+  const intialdata = location.state;
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState([
-    {
-      _id: "6658b554fd6f74a6b9627d0a",
-      cid: "665623917f6c573a26bec389",
-      bottle_count: 30,
-      delivery_date: "2024-05-30",
-      delivery_status: "Presenet",
-      __v: 0,
-    },
-  ]);
-
+  const [customers, setCustomers] = useState([...intialdata]);
+  console.log(customers);
   const getallfilteredcustomers = (option) => {
-
     if (option === "Absent") {
       const absentcustomers = customers.filter((customer) => {
         return customer.delivery_status === "Absent";
@@ -53,9 +45,9 @@ const CustomerEntryData = () => {
       return;
     }
 
-    if (option === "Presenet") {
+    if (option === "Present") {
       const presentcustomers = customers.filter((customer) => {
-        return customer.delivery_status === "Presenet";
+        return customer.delivery_status === "Present";
       });
 
       setCustomers(presentcustomers);
@@ -96,14 +88,14 @@ const CustomerEntryData = () => {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuCheckboxItem
                                   onClick={() => {
-                                    getallfilteredcustomers('Presenet');
+                                    getallfilteredcustomers("Present");
                                   }}
                                 >
                                   Present
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuCheckboxItem
                                   onClick={() => {
-                                    getallfilteredcustomers('Absent');
+                                    getallfilteredcustomers("Absent");
                                   }}
                                 >
                                   Absent
@@ -127,10 +119,10 @@ const CustomerEntryData = () => {
                               <span
                                 className="sr-only sm:not-sr-only sm:whitespace-nowrap"
                                 onClick={() => {
-                                  navigate('/customerentry');
+                                  navigate("/customerentry");
                                 }}
                               >
-                                Back to Entry 
+                                Back to Entry
                               </span>
                             </Button>
                           </div>
@@ -143,7 +135,7 @@ const CustomerEntryData = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <DataTable data={customers} columns={columns} />
+                        <DataTable data={customers} columns={columns1} />
                       </CardContent>
                       <CardFooter>
                         <div className="text-xs text-muted-foreground">

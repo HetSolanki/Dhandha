@@ -10,27 +10,19 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import { ArrowUpDown, EyeIcon, File, MoreHorizontal, PlusCircle } from "lucide-react";
+import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums"
 import { Button } from "../Components/UI/shadcn-UI/button";
-import { Checkbox } from "../Components/UI/shadcn-UI/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../Components/UI/shadcn-UI/dropdown-menu";
 import { Editcustomer } from "@/Components/UI/UI-Components/Editcustomer";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTrigger,
-  DialogHeader,
-} from "@/Components/UI/shadcn-UI/dialog";
 import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
+import { DataTable } from "@/Components/UI/shadcn-UI/DataTable";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/UI/shadcn-UI/sheet";
+import React, { useRef } from "react";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
+import { useNavigate } from "react-router-dom";
+import Invoice from "@/Components/Section/Invoice";
+
+
 
 export type Customer = {
   _id: number;
@@ -136,7 +128,7 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase text-left">
+      <div className="lowercase text-left ">
         {row.getValue("delivery_sequence_number")}
       </div>
     ),
@@ -146,12 +138,125 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const [isLoading, setIsLoading] = React.useState(true);  // Loading state
       const customer = row.original;
+      const [customerentrydetails, setCustomerentrydetails] = React.useState([]);
+      // const navigate = useNavigate();
+      const componentRef = useRef();
+      const handleprint = useReactToPrint({
+        content: () => componentRef.current,
+        onBeforeGetContent: () => {
+          alert("Content will Load now");
+          // setLoadinvoice(true);
+        },
+        onBeforePrint() {
+          alert("Printing will start now");
+        },
+        onAfterPrint() {
+          // setLoadinvoice(false);
+        },
+        // pageStyle: "@page { size: auto;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+
+      });
       return (
-        <div className="flex gap-x-4">
-          <Editcustomer id={customer._id} />
-          <DeleteCustomer cid={customer._id} />
-        </div>
+        <>
+          <div className="flex gap-x-3">
+            <Editcustomer id={customer._id} />
+            <DeleteCustomer cid={customer._id} />
+            <div className="cursor-pointer w-5 h-5" >
+              <Sheet>
+                <SheetTrigger onClick={
+                  async () => {
+                    setIsLoading(true);  // Start loading
+                    const response = await fetch(`http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`, {
+                      method: "GET",
+                      headers: {
+                        authorization: "Bearer " + localStorage.getItem("token"),
+                      },
+                    });
+
+                    const data = await response.json();
+                    setCustomerentrydetails(data.data);
+                    setIsLoading(false);  // End loading
+                  }
+                }><EyeIcon strokeWidth={3} /></SheetTrigger>
+                <SheetContent
+                  className="p-4  w-auto h-auto overflow-y-auto"
+                >
+                  <SheetHeader>
+                    <SheetTitle>
+                      Customer Details
+                    </SheetTitle>
+                    <SheetDescription>
+                      <div className="text-left">
+                        <div className="flex justify-between">
+                          <div className="font-medium">Name</div>
+                          <div className="font-light">{customer.cname}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Phone Number</div>
+                          <div className="font-light">{customer.cphone_number}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Address</div>
+                          <div className="font-light">{customer.caddress}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Bottle Price</div>
+                          <div className="font-light">{customer.bottle_price}</div>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="font-medium">Sequence Number</div>
+                          <div className="font-light">{customer.delivery_sequence_number}</div>
+                        </div>
+                      </div>
+                      <div className="ml-auto flex items-center gap-2 float-start m-3">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1"
+                          onClick={() => {
+                            console.log(customer._id)
+                          }}
+
+                        >
+                          <File className="h-3.5 w-3.5" />
+                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            Export
+                          </span>
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1"
+                          onClick={handleprint}
+                        >
+                          <PlusCircle className="h-3.5 w-3.5" />
+                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            Generate Invoice
+                          </span>
+                        </Button>
+                      </div>
+                      <div className="items-center float-start" id="datatable1">
+                        <DataTable columns={columns1} data={customerentrydetails} />
+                      </div>
+                    </SheetDescription>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
+            </div >
+          </div>
+          <div className="hidden">
+
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="loader">Loading</div> {/* Add your loader component or spinner here */}
+              </div>
+            ) : (<Invoice ref={componentRef} c_id={customer._id} />
+            )}
+
+          </div>
+        </>
       );
     },
   },

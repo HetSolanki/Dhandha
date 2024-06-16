@@ -1,5 +1,4 @@
 export const addcustomer = async (data, uid) => {
-  console.log(uid);
   const customer = await fetch("http://localhost:3001/api/customers/customer", {
     method: "POST",
     headers: {

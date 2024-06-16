@@ -21,12 +21,9 @@ import { useUser } from "@/Context/UserContext";
 import { NavbarItems } from "./NavbarItems";
 import { ModeToggle } from "../UI/UI-Components/ModeToggle";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useUser();
-
-  console.log(user);
 
   return (
     <>
@@ -43,7 +40,6 @@ const Navbar = () => {
               {user?.shop_name}
             </h4>
           </Link>
-         
           <NavbarItems />
         </nav>
         <Sheet>
@@ -94,7 +90,7 @@ const Navbar = () => {
             </div>
           </form>
           <ModeToggle />
-          <span>Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}</span>
+          <span className="hidden sm:block">Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">

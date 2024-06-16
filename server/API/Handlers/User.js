@@ -5,6 +5,11 @@ import { comparePassword } from "../Module/auth.js";
 export const getAllUser = async (req, res) => {
   try {
     const allUsers = await User.find({});
+
+    if (allUsers.length === 0) {
+      return res.json({ data: "No User Found", status: "failed" });
+    }
+
     res.json({ data: allUsers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -49,12 +54,16 @@ export const updateUser = async (req, res) => {
     },
     { new: true }
   );
-
   res.json({ data: updatedUser, status: "success" });
 };
 
 export const deleteUser = async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+  if (!deletedUser) {
+    return res.json({ data: "User not found", status: "failed" });
+  }
+
   res.json({ data: deletedUser, status: "success" });
 };
 
@@ -63,7 +72,6 @@ export const signIn = async (req, res) => {
     const user = await User.findOne({ phone_number: req.body.phone_number });
 
     if (user) {
-      console.log(user);
       if (await comparePassword(req.body.password, user.password)) {
         const token = createJWT(user);
         res.json({ token, success: true, cid: user._id });

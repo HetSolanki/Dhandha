@@ -2,11 +2,11 @@ import { Router as Route } from "express";
 import { body } from "express-validator";
 import {
   getAllCustomerEntry,
-  getOneCustomerEntry,
+  // getOneCustomerEntry,
   createCustomerEntry,
   updateCustomerEntry,
   deleteCustomerEntry,
-  getAllCustomerEntryByDate,
+  getAllCustomerEntrys,
 } from "./Handlers/CustomerEntry.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
@@ -18,17 +18,16 @@ router.use(cors());
 // Get All the Customer Entry
 router.get("/getallcustomerentry/:id", protect, getAllCustomerEntry);
 
-// Get All the Customer Entry by it's Date
-router.get("/getallcustomerentrybydate/:date", protect, getAllCustomerEntryByDate);
+// Get All the Customer Entry 
+router.get("/getallcustomerentrys/", protect, getAllCustomerEntrys);
 
 // Get Customer Entry by it's id
-router.get("/getcustomerentry/:id", getOneCustomerEntry);
+// router.get("/getcustomerentry/:id", getOneCustomerEntry);
 
 // Create Customer Entry
 router.post(
   "/addcustomerentry",
   [
-    body("cid").exists(),
     body("bottle_count").exists(),
     body("delivery_date").exists(),
     body("delivery_status").exists(),

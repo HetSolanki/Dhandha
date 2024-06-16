@@ -2,23 +2,23 @@ import CustomerEntry from "../Schema/customerEntry.js";
 
 export const getAllCustomerEntry = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id });
+    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id }).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No Customer Entry Found", status: "error" });
+      return res.json({ message: "No Customer's Entry Found", status: "error" });
     }
+    console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
   }
 };
 
-export const getAllCustomerEntryByDate = async (req, res) => {
+export const getAllCustomerEntrys = async (req, res) => {
   try {
     const allCustomerEntry = await CustomerEntry.find({
-      delivery_date: req.params.date,
-    });
+    }).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No Customer Entry Found", status: "error" });
+      return res.json({ message: "No any Customer's Entry Found", status: "error" });
     }
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
@@ -26,18 +26,17 @@ export const getAllCustomerEntryByDate = async (req, res) => {
   }
 }
 
-export const getOneCustomerEntry = async (req, res) => {
-  try {
-    const customerEntry = await CustomerEntry.findById(req.params.id);
-    if (!customerEntry) {
-      return res.json({ message: "No Customer Entry Found", status: "error" });
-    }
-
-    res.json({ data: customerEntry, status: "success" });
-  } catch (error) {
-    res.json({ message: "Error" });
-  }
-};
+// export const getOneCustomerEntry = async (req, res) => {
+//   try {
+//     const customerEntry = await CustomerEntry.findById(req.params.id);
+//     if (!customerEntry) {
+//       return res.json({ message: "No Customer Entry Found", status: "error" });
+//     }
+//     res.json({ data: customerEntry, status: "success" });
+//   } catch (error) {
+//     res.json({ message: "Error" });
+//   }
+// };
 
 export const createCustomerEntry = async (req, res) => {
   try {
@@ -47,6 +46,7 @@ export const createCustomerEntry = async (req, res) => {
       delivery_date: req.body.delivery_date,
       delivery_status: req.body.delivery_status,
     });
+
     res.json({ data: newCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ error });
@@ -64,6 +64,7 @@ export const updateCustomerEntry = async (req, res) => {
     },
     { new: true }
   );
+
   res.json({ data: updatedCustomerEntry, status: "success" });
 };
 
@@ -73,7 +74,7 @@ export const deleteCustomerEntry = async (req, res) => {
       req.params.id
     );
     if (!deletedCustomerEntry) {
-      return res.json({ message: "No Customer Entry Found", status: "error" });
+      return res.json({ message: "No Customer's Entry Found", status: "error" });
     }
     res.json({ data: deletedCustomerEntry, status: "success" });
   } catch (error) {
