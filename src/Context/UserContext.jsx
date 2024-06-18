@@ -11,7 +11,7 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   const token = localStorage.getItem("token");
-
+  
   if (token !== null) {
     var userToken = jwtDecode(token);
   } else {

@@ -143,6 +143,7 @@ export const columns: ColumnDef<Customer>[] = [
       const [customerentrydetails, setCustomerentrydetails] = React.useState([]);
       // const navigate = useNavigate();
       const componentRef = useRef();
+      
       const handleprint = useReactToPrint({
         content: () => componentRef.current,
         onBeforeGetContent: () => {
