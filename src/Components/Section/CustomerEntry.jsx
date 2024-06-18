@@ -10,42 +10,47 @@ import {
   CardContent,
 } from "@/Components/UI/shadcn-UI/card";
 import { Button } from "../UI/shadcn-UI/button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
 
 export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
+  const [intialdata, setIntialdata] = useState([]);
 
-  const handleNavigate = () => {
-    navigate('/customerentrydata', { state: customer });
+  const handleNavigate =async () => {
+    const data = getintialdata();
+    console.log(await data)
+    navigate('/customerentrydata', { state: await data});
   };
 
-  // const getintialdata = async () => {
-  //   alert(new Date().toISOString().split("T")[0]);
-  //   const token = localStorage.getItem("token");
-  //   const customers = await fetch(
-  //     `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         authorization: "Bearer " + token,
-  //       },
-  //     }
-  //   );
-  //   const res = await customers.json();
-  //   if (res.status === "success") {
-  //     const todayscustomer = res.data.filter((customer) => {
-  //       return (
-  //         customer.delivery_date === new Date().toISOString().split("T")[0]
-  //       );
-  //     });
-  //     console.log(todayscustomer);
-  //     setCustomers(todayscustomer);
-  //   } else {
-  //     console.log(res);
-  //   }
-  // };
+  const getintialdata = async () => {
+    alert(new Date(Date.now()).toISOString().split("T")[0]);
+    const token = localStorage.getItem("token");
+    const customers = await fetch(
+      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+      {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    );
+    const res = await customers.json();
+    if (res.status === "success") {
+      const todayscustomer = res.data.filter((customer) => {
+        return (
+          customer.delivery_date === new Date(Date.now()).toISOString().split("T")[0]
+        );
+      });
+      console.log(todayscustomer)
+      setIntialdata(todayscustomer);
+      return todayscustomer;
+    } else {
+      console.log(res);
+    }
+  };
 
   return (
     <div>

@@ -58,25 +58,30 @@ const records: { title: string; href: string; description: string }[] = [
 ];
 
 export function NavbarItems() {
-  return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-            <Link to="/dashboard">Dashboard</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-            <Link to="/customers">Customers</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-            <Link to="/customerentry">Customer Entry</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        {/* <NavigationMenuItem>
+    return (
+        <NavigationMenu>
+            <NavigationMenuList>
+                <NavigationMenuItem>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/dashboard" >
+                            Dashboard
+                        </Link>
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/customers" >
+                            Customers
+                        </Link>
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                        <Link to="/customerentry" >
+                            Customer Entry
+                        </Link>
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
                     <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">

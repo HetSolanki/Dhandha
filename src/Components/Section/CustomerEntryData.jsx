@@ -34,6 +34,8 @@ const CustomerEntryData = () => {
   const intialdata = location.state;
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([...intialdata]);
+  const [presentcheck, setPresentcheck] = useState(false);
+  const [absentcheck, setAbsentcheck] = useState(false);
   console.log(customers);
   const getallfilteredcustomers = (option) => {
     if (option === "Absent") {
@@ -53,6 +55,13 @@ const CustomerEntryData = () => {
       setCustomers(presentcustomers);
       return;
     }
+
+    if (option === "All") {
+      setCustomers(customers);
+      return;
+    }
+
+    return;
   };
 
   return (
@@ -87,16 +96,30 @@ const CustomerEntryData = () => {
                                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuCheckboxItem
+                                  checked={presentcheck}                                  
                                   onClick={() => {
-                                    getallfilteredcustomers("Present");
+                                    setPresentcheck(!presentcheck);
+                                    if (!presentcheck === true) {
+                                      getallfilteredcustomers("Present");
+                                    }
+                                    else{
+                                      getallfilteredcustomers("All");
+                                    }
                                   }}
                                 >
                                   Present
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuCheckboxItem
+                                  checked={absentcheck}
                                   onClick={() => {
-                                    getallfilteredcustomers("Absent");
+                                    setAbsentcheck(!absentcheck);
+                                    if (!absentcheck === true) {
+                                      getallfilteredcustomers("Absent");
+                                    }else{
+                                      getallfilteredcustomers("All");
+                                    }                   
                                   }}
+                                  
                                 >
                                   Absent
                                 </DropdownMenuCheckboxItem>
