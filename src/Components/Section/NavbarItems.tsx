@@ -3,86 +3,87 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
 } from "@/Components/UI/shadcn-UI/navigation-menu";
 import { Link } from "react-router-dom";
 
 const records: { title: string; href: string; description: string }[] = [
-  {
-    title: "Customer Entry Records",
-    href: "/customerentrydata",
-    description:
-      "Records of all the customers that have been entered into the system.",
-  },
-  {
-    title: "Customer Data Records",
-    href: "/",
-    description:
-      "Records of all the customers that have been entered into the system.",
-  },
-  // {
-  //     title: "Hover Card",
-  //     href: "/docs/primitives/hover-card",
-  //     description:
-  //         "For sighted users to preview content available behind a link.",
-  // },
-  // {
-  //     title: "Progress",
-  //     href: "/docs/primitives/progress",
-  //     description:
-  //         "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  // },
-  // {
-  //     title: "Scroll-area",
-  //     href: "/docs/primitives/scroll-area",
-  //     description: "Visually or semantically separates content.",
-  // },
-  // {
-  //     title: "Tabs",
-  //     href: "/docs/primitives/tabs",
-  //     description:
-  //         "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  // },
-  // {
-  //     title: "Tooltip",
-  //     href: "/docs/primitives/tooltip",
-  //     description:
-  //         "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-  // },
+    {
+        title: "Customer Entry Records",
+        href: "/customerentrydata",
+        description:
+            "Records of all the customers that have been entered into the system.",
+    },
+    {
+        title: "Customer Data Records",
+        href: "/",
+        description:
+            "Records of all the customers that have been entered into the system.",
+    },
+    // {
+    //     title: "Hover Card",
+    //     href: "/docs/primitives/hover-card",
+    //     description:
+    //         "For sighted users to preview content available behind a link.",
+    // },
+    // {
+    //     title: "Progress",
+    //     href: "/docs/primitives/progress",
+    //     description:
+    //         "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    // },
+    // {
+    //     title: "Scroll-area",
+    //     href: "/docs/primitives/scroll-area",
+    //     description: "Visually or semantically separates content.",
+    // },
+    // {
+    //     title: "Tabs",
+    //     href: "/docs/primitives/tabs",
+    //     description:
+    //         "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    // },
+    // {
+    //     title: "Tooltip",
+    //     href: "/docs/primitives/tooltip",
+    //     description:
+    //         "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    // },
 ];
 
 export function NavbarItems() {
     return (
+        <>
         <NavigationMenu>
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                        <Link to="/dashboard" >
-                            Dashboard
-                        </Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                        <Link to="/customers" >
-                            Customers
-                        </Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                        <Link to="/customerentry" >
-                            Customer Entry
-                        </Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                    <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                            <Link to="/dashboard" >
+                                Dashboard
+                            </Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                            <Link to="/customers" >
+                                Customers
+                            </Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                            <Link to="/customerentry" >
+                                Customer Entry
+                            </Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                    {/* <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                             <li className="row-span-3">
@@ -112,9 +113,9 @@ export function NavbarItems() {
                                 Styles for headings, paragraphs, lists...etc
                             </ListItem>
                         </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem> */}
-        {/* <NavigationMenuItem>
+                    </NavigationMenuContent> */}
+                </NavigationMenuList>
+                {/* <NavigationMenuItem>
                     <NavigationMenuTrigger>Records</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -130,10 +131,10 @@ export function NavbarItems() {
                             ))}
                         </ul>
                     </NavigationMenuContent>
-                </NavigationMenuItem> */}
-      </NavigationMenuList>
-    </NavigationMenu>
-  );
+                </NavigationMenuItem> */}        
+        </NavigationMenu >
+    </>
+    );
 }
 
 // const ListItem = React.forwardRef<
