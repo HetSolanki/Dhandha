@@ -22,6 +22,8 @@ import { Stack, TextField } from "@mui/material";
 import { addcustomerEntry } from "../Handlers/AddcustomerEntryHandler"
 import { Input } from "@/Components/UI/shadcn-UI/input";
 import '../index.css'
+import { toast, ToastContainer } from "react-toastify";
+import React from "react";
 
 export type Customer = {
   cname: string;
@@ -33,7 +35,9 @@ export type Customer = {
   delivery_sequence_number: number;
 };
 
-const handleEntry = async (customer, status) => {
+const handleEntry = async ( customer: Customer,
+  status: string,
+  setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>) => {
   const no_of_bottles = document.getElementById(customer._id);
 
   if (status === "Present") {
@@ -45,18 +49,20 @@ const handleEntry = async (customer, status) => {
         }, customer._id);
 
         if (newEntry.status === "success") {
-          alert("Entry added successfully");
+          toast.success("Entry added successfully");
+          setCustomers(prev => prev.filter(c => c.uid !== customer.uid));          
           console.log(newEntry)
         }
         else {
-          alert("Entry could not be added");
+          toast.error("Entry could not be added");
         }
       } else {
+        toast.error("Please enter a valid quantity");      
         console.log(customer)
         no_of_bottles.value = 0;
       }
     } else {
-      alert("Please enter the quantity");
+      toast.error("Please enter the quantity");
       no_of_bottles.value = 0;
     }
   }
@@ -67,13 +73,15 @@ const handleEntry = async (customer, status) => {
       delivery_status: "Absent",
     }, customer._id,);
     if (newEntry.status === "success") {
-      alert("Absent Entry added successfully");
+      toast.success("Entry added successfully");
+      setCustomers(prev => prev.filter(c => c.uid !== customer.uid));
     }
     else {
-      alert("Entry could not be added");
+      toast.error("Entry could not be added");
     }
   }
 };
+
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -202,6 +210,7 @@ export const columns: ColumnDef<Customer>[] = [
               </svg>
             </div>
           </div >
+          <ToastContainer />
         </>
       );
     },
@@ -211,6 +220,7 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const [customers, setCustomers] = React.useState<Customer[]>([]);
       const customer = row.original;
 
       return (
@@ -219,13 +229,13 @@ export const columns: ColumnDef<Customer>[] = [
             <Button
               size="icon"
               className="h-8 gap-1 inl"
-              onClick={() => handleEntry(customer,"Present")}
+              onClick={() => handleEntry(customer,"Present",setCustomers)}
             >
               <ClipboardCheckIcon />
             </Button>
             <Button size="icon" className="h-8 gap-1"
               onClick={() => {
-                handleEntry(customer,"Absent");
+                handleEntry(customer,"Absent",setCustomers);
               }}
             >
               <ClipboardXIcon />

@@ -63,7 +63,7 @@ export function NavbarItems() {
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                        <Link to="/" >
+                        <Link to="/dashboard" >
                             Dashboard
                         </Link>
                     </NavigationMenuLink>
