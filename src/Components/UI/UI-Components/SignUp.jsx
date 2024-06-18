@@ -35,6 +35,8 @@ import { useEffect, useState } from "react";
 import { Addshopname } from "@/Handlers/Addshopname";
 import { createShop } from "@/Handlers/AddShop";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../shadcn-UI/input-otp";
+import { sendOtp } from "../../../Handlers/SendOtp";
+import { VerifyOtp } from "@/Handlers/VerifyOtp";
 
 const steps = [
   "Sign Up",
@@ -130,6 +132,7 @@ export default function SignUp() {
     resolver: zodResolver(shopSchema),
   });
 
+  const phone_number = form.watch('phone_number');
   const shopSubmit = async (data) => {
     const newShop = await createShop(data);
 
@@ -148,15 +151,28 @@ export default function SignUp() {
   const form1 = useForm({
     resolver: zodResolver(formSchema1),
     defaultValues: {
-      pin: "121223",
+      pin: "",
     },
   });
 
-  const verifyotp = (data) => {
-    console.log(data);
-    handlepage(2);
+  const verifyotp = async (data) => {
+    const otp_verification = await VerifyOtp(data, phone_number);
+
+    console.log(otp_verification);
+    if (otp_verification.message.status == "approved") {
+      handlepage(2);
+    } else {
+      toast.error("Enter Valid OTP", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+      });
+    }
   };
 
+  
   const formSubmit = async (data) => {
     if (!checkValidation(data)) {
       return;
@@ -175,6 +191,8 @@ export default function SignUp() {
       });
       localStorage.setItem("token", newUser.token);
       localStorage.setItem("cid", newUser.cid);
+      await sendOtp(data);
+
       handlepage(1);
     } else if (newUser.status === "failed") {
       toast.error("User already exists", {
@@ -427,52 +445,52 @@ export default function SignUp() {
             } flex justify-center items-center p-10`}
           >
             {/* <div className="h-screen flex justify-center items-center "> */}
-              <Form {...form1}>
-                <form1 onSubmit={form1.handleSubmit(verifyotp)}>
-                  <Card className="mx-auto max-w-sm">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-[700]">
-                        OTP Verification
-                      </CardTitle>
-                      <CardDescription>
-                        Enter your OTP below to Verify your Phone Number
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <form className="w-2/3 space-y-6">
-                        <FormField
-                          control={form1.control}
-                          name="pin"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>One-Time Password</FormLabel>
-                              <FormControl>
-                                <InputOTP maxLength={6} {...field}>
-                                  <InputOTPGroup>
-                                    <InputOTPSlot index={0} />
-                                    <InputOTPSlot index={1} />
-                                    <InputOTPSlot index={2} />
-                                    <InputOTPSlot index={3} />
-                                    <InputOTPSlot index={4} />
-                                    <InputOTPSlot index={5} />
-                                  </InputOTPGroup>
-                                </InputOTP>
-                              </FormControl>
-                              <FormDescription>
-                                Please enter the one-time password sent to your
-                                phone.
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button>Submit</Button>
-                      </form>
-                    </CardContent>
-                  </Card>
-                </form1>
-              </Form>
-            </div>
+            <Form {...form1}>
+              <form1 onSubmit={form1.handleSubmit(verifyotp)}>
+                <Card className="mx-auto max-w-sm">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-[700]">
+                      OTP Verification
+                    </CardTitle>
+                    <CardDescription>
+                      Enter your OTP below to Verify your Phone Number
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form className="w-2/3 space-y-6">
+                      <FormField
+                        control={form1.control}
+                        name="pin"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>One-Time Password</FormLabel>
+                            <FormControl>
+                              <InputOTP maxLength={6} {...field}>
+                                <InputOTPGroup>
+                                  <InputOTPSlot index={0} />
+                                  <InputOTPSlot index={1} />
+                                  <InputOTPSlot index={2} />
+                                  <InputOTPSlot index={3} />
+                                  <InputOTPSlot index={4} />
+                                  <InputOTPSlot index={5} />
+                                </InputOTPGroup>
+                              </InputOTP>
+                            </FormControl>
+                            <FormDescription>
+                              Please enter the one-time password sent to your
+                              phone.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button>Submit</Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </form1>
+            </Form>
+          </div>
           {/* </div> */}
           <div
             className={`${
