@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import InvoiceDataContext from "@/Context/InvoiceDataContext";
 import { useUser } from "@/Context/UserContext";
 import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
@@ -8,7 +10,7 @@ const Invoice = React.forwardRef((props, ref) => {
   const [firstPartCustomers, setFirstPartCustomers] = useState([]);
   const [secondPartCustomers, setSecondPartCustomers] = useState([]);
   const [thirdPartCustomers, setThirdPartCustomers] = useState([]);
-  const {invoicedata , setInvoicedata} = useContext(InvoiceDataContext);
+  const { invoicedata, setInvoicedata } = useContext(InvoiceDataContext);
 
   // const getDaysInMonth = (month, year) => {
   //   return new Array(31).fill('').map((v, i) => new Date(year, month, i + 1).getMonth() === month ? i + 1 : 0).filter(f => f);
@@ -85,15 +87,11 @@ const Invoice = React.forwardRef((props, ref) => {
       setCustomers(sortedCustomers);
       console.log(sortedCustomers[0]);
 
-      
-
       return sortedCustomers[0];
     } else {
       console.log(res);
     }
   };
-
- 
 
   const getdeliverydateData = async (date) => {
     const data = getData(date);
@@ -101,11 +99,11 @@ const Invoice = React.forwardRef((props, ref) => {
       setInvoicedata({
         data: await data,
         total_bottles: totalBottles,
-        shorturl : ""
+        shorturl: "",
       });
       alert("Data Fetched");
-      console.log(totalBottles)
-      console.log(invoicedata)
+      console.log(totalBottles);
+      console.log(invoicedata);
     }
   };
 
@@ -408,7 +406,14 @@ const Invoice = React.forwardRef((props, ref) => {
               {/* <h2>LINK :{
                 invoicedata.shorturl
                 }</h2> */}
-              <a href={invoicedata.shorturl} target="_blank" className="text-blue-600 underline cursor-pointer"> Pay Now</a>
+              <a
+                href={invoicedata.shorturl}
+                target="_blank"
+                className="text-blue-600 underline cursor-pointer"
+              >
+                {" "}
+                Pay Now
+              </a>
               <h4 className="text-lg font-semibold text-gray-800 dark:text-neutral-200">
                 Thank you!
               </h4>

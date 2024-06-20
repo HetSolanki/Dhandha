@@ -34,20 +34,19 @@ export const getAllCustomerEntrys = async (req, res) => {
 };
 
 export const getAllCustomerEntryCurrentMonth = async (req, res) => {
-
   const date = new Date();
-  const firstDay = new Date(date.getFullYear(), date.getMonth()+1, -28);
+  const firstDay = new Date(date.getFullYear(), date.getMonth() + 1, -28);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
-  console.log(firstDay, lastDay)
+  console.log(firstDay, lastDay);
 
   try {
     const allCustomerEntry = await CustomerEntry.find({
-      // write the query to get the current month's data 
+      // write the query to get the current month's data
       delivery_date: {
         $gte: firstDay,
-        $lt: lastDay
-      }
+        $lt: lastDay,
+      },
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
@@ -139,6 +138,43 @@ export const deleteCustomerEntry = async (req, res) => {
       });
     }
     res.json({ data: deletedCustomerEntry, status: "success" });
+  } catch (error) {
+    res.json({ message: "Error" });
+  }
+};
+
+export const getCustomerForPayment = async (req, res) => {
+  try {
+    const allCustomers = await CustomerEntry.aggregate([
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerData",
+        },
+      },
+      {
+        $unwind: "$customerData",
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalBottle: { $sum: "$bottle_count" },
+          customer: { $first: "$customerData" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalBottle: 1,
+          customer: 1,
+        },
+      },
+    ]);
+
+    return res.json({ message: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
   }

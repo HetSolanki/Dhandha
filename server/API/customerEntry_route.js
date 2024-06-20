@@ -8,6 +8,7 @@ import {
   deleteCustomerEntry,
   getAllCustomerEntrys,
   getAllCustomerEntryCurrentMonth,
+  getCustomerForPayment,
 } from "./Handlers/CustomerEntry.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
@@ -59,5 +60,7 @@ router.put(
 
 // Delete Customer Entry
 router.delete("/removecustomerentry/:id", deleteCustomerEntry);
+
+router.get("/customersforpayment", getCustomerForPayment);
 
 export default router;

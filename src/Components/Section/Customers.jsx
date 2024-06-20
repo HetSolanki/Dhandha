@@ -41,6 +41,7 @@ import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RotatingLines } from "react-loader-spinner";
+import { createPaymentLinkAll } from "@/Handlers/CreatePaymentLinkAll";
 
 const Customers = () => {
   const { customer } = useCustomer();
@@ -51,53 +52,54 @@ const Customers = () => {
   });
 
   const handlesendinvoice = async () => {
-    const date = new Date(Date.now()).toISOString().split("T")[0];
+    // const date = new Date(Date.now()).toISOString().split("T")[0];
 
-    let sortedCustomers = [];
-    const token = localStorage.getItem("token");
-    const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
-      {
-        method: "GET",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-      }
-    );
-    const res = await customers.json();
-    if (res.status === "success") {
-      const currentMonth = new Date().getMonth();
-      console.log(currentMonth);
-      const currentYear = new Date().getFullYear();
-      // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
-      const selectedCustomers = res.data.filter((customer) => {
-        const deliveryDate = new Date(customer.delivery_date);
-        return (
-          deliveryDate.getMonth() === currentMonth &&
-          deliveryDate.getFullYear() === currentYear
-        );
-      });
+    // let sortedCustomers = [];
+    // const token = localStorage.getItem("token");
+    // const customers = await fetch(
+    //   `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+    //   {
+    //     method: "GET",
+    //     headers: {
+    //       authorization: "Bearer " + token,
+    //     },
+    //   }
+    // );
+    // const res = await customers.json();
+    // if (res.status === "success") {
+    //   const currentMonth = new Date().getMonth();
+    //   console.log(currentMonth);
+    //   const currentYear = new Date().getFullYear();
+    //   // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+    //   const selectedCustomers = res.data.filter((customer) => {
+    //     const deliveryDate = new Date(customer.delivery_date);
+    //     return (
+    //       deliveryDate.getMonth() === currentMonth &&
+    //       deliveryDate.getFullYear() === currentYear
+    //     );
+    //   });
 
-      sortedCustomers = selectedCustomers.sort(
-        (a, b) => new Date(a.delivery_date) - new Date(b.delivery_date)
-      );
+    //   sortedCustomers = selectedCustomers.sort(
+    //     (a, b) => new Date(a.delivery_date) - new Date(b.delivery_date)
+    //   );
 
+    //   console.log(sortedCustomers);
+    // } else {
+    //   console.log(res);
+    // }
 
-      console.log(sortedCustomers);
-    } else {
-      console.log(res);
-    }
+    // const generatePaymentLinks = () => {
+    //   sortedCustomers.forEach((customer) => {
+    //     const { cid, bottle_count} = customer;
+    //    console.log(cid, bottle_count);
+    //     console.log(paymentLink);
+    //   });
+    // };
 
-
-    const generatePaymentLinks = () => {
-      sortedCustomers.forEach((customer) => {
-        const { cid, bottle_count} = customer;
-       console.log(cid, bottle_count);
-        console.log(paymentLink);
-      });
-    };
-  
     alert("Send Invoice to All Customers");
+
+    const paymentLink = await createPaymentLinkAll();
+    console.log(paymentLink);
   };
 
   return (
