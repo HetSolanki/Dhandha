@@ -2,9 +2,14 @@ import CustomerEntry from "../Schema/customerEntry.js";
 
 export const getAllCustomerEntry = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id }).populate("cid");
+    const allCustomerEntry = await CustomerEntry.find({
+      cid: req.params.id,
+    }).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No Customer's Entry Found",
+        status: "error",
+      });
     }
     console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
@@ -15,16 +20,54 @@ export const getAllCustomerEntry = async (req, res) => {
 
 export const getAllCustomerEntrys = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({
-    }).populate("cid");
+    const allCustomerEntry = await CustomerEntry.find({}).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No any Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
     }
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
   }
-}
+};
+
+export const getAllCustomerEntryCurrentMonth = async (req, res) => {
+
+  const date = new Date();
+  const firstDay = new Date(date.getFullYear(), date.getMonth()+1, -28);
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+
+  console.log(firstDay, lastDay)
+
+  try {
+    const allCustomerEntry = await CustomerEntry.find({
+      // write the query to get the current month's data 
+      delivery_date: {
+        $gte: firstDay,
+        $lt: lastDay
+      }
+    }).populate("cid");
+    if (!allCustomerEntry) {
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
+    }
+
+    if (allCustomerEntry.length === 0) {
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
+    }
+
+    res.json({ data: allCustomerEntry, status: "success" });
+  } catch (error) {
+    res.json({ message: "Error" });
+  }
+};
 
 // export const getOneCustomerEntry = async (req, res) => {
 //   try {
@@ -74,7 +117,10 @@ export const deleteCustomerEntry = async (req, res) => {
       req.params.id
     );
     if (!deletedCustomerEntry) {
-      return res.json({ message: "No Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No Customer's Entry Found",
+        status: "error",
+      });
     }
     res.json({ data: deletedCustomerEntry, status: "success" });
   } catch (error) {
