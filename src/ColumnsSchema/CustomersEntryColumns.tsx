@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 import { Button } from "../Components/UI/shadcn-UI/button";
 import { Stack, TextField } from "@mui/material";
-import { addcustomerEntry } from "../Handlers/AddcustomerEntryHandler"
+import { addcustomerEntry } from "../Handlers/AddcustomerEntryHandler";
 import { Input } from "@/Components/UI/shadcn-UI/input";
-import '../index.css'
+import "../index.css";
 import { toast, ToastContainer } from "react-toastify";
 import React from "react";
 
@@ -35,53 +35,71 @@ export type Customer = {
   delivery_sequence_number: number;
 };
 
-const handleEntry = async ( customer: Customer,
+const handleEntry = async (
+  customer: Customer,
   status: string,
-  setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>) => {
+  setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>
+) => {
   const no_of_bottles = document.getElementById(customer._id);
 
   if (status === "Present") {
     if (no_of_bottles.value !== "") {
       if (parseInt(no_of_bottles.value) > 0) {
-        const newEntry = await addcustomerEntry({
-          no_of_bottles: parseInt(no_of_bottles.value),
-          delivery_status: "Present",
-        }, customer._id);
+        const newEntry = await addcustomerEntry(
+          {
+            no_of_bottles: parseInt(no_of_bottles.value),
+            delivery_status: "Present",
+          },
+          customer._id
+        );
 
         if (newEntry.status === "success") {
-          toast.success("Entry added successfully");
-          setCustomers(prev => prev.filter(c => c.uid !== customer.uid));          
-          console.log(newEntry)
-        }
-        else {
-          toast.error("Entry could not be added");
+          toast.success("Entry added successfully", {
+            autoClose: 1000,
+          });
+          setCustomers((prev) => prev.filter((c) => c.uid !== customer.uid));
+          console.log(newEntry);
+        } else {
+          toast.error("Entry could not be added", {
+            autoClose: 1000,
+          });
         }
       } else {
-        toast.error("Please enter a valid quantity");      
-        console.log(customer)
+        toast.error("Please enter a valid quantity", {
+          autoClose: 1000,
+        });
+        console.log(customer);
         no_of_bottles.value = 0;
       }
     } else {
-      toast.error("Please enter the quantity");
+      toast.error("Please enter the quantity", {
+        autoClose: 1000,
+      });
       no_of_bottles.value = 0;
     }
   }
 
   if (status === "Absent") {
-    const newEntry = await addcustomerEntry({
-      no_of_bottles: 0,
-      delivery_status: "Absent",
-    }, customer._id,);
+    const newEntry = await addcustomerEntry(
+      {
+        no_of_bottles: 0,
+        delivery_status: "Absent",
+      },
+      customer._id
+    );
+    console.log(newEntry);
     if (newEntry.status === "success") {
-      toast.success("Entry added successfully");
-      setCustomers(prev => prev.filter(c => c.uid !== customer.uid));
-    }
-    else {
-      toast.error("Entry could not be added");
+      toast.success("Entry added successfully", {
+        autoClose: 1000,
+      });
+      setCustomers((prev) => prev.filter((c) => c.uid !== customer.uid));
+    } else {
+      toast.error("Entry could not be added", {
+        autoClose: 1000,
+      });
     }
   }
 };
-
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -104,7 +122,7 @@ export const columns: ColumnDef<Customer>[] = [
       <div className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
       </div>
-    ),  
+    ),
   },
 
   {
@@ -113,7 +131,6 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => (
       <div className="capitalize text-left">{row.getValue("cname")}</div>
     ),
-
   },
   {
     accessorKey: "caddress",
@@ -162,8 +179,7 @@ export const columns: ColumnDef<Customer>[] = [
                 if (parseInt(no_of_bottles.value) < 0) {
                   no_of_bottles.value = 0;
                 }
-              }
-              }
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +225,7 @@ export const columns: ColumnDef<Customer>[] = [
                 />
               </svg>
             </div>
-          </div >
+          </div>
           <ToastContainer />
         </>
       );
@@ -229,13 +245,15 @@ export const columns: ColumnDef<Customer>[] = [
             <Button
               size="icon"
               className="h-8 gap-1 inl"
-              onClick={() => handleEntry(customer,"Present",setCustomers)}
+              onClick={() => handleEntry(customer, "Present", setCustomers)}
             >
               <ClipboardCheckIcon />
             </Button>
-            <Button size="icon" className="h-8 gap-1"
+            <Button
+              size="icon"
+              className="h-8 gap-1"
               onClick={() => {
-                handleEntry(customer,"Absent",setCustomers);
+                handleEntry(customer, "Absent", setCustomers);
               }}
             >
               <ClipboardXIcon />

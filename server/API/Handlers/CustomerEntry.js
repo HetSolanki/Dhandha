@@ -2,9 +2,14 @@ import CustomerEntry from "../Schema/customerEntry.js";
 
 export const getAllCustomerEntry = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({ cid: req.params.id }).populate("cid");
+    const allCustomerEntry = await CustomerEntry.find({
+      cid: req.params.id,
+    }).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No Customer's Entry Found",
+        status: "error",
+      });
     }
     console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
@@ -15,16 +20,18 @@ export const getAllCustomerEntry = async (req, res) => {
 
 export const getAllCustomerEntrys = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({
-    }).populate("cid");
+    const allCustomerEntry = await CustomerEntry.find({}).populate("cid");
     if (!allCustomerEntry) {
-      return res.json({ message: "No any Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
     }
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
   }
-}
+};
 
 // export const getOneCustomerEntry = async (req, res) => {
 //   try {
@@ -40,12 +47,28 @@ export const getAllCustomerEntrys = async (req, res) => {
 
 export const createCustomerEntry = async (req, res) => {
   try {
-    const newCustomerEntry = await CustomerEntry.create({
-      cid: req.body.cid,
-      bottle_count: req.body.bottle_count,
-      delivery_date: req.body.delivery_date,
-      delivery_status: req.body.delivery_status,
-    });
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const newCustomerEntry = await CustomerEntry.findOneAndUpdate(
+      {
+        cid: req.body.cid,
+        createdAt: {
+          $gte: todayStart,
+          $lte: todayEnd,
+        },
+      },
+      {
+        cid: req.body.cid,
+        bottle_count: req.body.bottle_count,
+        delivery_date: req.body.delivery_date,
+        delivery_status: req.body.delivery_status,
+      },
+      { upsert: true, new: true }
+    );
 
     res.json({ data: newCustomerEntry, status: "success" });
   } catch (error) {
@@ -74,7 +97,10 @@ export const deleteCustomerEntry = async (req, res) => {
       req.params.id
     );
     if (!deletedCustomerEntry) {
-      return res.json({ message: "No Customer's Entry Found", status: "error" });
+      return res.json({
+        message: "No Customer's Entry Found",
+        status: "error",
+      });
     }
     res.json({ data: deletedCustomerEntry, status: "success" });
   } catch (error) {
