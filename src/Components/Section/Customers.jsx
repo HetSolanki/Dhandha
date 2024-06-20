@@ -1,4 +1,4 @@
-import { File, ListFilter } from "lucide-react";
+import { File, ListFilter, PlusCircle, Send } from "lucide-react";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
@@ -50,6 +50,56 @@ const Customers = () => {
     queryFn: fetchCustomers,
   });
 
+  const handlesendinvoice = async () => {
+    const date = new Date(Date.now()).toISOString().split("T")[0];
+
+    let sortedCustomers = [];
+    const token = localStorage.getItem("token");
+    const customers = await fetch(
+      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+      {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    );
+    const res = await customers.json();
+    if (res.status === "success") {
+      const currentMonth = new Date().getMonth();
+      console.log(currentMonth);
+      const currentYear = new Date().getFullYear();
+      // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+      const selectedCustomers = res.data.filter((customer) => {
+        const deliveryDate = new Date(customer.delivery_date);
+        return (
+          deliveryDate.getMonth() === currentMonth &&
+          deliveryDate.getFullYear() === currentYear
+        );
+      });
+
+      sortedCustomers = selectedCustomers.sort(
+        (a, b) => new Date(a.delivery_date) - new Date(b.delivery_date)
+      );
+
+
+      console.log(sortedCustomers);
+    } else {
+      console.log(res);
+    }
+
+
+    const generatePaymentLinks = () => {
+      sortedCustomers.forEach((customer) => {
+        const { cid, bottle_count} = customer;
+       console.log(cid, bottle_count);
+        console.log(paymentLink);
+      });
+    };
+  
+    alert("Send Invoice to All Customers");
+  };
+
   return (
     <>
       <Navbar />
@@ -90,6 +140,16 @@ const Customers = () => {
                         <CardTitle>
                           Customers
                           <div className="ml-auto flex items-center gap-2 float-end">
+                            <Button
+                              size="sm"
+                              className="h-8 gap-1"
+                              onClick={handlesendinvoice}
+                            >
+                              <Send className="h-3.5 w-3.5" />
+                              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                Send Invoice to All Customers
+                              </span>
+                            </Button>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button

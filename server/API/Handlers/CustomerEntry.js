@@ -33,6 +33,42 @@ export const getAllCustomerEntrys = async (req, res) => {
   }
 };
 
+export const getAllCustomerEntryCurrentMonth = async (req, res) => {
+
+  const date = new Date();
+  const firstDay = new Date(date.getFullYear(), date.getMonth()+1, -28);
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+
+  console.log(firstDay, lastDay)
+
+  try {
+    const allCustomerEntry = await CustomerEntry.find({
+      // write the query to get the current month's data 
+      delivery_date: {
+        $gte: firstDay,
+        $lt: lastDay
+      }
+    }).populate("cid");
+    if (!allCustomerEntry) {
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
+    }
+
+    if (allCustomerEntry.length === 0) {
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
+    }
+
+    res.json({ data: allCustomerEntry, status: "success" });
+  } catch (error) {
+    res.json({ message: "Error" });
+  }
+};
+
 // export const getOneCustomerEntry = async (req, res) => {
 //   try {
 //     const customerEntry = await CustomerEntry.findById(req.params.id);
