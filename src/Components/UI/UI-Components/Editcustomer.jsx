@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "@/Components/UI/shadcn-UI/dialog";
 import { Input } from "@/Components/UI/shadcn-UI/input";
-import { Pencil, PlusCircle } from "lucide-react";
+import { Pencil } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -22,13 +22,11 @@ import {
 } from "../shadcn-UI/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { custom, z } from "zod";
-import { useContext, useEffect, useState } from "react";
+import { z } from "zod";
 import { useCustomer } from "@/Context/CustomerContext";
 import { editcustomer } from "@/Handlers/EditcustomerHandler";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
-import { DropdownMenuItem } from "../shadcn-UI/dropdown-menu";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -105,7 +103,7 @@ export function Editcustomer({ id }) {
       >
         <DialogTrigger asChild>
           <div className="cursor-pointer items-center   ">
-          <Pencil/>
+            <Pencil/>
           </div>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">

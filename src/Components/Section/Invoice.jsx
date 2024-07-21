@@ -3,6 +3,7 @@
 import InvoiceDataContext from "@/Context/InvoiceDataContext";
 import { useUser } from "@/Context/UserContext";
 import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
+import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import React, { useContext, useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
@@ -79,6 +80,7 @@ const Invoice = React.forwardRef((props, ref) => {
         0
       );
 
+      const customerData = GetCustomerInvoice()
       const thirdIndex = Math.ceil(sortedCustomers.length / 3);
       setFirstPartCustomers(sortedCustomers.slice(0, thirdIndex));
       setSecondPartCustomers(sortedCustomers.slice(thirdIndex, thirdIndex * 2));

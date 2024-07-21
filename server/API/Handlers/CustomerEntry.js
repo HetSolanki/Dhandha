@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CustomerEntry from "../Schema/customerEntry.js";
 
 export const getAllCustomerEntry = async (req, res) => {
@@ -14,7 +15,7 @@ export const getAllCustomerEntry = async (req, res) => {
     console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
-    res.json({ message: "Error" });
+    res.json({ message: error });
   }
 };
 
@@ -29,7 +30,7 @@ export const getAllCustomerEntrys = async (req, res) => {
     }
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
-    res.json({ message: "Error" });
+    res.json({ message: error });
   }
 };
 
@@ -88,6 +89,7 @@ export const createCustomerEntry = async (req, res) => {
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
 
+    console.log(todayStart, todayEnd)
     const newCustomerEntry = await CustomerEntry.findOneAndUpdate(
       {
         cid: req.body.cid,
@@ -177,5 +179,66 @@ export const getCustomerForPayment = async (req, res) => {
     return res.json({ message: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
+  }
+};
+
+export const getCustomerInvoice = async (req, res) => {
+  const date = new Date();
+  const firstDate = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)
+  );
+  const lastDate = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)
+  );
+  try {
+    const customerEntry = await CustomerEntry.aggregate([
+      {
+        $match: {
+          cid: new mongoose.Types.ObjectId(req.body.cid),
+          createdAt: {
+            $gt: firstDate,
+            $lt: lastDate,
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalBottle: { $sum: "$bottle_count" },
+          customerDetails: { $first: "$customerDetails" },
+          customerEntry: {
+            $push: {
+              bottle_count: "$bottle_count",
+              delivery_date: "$delivery_date",
+              delivery_status: "$delivery_status",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalBottle: 1,
+          customerDetails: 1,
+          customerEntry: 1,
+        },
+      },
+    ]).exec();
+
+    res.json({ data: customerEntry });
+  } catch (error) {
+    res.json({ message: error });
   }
 };
