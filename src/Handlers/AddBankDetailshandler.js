@@ -1,0 +1,17 @@
+export const updateBankDetails = async (data, uid) => {
+    const user = await fetch(`http://localhost:3001/api/auth/user/bankdetails/${uid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        
+      },
+      body: JSON.stringify({
+        branch_ifsc_code: data.branch_ifsc_code,
+        account_number: data.account_number,
+        benificiary_name: data.benificiary_name,
+      }),
+    });
+  
+    return user.json();
+  };
+  

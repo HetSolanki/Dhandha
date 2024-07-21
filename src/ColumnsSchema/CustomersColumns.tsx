@@ -146,7 +146,8 @@ export const columns: ColumnDef<Customer>[] = [
           customer_email: "",
           smsnotify: true,
           emailnotify: false,
-          reminder_enable: false
+          reminder_enable: false,
+          account_number: "acc_OXH9Xd6WTvaZ9m",
         };
         const newpaymentlink = await createPaymentLink(data);
 

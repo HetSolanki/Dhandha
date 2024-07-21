@@ -1,24 +1,23 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
-import { Button } from "@/registry/new-york/ui/button"
-import { Checkbox } from "@/registry/new-york/ui/checkbox"
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/new-york/ui/form"
-import { RadioGroup, RadioGroupItem } from "@/registry/new-york/ui/radio-group"
-import { Switch } from "@/registry/new-york/ui/switch"
-import { toast } from "@/registry/new-york/ui/use-toast"
+  Form
+} from "@/Components/UI/shadcn-UI/form"
+import { Button } from "@/Components/UI/shadcn-UI/button"
+import { Switch } from "@/Components/UI/shadcn-UI/switch"
+import { Checkbox } from "@/Components/UI/shadcn-UI/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/Components/UI/shadcn-UI/radio-group"
+import { toast } from "@/Components/UI/shadcn-UI/use-toast"
 
 const notificationsFormSchema = z.object({
   type: z.enum(["all", "mentions", "none"], {
@@ -209,7 +208,7 @@ export function NotificationsForm() {
                 </FormLabel>
                 <FormDescription>
                   You can manage your mobile notifications in the{" "}
-                  <Link href="/examples/forms">mobile settings</Link> page.
+                  <Link to="/examples/forms">mobile settings</Link> page.
                 </FormDescription>
               </div>
             </FormItem>

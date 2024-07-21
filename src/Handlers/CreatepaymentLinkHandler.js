@@ -15,6 +15,7 @@ export const createPaymentLink = async (data) => {
         smsnotify: data.smsnotify,
         emailnotify: data.emailnotify,
         reminder_enable: data.reminder_enable,
+        account: data.account_number,
       }),
     }
   );

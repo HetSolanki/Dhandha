@@ -22,6 +22,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bank_details: {    
+    branch_ifsc_code: {
+      type: String,
+    },
+    account_number: {
+      type: Number,
+    },
+    benificiary_name: {
+      type: String,
+    },
+  },
 });
 
 export default mongoose.model("User", userSchema);
