@@ -8,7 +8,13 @@ const razorpay = new Razorpay({
 
 export const createPaymentLinkAll = async (req, res) => {
   const allCustomers = await fetch(
-    `http://localhost:3001/api/customerentry/customersforpayment`
+    `http://localhost:3001/api/customerentry/customersforpayment`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   );
 
   const customerResponse = await allCustomers.json();
@@ -16,6 +22,7 @@ export const createPaymentLinkAll = async (req, res) => {
   try {
     const responses = await Promise.all(
       customerResponse.message.map(async (user) => {
+        console.log("User");
         console.log(user);
         try {
           const { description, smsnotify, emailnotify, reminder_enable } =
@@ -71,6 +78,7 @@ export const createPaymentLinkAll = async (req, res) => {
           const response = await razorpay.paymentLink.create(options);
 
           if (response) {
+            console.log(response.customer);
             res.json({ data: response, status: "success" });
           } else {
             res.json({ data: "Payment Link creation failed", status: "error" });
@@ -81,8 +89,16 @@ export const createPaymentLinkAll = async (req, res) => {
       })
     );
 
+    if (responses) {
+      res.json({ data: responses, status: "success" });
+    } else {
+      res.json({ data: "Payment Link creation failed........", status: "error" });
+    }
+
     res.json({ data: responses, status: "success" });
   } catch (error) {
     res.json({ data: error.message, status: "error", error: error });
+    console.log(error);
+    console.log(error.message);
   }
 };

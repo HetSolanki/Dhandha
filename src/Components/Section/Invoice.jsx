@@ -12,10 +12,8 @@ const Invoice = React.forwardRef((props, ref) => {
   const [secondPartCustomers, setSecondPartCustomers] = useState([]);
   const [thirdPartCustomers, setThirdPartCustomers] = useState([]);
   const { invoicedata, setInvoicedata } = useContext(InvoiceDataContext);
-
-  // const getDaysInMonth = (month, year) => {
-  //   return new Array(31).fill('').map((v, i) => new Date(year, month, i + 1).getMonth() === month ? i + 1 : 0).filter(f => f);
-  // }
+  
+  let totalBottles = 0;
 
   const user = useUser();
   const [customers, setCustomers] = useState([
@@ -33,6 +31,9 @@ const Invoice = React.forwardRef((props, ref) => {
       delivery_status: "Absent",
     },
   ]);
+
+  // const bottle_price = customers[0].cid.bottle_price;
+  // console.log(bottle_price);
 
   useEffect(() => {
     const date = new Date(Date.now()).toISOString().split("T")[0];
@@ -125,7 +126,6 @@ const Invoice = React.forwardRef((props, ref) => {
   // Format the date as needed (e.g., YYYY-MM-DD)
   const formattedDate = futureDate.toISOString().split("T")[0];
 
-  let totalBottles = 0;
 
   const handleprint = useReactToPrint({
     content: () => componentRef.current,

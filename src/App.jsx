@@ -13,6 +13,8 @@ import CustomerEntryData from "./Components/Section/CustomerEntryData";
 import { ThemeProvider } from "./Context/ThemeProviderContext ";
 import Invoice from "./Components/Section/Invoice";
 import { useEffect, useState } from "react";
+import SettingsNotificationsPage from "./Components/Section/forms/notifications/page";
+import SettingsBankDetailsPage from "./Components/Section/forms/bankdetails/page";
 
 function App() {
   const [defaultRoute, setDefaultRoute] = useState('/');
@@ -40,6 +42,14 @@ function App() {
             <Route
               path="/profile"
               element={<SettingsLayout children={<SettingsProfilePage />} />}
+            />
+            <Route
+              path="/notifications-settings"
+              element={<SettingsLayout children={<SettingsNotificationsPage />} />}
+            />
+            <Route
+              path="/bankdetails"
+              element={<SettingsLayout children={<SettingsBankDetailsPage />} />}
             />
             <Route
               path="/shopdetails"

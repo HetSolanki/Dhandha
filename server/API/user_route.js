@@ -7,6 +7,7 @@ import {
   updateUser,
   deleteUser,
   signIn,
+  updateBankDetails,
 } from "./Handlers/User.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 const accountSid = "AC7d6926caa8ace8f5820150f5d89fb768";
@@ -54,6 +55,18 @@ router.put(
 
 // Delete User
 router.delete("/user/:id", deleteUser);
+
+// Bank Details
+router.put(
+  "/user/bankdetails/:id",
+  [
+    body("branch_ifsc_code").exists(),
+    body("account_number").exists(),
+    body("benificiary_name").exists(),
+  ],
+  inputErrorHandler,
+  updateBankDetails
+);
 
 // signin user
 router.post(

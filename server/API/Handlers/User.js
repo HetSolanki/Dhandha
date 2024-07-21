@@ -57,6 +57,22 @@ export const updateUser = async (req, res) => {
   res.json({ data: updatedUser, status: "success" });
 };
 
+export const updateBankDetails = async (req, res) => {
+  const updated = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      bank_details: {
+        branch_ifsc_code: req.body.branch_ifsc_code,
+        account_number: req.body.account_number,
+        benificiary_name: req.body.benificiary_name,
+      },
+    },
+    { new: true }
+  );
+
+  res.json({ data: updated, status: "success" });
+}
+
 export const deleteUser = async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
 

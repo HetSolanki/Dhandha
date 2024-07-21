@@ -51,29 +51,6 @@ export type Customer = {
 };
 
 export const columns: ColumnDef<Customer>[] = [
-  // {
-  //   id: "_id",
-  //   accessorKey: "_id",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "cname",
     header: () => <div className="text-left">Customer Names</div>,
@@ -191,6 +168,7 @@ export const columns: ColumnDef<Customer>[] = [
           smsnotify: true,
           emailnotify: false,
           reminder_enable: false,
+          account_number: "acc_OXH9Xd6WTvaZ9m",
         };
         const newpaymentlink = await createPaymentLink(data);
 
