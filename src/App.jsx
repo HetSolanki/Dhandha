@@ -15,9 +15,12 @@ import Invoice from "./Components/Section/Invoice";
 import { useEffect, useState } from "react";
 import SettingsNotificationsPage from "./Components/Section/forms/notifications/page";
 import SettingsBankDetailsPage from "./Components/Section/forms/bankdetails/page";
+import Error from "./Components/Section/404";
+import ComingSoonPage from "./Components/Section/ComingSoonPage";
+import UnderConstructionPage from "./Components/Section/UnderConstructionPage";
 
 function App() {
-  const [defaultRoute, setDefaultRoute] = useState('/');
+  const [defaultRoute, setDefaultRoute] = useState('/dashboard');
 
   useEffect(() => {
     const savedDefaultRoute = localStorage.getItem('defaultRoute');
@@ -63,6 +66,11 @@ function App() {
                 <SettingsLayout children={<SettingsSettingsDisplayPage setDefaultRoute={setDefaultRoute} />} />
               }
             />
+            <Route path="/404" element={<Error />} />            
+            <Route path="/comming-soon" element={<ComingSoonPage />} /> 
+            <Route path="/under-construction" element={<UnderConstructionPage />} /> 
+
+            <Route path="*" element={<Navigate to="/404" />} />          
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

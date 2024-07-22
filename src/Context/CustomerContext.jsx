@@ -21,9 +21,11 @@ export default function CustomerProvider({ children }) {
       );
       const customerRes = await customerDetails.json();
       setCustomer(customerRes.data);
+      console.log(customerRes.data);
     };
-
-    fetchCustomerData();
+    if (token)
+      fetchCustomerData();
+      
   }, []);
 
   const updateCustomerContext = async () => {
