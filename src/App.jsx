@@ -68,7 +68,7 @@ function App() {
             />
             <Route path="/404" element={<Error />} />            
             <Route path="/comming-soon" element={<ComingSoonPage />} /> 
-            <Route path="/underconstructionPage" element={<UnderConstructionPage />} /> 
+            <Route path="/under-construction" element={<UnderConstructionPage />} /> 
 
             <Route path="*" element={<Navigate to="/404" />} />          
           </Routes>

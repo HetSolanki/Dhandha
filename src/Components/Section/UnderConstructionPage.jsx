@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Logo from "@/assets/images/logo.svg";
-import SvgImage from "@/assets/images/img-2.svg";
+import Logo from "@/assets/logo.svg";
+import SvgImage from "@/assets/img-2.svg";
 import { Button } from "../UI/shadcn-UI/button";
-import { Icon } from "lucide-react";
+import { Icon } from "@mui/material";
 
 const UnderConstructionPage = () => {
   return (
@@ -15,7 +15,7 @@ const UnderConstructionPage = () => {
             </Link>
           </div>
           <div>
-            <Button text="Contact us" btnclassName=" btn-outline-dark btn-sm" />
+            <Button text="Contact us" className=" btn-outline-dark btn-sm" />
           </div>
         </div>
       </div>

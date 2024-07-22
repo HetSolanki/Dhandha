@@ -64,5 +64,6 @@ router.delete("/removecustomerentry/:id", deleteCustomerEntry);
 
 router.get("/customersforpayment", getCustomerForPayment);
 
-router.post("/getCustomerInvoice", getCustomerInvoice);
+router.get("/getCustomerInvoice/:id", getCustomerInvoice);
+
 export default router;

@@ -194,7 +194,7 @@ export const getCustomerInvoice = async (req, res) => {
     const customerEntry = await CustomerEntry.aggregate([
       {
         $match: {
-          cid: new mongoose.Types.ObjectId(req.body.cid),
+          cid: new mongoose.Types.ObjectId(req.params.id),
           createdAt: {
             $gt: firstDate,
             $lt: lastDate,

@@ -1,14 +1,11 @@
-export const GetCustomerInvoice = async (querykeys) => {
+export const GetCustomerInvoice = async (cid) => {
   const customerEntry = await fetch(
-    "http://localhost:3001/api/customerentry/getCustomerInvoice",
+    `http://localhost:3001/api/customerentry/getCustomerInvoice/${cid}`,
     {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cid: querykeys[1],
-      }),
+      }
     }
   );
 
