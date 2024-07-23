@@ -74,8 +74,6 @@ const formSchema1 = z.object({
 });
 
 export default function SignIn() {
-  const [otpvisible, setOtpvisible] = useState(false);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
   });
@@ -105,7 +103,6 @@ export default function SignIn() {
     const signin = await signinuser(data);
 
     if (signin.success === true) {
-     
       localStorage.setItem("token", signin.token);
 
       updateUserContext();
@@ -113,8 +110,16 @@ export default function SignIn() {
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
       // lsRememberMe(phone_numberInput, passwordInput);
-
-      setOtpvisible(true);
+      toast.success("Login Successful", {
+        position: "top-right",
+        autoClose: 2000,
+        draggable: true,
+        closeOnClick: true,
+        theme: "light",
+        onClose: () => {
+          navigate("/");
+        },
+      });
     } else if (signin.data === "Invalid Credentials") {
       toast.error("Invalid Credentials", {
         position: "top-right",
@@ -132,23 +137,6 @@ export default function SignIn() {
         theme: "light",
       });
     }
-  };
-
-  const verifyotp = (data) => {
-    console.log(data);
-
-    toast.success("Login Successful", {
-      position: "top-right",
-      autoClose: 2000,
-      draggable: true,
-        closeOnClick: true,
-        theme: "light",
-        onClose: () => {
-          setOtpvisible(false)
-          navigate("/");
-        },
-      });
-
   };
 
   const [rmCheck, setRmCheck] = useState(false);
@@ -180,7 +168,6 @@ export default function SignIn() {
   };
   return (
     <>
-      {otpvisible === false ? (
         <div className="h-screen flex justify-center items-center ">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(formSubmit)}>
@@ -284,57 +271,6 @@ export default function SignIn() {
             </form>
           </Form>
         </div>
-      ) : (
-        <>
-          <div className="h-screen flex justify-center items-center ">
-            <Form {...form1}>
-              <form1 onSubmit={form1.handleSubmit(verifyotp)}>
-                <Card className="mx-auto max-w-sm">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-[700]">
-                      OTP Verification
-                    </CardTitle>
-                    <CardDescription>
-                      Enter your OTP below to Verify your Phone Number
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form className="w-2/3 space-y-6">
-                      <FormField
-                        control={form1.control}
-                        name="pin"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>One-Time Password</FormLabel>
-                            <FormControl>
-                              <InputOTP maxLength={6} {...field}>
-                                <InputOTPGroup>
-                                  <InputOTPSlot index={0} />
-                                  <InputOTPSlot index={1} />
-                                  <InputOTPSlot index={2} />
-                                  <InputOTPSlot index={3} />
-                                  <InputOTPSlot index={4} />
-                                  <InputOTPSlot index={5} />
-                                </InputOTPGroup>
-                              </InputOTP>
-                            </FormControl>
-                            <FormDescription>
-                              Please enter the one-time password sent to your
-                              phone.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button>Submit</Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </form1>
-            </Form>
-          </div>
-        </>
-      )}
       <ToastContainer />
     </>
   );

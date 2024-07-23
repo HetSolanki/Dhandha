@@ -12,14 +12,14 @@ const sidebarNavItems = [
     title: "Shop Details",
     href: "/shopdetails",
   },
-  {
-    title: "Bank Details",
-    href: "/bankdetails",
-  },
-  {
-    title: "Notifications",
-    href: "/notifications-settings",
-  },
+  // {
+  //   title: "Bank Details",
+  //   href: "/bankdetails",
+  // },
+  // {
+  //   title: "Notifications",
+  //   href: "/notifications-settings",
+  // },
   {
     title: "Display",
     href: "/displaydetails",

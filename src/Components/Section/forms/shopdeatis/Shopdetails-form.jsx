@@ -17,6 +17,7 @@ import { Input } from "@/Components/UI/shadcn-UI/input";
 import { useUser } from "@/Context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import { updateshop } from "@/Handlers/UpdateShop";
+import { useState } from "react";
 
 const ShopFormSchema = z.object({
   shop_name: z.string(),
@@ -27,7 +28,7 @@ const ShopFormSchema = z.object({
     })
     .max(30, {
       message: "Address must not be longer than 30 characters.",
-    }),
+    })    
 });
 
 export function ShopForm() {
@@ -37,7 +38,10 @@ export function ShopForm() {
     resolver: zodResolver(ShopFormSchema),
   });
 
+  const [file, setFile] = useState(null);
+
   async function onSubmit(data) {
+    console.log(file)
     const uid = user.uid._id;
     const updatedUser = await updateshop(data, uid);
     updateUserContext();
@@ -53,51 +57,77 @@ export function ShopForm() {
   }
 
   return (
-    
     user && (
       <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="shop_name"
-            defaultValue={user?.shop_name}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Shop Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Shop Name" {...field} className="w-80" />
-                </FormControl>
-                <FormDescription>
-                  Your shop name should be unique and easy to remember.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="shop_address"
-            defaultValue={user?.shop_address}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Shop Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Shop Address" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Your shop address should be unique and easy to remember.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="shop_name"
+              defaultValue={user?.shop_name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Shop Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Shop Name"
+                      {...field}
+                      className="w-80"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Your shop name should be unique and easy to remember.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="shop_address"
+              defaultValue={user?.shop_address}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Shop Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Shop Address" {...field} 
+                      className="w-80"
 
-          <Button type="submit">Update Shop Details</Button>
-        </form>
-      </Form>
-    <ToastContainer />
-    </>
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Your shop address should be unique and easy to remember.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="payment_qr_code"
+              defaultValue={user?.payment_qr_code}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Payment QR Code</FormLabel>
+                  <FormControl>
+                    <Input type="file" {...field}
+                      className="w-80"
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Upload the QR code image for online payment.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Update Shop Details</Button>
+          </form>
+        </Form>
+        <ToastContainer />
+      </>
     )
   );
 }

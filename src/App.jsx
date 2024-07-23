@@ -14,10 +14,11 @@ import { ThemeProvider } from "./Context/ThemeProviderContext ";
 import Invoice from "./Components/Section/Invoice";
 import { useEffect, useState } from "react";
 import SettingsNotificationsPage from "./Components/Section/forms/notifications/page";
-import SettingsBankDetailsPage from "./Components/Section/forms/bankdetails/page";
+// import SettingsBankDetailsPage from "./Components/Section/forms/bankdetails/page";
 import Error from "./Components/Section/404";
 import ComingSoonPage from "./Components/Section/ComingSoonPage";
 import UnderConstructionPage from "./Components/Section/UnderConstructionPage";
+import Invoicex from "./Components/Section/Invoicex";
 
 function App() {
   const [defaultRoute, setDefaultRoute] = useState('/dashboard');
@@ -42,6 +43,7 @@ function App() {
             <Route path="/customerentry" element={<CustomerEntry />} />
             <Route path="/customerentrydata" element={<CustomerEntryData />} />
             <Route path="/invoice" element={<Invoice />} />
+            <Route path="/invoicex" element={<Invoicex />} />
             <Route
               path="/profile"
               element={<SettingsLayout children={<SettingsProfilePage />} />}
@@ -50,10 +52,10 @@ function App() {
               path="/notifications-settings"
               element={<SettingsLayout children={<SettingsNotificationsPage />} />}
             />
-            <Route
+            {/* <Route
               path="/bankdetails"
               element={<SettingsLayout children={<SettingsBankDetailsPage />} />}
-            />
+            /> */}
             <Route
               path="/shopdetails"
               element={

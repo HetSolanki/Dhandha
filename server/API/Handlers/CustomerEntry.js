@@ -89,7 +89,7 @@ export const createCustomerEntry = async (req, res) => {
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
 
-    console.log(todayStart, todayEnd)
+    console.log(todayStart, todayEnd);
     const newCustomerEntry = await CustomerEntry.findOneAndUpdate(
       {
         cid: req.body.cid,
@@ -242,3 +242,392 @@ export const getCustomerInvoice = async (req, res) => {
     res.json({ message: error });
   }
 };
+
+// export const getdashboardData = async (req, res) => {
+//   try {
+//     const totalCustomer = await CustomerEntry.aggregate([
+//       {
+//         $lookup: {
+//           from: "customers",
+//           localField: "cid",
+//           foreignField: "_id",
+//           as: "customerDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$customerDetails",
+//       },
+//       {
+//         $group: {
+//           _id: "$cid",
+//           totalBottle: { $sum: "$bottle_count" },
+//           customerDetails: { $first: "$customerDetails" },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           cid: "$_id",
+//           totalBottle: 1,
+//           customerDetails: 1,
+//         },
+//       },
+//     ]);
+
+//     const totalBottle = totalCustomer.reduce(
+//       (acc, current) => acc + current.totalBottle,
+//       0
+//     );
+
+//     const totalCustomerData = totalCustomer.length;
+
+//     const totalCustomerEntry = await CustomerEntry.find({}).countDocuments();
+
+//     const totalCustomerEntryCurrentMonth = await CustomerEntry.find({
+//       delivery_date: {
+//         $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+//         $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+//       },
+//     }).countDocuments();
+
+//     res.json({
+//       totalCustomer,
+//       totalBottle,
+//       totalCustomerData,
+//       totalCustomerEntry,
+//       totalCustomerEntryCurrentMonth,
+//     });
+//   } catch (error) {
+//     res.json({ message: error });
+//   }
+// };
+
+// export const getdashboardData = async (req, res) => {
+//   try {
+//     const totalCustomer = await CustomerEntry.aggregate([
+//       {
+//         $lookup: {
+//           from: "customers",
+//           localField: "cid",
+//           foreignField: "_id",
+//           as: "customerDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$customerDetails",
+//       },
+//       {
+//         $addFields: {
+//           revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$cid",
+//           totalBottle: { $sum: "$bottle_count" },
+//           totalRevenue: { $sum: "$revenue" },
+//           customerDetails: { $first: "$customerDetails" },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           cid: "$_id",
+//           totalBottle: 1,
+//           totalRevenue: 1,
+//           customerDetails: 1,
+//         },
+//       },
+//     ]);
+
+//     const totalBottle = totalCustomer.reduce(
+//       (acc, current) => acc + current.totalBottle,
+//       0
+//     );
+
+//     const totalRevenue = totalCustomer.reduce(
+//       (acc, current) => acc + current.totalRevenue,
+//       0
+//     );
+
+//     const totalCustomerData = totalCustomer.length;
+
+//     const totalCustomerEntry = await CustomerEntry.find({}).countDocuments();
+
+//     const totalCustomerEntryCurrentMonth = await CustomerEntry.find({
+//       delivery_date: {
+//         $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+//         $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+//       },
+//     }).countDocuments();
+
+//     const monthlyRevenueResult = await CustomerEntry.aggregate([
+//       {
+//         $match: {
+//           delivery_date: {
+//             $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+//             $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+//           },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "customers",
+//           localField: "cid",
+//           foreignField: "_id",
+//           as: "customerDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$customerDetails",
+//       },
+//       {
+//         $addFields: {
+//           revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: null,
+//           totalRevenue: { $sum: "$revenue" },
+//         },
+//       },
+//     ]);
+
+//     const monthlyRevenue = monthlyRevenueResult.length ? monthlyRevenueResult[0].totalRevenue : 0;
+
+//     const topCustomers = await CustomerEntry.aggregate([
+//       {
+//         $lookup: {
+//           from: "customers",
+//           localField: "cid",
+//           foreignField: "_id",
+//           as: "customerDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$customerDetails",
+//       },
+//       {
+//         $addFields: {
+//           revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$cid",
+//           totalRevenue: { $sum: "$revenue" },
+//           customerDetails: { $first: "$customerDetails" },
+//         },
+//       },
+//       {
+//         $sort: { totalRevenue: -1 },
+//       },
+//       {
+//         $limit: 5,
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           cid: "$_id",
+//           totalRevenue: 1,
+//           customerDetails: 1,
+//         },
+//       },
+//     ]);
+
+//     res.json({
+//       totalCustomer,
+//       totalBottle,
+//       totalRevenue,
+//       totalCustomerData,
+//       totalCustomerEntry,
+//       totalCustomerEntryCurrentMonth,
+//       monthlyRevenue,
+//       topCustomers,
+//     });
+//   } catch (error) {
+//     res.json({ message: error.message });
+//   }
+// };
+
+export const getdashboardData = async (req, res) => {
+  try {
+    const totalCustomer = await CustomerEntry.aggregate([
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $addFields: {
+          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalBottle: { $sum: "$bottle_count" },
+          totalRevenue: { $sum: "$revenue" },
+          customerDetails: { $first: "$customerDetails" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalBottle: 1,
+          totalRevenue: 1,
+          customerDetails: 1,
+        },
+      },
+    ]);
+
+    const totalBottle = totalCustomer.reduce(
+      (acc, current) => acc + current.totalBottle,
+      0
+    );
+
+    const totalRevenue = totalCustomer.reduce(
+      (acc, current) => acc + current.totalRevenue,
+      0
+    );
+
+    const totalCustomerData = totalCustomer.length;
+
+    const totalCustomerEntry = await CustomerEntry.find({}).countDocuments();
+
+    // const monthlyRevenueResult = await CustomerEntry.aggregate([
+    //   {
+    //     $match: {
+    //       delivery_date: {
+    //         $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    //         $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+    //       },
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "customers",
+    //       localField: "cid",
+    //       foreignField: "_id",
+    //       as: "customerDetails",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$customerDetails",
+    //   },
+    //   {
+    //     $addFields: {
+    //       revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+    //     },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: null,
+    //       totalRevenue: { $sum: "$revenue" },
+    //     },
+    //   },
+    // ]);
+
+    // const monthlyRevenue = monthlyRevenueResult.length ? monthlyRevenueResult[0].totalRevenue : 0;
+
+    const topCustomers = await CustomerEntry.aggregate([
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $addFields: {
+          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalRevenue: { $sum: "$revenue" },
+          customerDetails: { $first: "$customerDetails" },
+        },
+      },
+      {
+        $sort: { totalRevenue: -1 },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalRevenue: 1,
+          customerDetails: 1,
+        },
+      },
+    ]);
+
+    const monthlySalesResult = await CustomerEntry.aggregate([
+      {
+        $match: {
+          delivery_date: {
+            $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $addFields: {
+          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: "$revenue" },
+        },
+      },
+    ]);
+
+    // const monthlySales = monthlySalesResult.length ? monthlySalesResult[0].totalSales : 0;
+
+    res.json({
+      totalCustomer,
+      totalBottle,
+      totalRevenue,
+      totalCustomerData,
+      totalCustomerEntry,
+      // monthlyRevenue,
+      // monthlySales,
+      topCustomers,
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+
+
+
