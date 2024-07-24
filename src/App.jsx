@@ -19,9 +19,11 @@ import Error from "./Components/Section/404";
 import ComingSoonPage from "./Components/Section/ComingSoonPage";
 import UnderConstructionPage from "./Components/Section/UnderConstructionPage";
 import Invoicex from "./Components/Section/Invoicex";
+import PaymentDetails from "./Components/Section/PaymentDetails";
+import PaymentsEntryData from "./Components/Section/PaymentsEntryData";
 
 function App() {
-  const [defaultRoute, setDefaultRoute] = useState('/dashboard');
+  const [defaultRoute, setDefaultRoute] = useState('');
 
   useEffect(() => {
     const savedDefaultRoute = localStorage.getItem('defaultRoute');
@@ -41,7 +43,9 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/customerentry" element={<CustomerEntry />} />
-            <Route path="/customerentrydata" element={<CustomerEntryData />} />
+            <Route path="/customerentrydata" element={<CustomerEntryData />} />            
+            <Route path="/paymentdetails" element={<PaymentDetails />} />
+            <Route path="/paymentsdata" element={<PaymentsEntryData />} />            
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/invoicex" element={<Invoicex />} />
             <Route

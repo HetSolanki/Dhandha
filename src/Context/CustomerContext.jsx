@@ -5,7 +5,6 @@ const CustomerContext = createContext();
 
 export default function CustomerProvider({ children }) {
   const [customer, setCustomer] = useState(null);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {

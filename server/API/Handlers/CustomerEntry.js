@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import CustomerEntry from "../Schema/customerEntry.js";
+import PaymentEntry from "../Schema/PaymentDetail.js";
 
 export const getAllCustomerEntry = async (req, res) => {
   try {
@@ -245,7 +246,7 @@ export const getCustomerInvoice = async (req, res) => {
 
 // export const getdashboardData = async (req, res) => {
 //   try {
-//     const totalCustomer = await CustomerEntry.aggregate([
+//     const totalCustomer = await CustomerEntry.aggregate([    cid, payment status, payment
 //       {
 //         $lookup: {
 //           from: "customers",
@@ -467,7 +468,9 @@ export const getdashboardData = async (req, res) => {
       },
       {
         $addFields: {
-          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+          revenue: {
+            $multiply: ["$bottle_count", "$customerDetails.bottle_price"],
+          },
         },
       },
       {
@@ -552,7 +555,9 @@ export const getdashboardData = async (req, res) => {
       },
       {
         $addFields: {
-          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+          revenue: {
+            $multiply: ["$bottle_count", "$customerDetails.bottle_price"],
+          },
         },
       },
       {
@@ -583,7 +588,11 @@ export const getdashboardData = async (req, res) => {
         $match: {
           delivery_date: {
             $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-            $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1),
+            $lt: new Date(
+              new Date().getFullYear(),
+              new Date().getMonth() + 1,
+              1
+            ),
           },
         },
       },
@@ -600,7 +609,9 @@ export const getdashboardData = async (req, res) => {
       },
       {
         $addFields: {
-          revenue: { $multiply: ["$bottle_count", "$customerDetails.bottle_price"] },
+          revenue: {
+            $multiply: ["$bottle_count", "$customerDetails.bottle_price"],
+          },
         },
       },
       {
@@ -613,6 +624,61 @@ export const getdashboardData = async (req, res) => {
 
     // const monthlySales = monthlySalesResult.length ? monthlySalesResult[0].totalSales : 0;
 
+    // Aggregating total due amount from PaymentEntry with pending status
+
+    const totalDueAmountResult = await PaymentEntry.aggregate([
+      {
+        $match: {
+          payment_status: "Pending",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalDue: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    const totalDueAmount = totalDueAmountResult.length
+      ? totalDueAmountResult[0].totalDue
+      : 0;
+    // Aggregating customers with pending payment status
+    const pendingPaymentCustomersResult = await PaymentEntry.aggregate([
+      {
+        $match: {
+          payment_status: "Pending",
+        },
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalDue: { $sum: "$amount" },
+        },
+      },
+      {
+        $lookup: {
+          from: "customers",
+          localField: "_id",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalDue: 1,
+          customerDetails: 1,
+        },
+      },
+    ]);
+
+    const pendingPaymentCustomersCount = pendingPaymentCustomersResult.length;
+
     res.json({
       totalCustomer,
       totalBottle,
@@ -622,12 +688,11 @@ export const getdashboardData = async (req, res) => {
       // monthlyRevenue,
       // monthlySales,
       topCustomers,
+      totalDueAmount,
+      pendingPaymentCustomers: pendingPaymentCustomersResult,
+      pendingPaymentCustomersCount,
     });
   } catch (error) {
     res.json({ message: error.message });
   }
 };
-
-
-
-

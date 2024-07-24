@@ -110,7 +110,7 @@ export function Dashboard() {
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">₹573</div>
+                <div className="text-2xl font-bold">₹{data.totalDueAmount}</div>
                 <p className="text-xs text-muted-foreground">
                   +5% from last month
                 </p>
@@ -147,7 +147,7 @@ export function Dashboard() {
                   <CurrencyRupee className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">135/200</div>
+                  <div className="text-2xl font-bold">{data.pendingPaymentCustomersCount}/{data.totalCustomerData}</div>
                   <p className="text-xs text-muted-foreground">
                     +20.1% from last month
                   </p>
@@ -159,17 +159,20 @@ export function Dashboard() {
                   <CardTitle>Due Payment Details</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-8">
-                  <div className="flex items-center gap-4">
-                    <div className="grid gap-1">
-                      <p className="text-sm font-medium leading-none">
-                        Olivia Martin
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        olivia.martin@email.com
-                      </p>
-                    </div>
-                    <div className="ml-auto font-medium">+$1,999.00</div>
-                  </div>
+                  {
+                    data.pendingPaymentCustomers.map((customer, index) => (
+                      <div key={index} className="flex flex-row items-center justify-between">
+                        <div className="flex flex-row items-center gap-4">                         
+                          <div>
+                            <p className="text-sm font-medium">{customer.customerDetails.cname}</p>
+                            <p className="text-xs text-muted-foreground">{customer.customerDetails.cphone_number}</p>
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium">₹{customer.totalDue}</div>
+                      </div>
+                    ))
+                  }              
+
                 </CardContent>
               </Card>
             </div>
