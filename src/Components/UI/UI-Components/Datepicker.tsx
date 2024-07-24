@@ -26,6 +26,8 @@ import {
 import { useContext } from "react"
 import CustomerEntryContext from "@/Context/CustomerEntryContext"
 
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 const FormSchema = z.object({
   delivery_date: z.date({
     required_error: "A date of birth is required.",
@@ -39,7 +41,7 @@ export function DatePickerForm() {
   const token = localStorage.getItem("token");
   const getData = async (date) => {
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+      `${DOMAIN_NAME}/api/customerentry/getallcustomerentrys/`,
       {
         method: "GET",
         headers: {

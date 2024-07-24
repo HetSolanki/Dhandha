@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 // import { useState } from "react";
 
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export default function PaymentDetails() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
@@ -27,7 +29,7 @@ export default function PaymentDetails() {
 
   const fetchpaymentdata = async () => {
     const paymentdata = await fetch(
-      `http://localhost:3001/api/customerentry/customersforpayment`,
+      `${DOMAIN_NAME}/api/customerentry/customersforpayment`,
       {
         method: "GET",
         headers: {
@@ -57,7 +59,7 @@ export default function PaymentDetails() {
     alert(new Date(Date.now()).toISOString().split("T")[0]);
     const token = localStorage.getItem("token");
     const entrys = await fetch(
-      `http://localhost:3001/api/paymentdetails/getAllPaymentEntrys`,
+      `${DOMAIN_NAME}/api/paymentdetails/getAllPaymentEntrys`,
       {
         method: "GET",
         headers: {

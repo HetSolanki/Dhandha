@@ -1,6 +1,8 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const editcustomer = async (data, id) => {
   const customer = await fetch(
-    `http://localhost:3001/api/customers/customer/${id}`,
+    `${DOMAIN_NAME}/api/customers/customer/${id}`,
     {
       method: "PUT",
       headers: {

@@ -1,5 +1,7 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const updateBankDetails = async (data, uid) => {
-    const user = await fetch(`http://localhost:3001/api/auth/user/bankdetails/${uid}`, {
+    const user = await fetch(`${DOMAIN_NAME}/api/auth/user/bankdetails/${uid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

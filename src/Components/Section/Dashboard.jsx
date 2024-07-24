@@ -1,18 +1,9 @@
 import { Link } from "react-router-dom";
 import {
-  Activity,
   ArrowUpRight,
-  Component,
   CreditCard,
-  DollarSign,
   Users,
 } from "lucide-react";
-import { ArrowUpRight, CreditCard, Users } from "lucide-react";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/Components/UI/shadcn-UI/avatar";
 // import { Badge } from "@/Components/UI/shadcn-UI/badge";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
@@ -22,14 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/Components/UI/shadcn-UI/table";
 // import {
 //   Table,
 //   TableBody,
@@ -43,7 +26,6 @@ import { DataTable } from "../UI/shadcn-UI/DataTable";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { InvoiceX, MyComponent } from "./Invoicex";
 import { CurrencyRupee, Money } from "@mui/icons-material";
 import { GetdashboardData } from "@/Handlers/GetdashboardData";
 import { columns } from "@/ColumnsSchema/DashboardColumns";
@@ -177,7 +159,7 @@ export function Dashboard() {
                 </CardHeader>
                 <CardContent className="grid gap-8">
                   {
-                    data.pendingPaymentCustomers.map((customer, index) => (
+                    data.pendingPaymentCustomers?.map((customer, index) => (
                       <div key={index} className="flex flex-row items-center justify-between">
                         <div className="flex flex-row items-center gap-4">                         
                           <div>

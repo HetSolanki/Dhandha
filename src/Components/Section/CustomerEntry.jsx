@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
@@ -29,7 +31,7 @@ export default function CustomerEntry() {
     alert(new Date(Date.now()).toISOString().split("T")[0]);
     const token = localStorage.getItem("token");
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentrys/`,
+      `${DOMAIN_NAME}/api/customerentry/getallcustomerentrys/`,
       {
         method: "GET",
         headers: {

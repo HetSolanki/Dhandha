@@ -4,11 +4,13 @@ const razorpay = new Razorpay({
   key_secret: "wIVSrlvxmgCl17Oyt36Aaali",
 });
 
+const DOMAIN_NAME = process.env.VITE_DOMAIN_NAME;
+
 // Create a new payment link
 
 export const createPaymentLinkAll = async (req, res) => {
   const allCustomers = await fetch(
-    `http://localhost:3001/api/customerentry/customersforpayment`,
+    `${DOMAIN_NAME}/api/customerentry/customersforpayment`,
     {
       method: "GET",
       headers: {
