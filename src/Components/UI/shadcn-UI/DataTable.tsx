@@ -74,7 +74,7 @@ export function DataTable({ data, columns }) {
             table.getColumn("cname")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        /> */}
+        /> */}      
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

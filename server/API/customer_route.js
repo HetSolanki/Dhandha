@@ -6,6 +6,7 @@ import {
   createCustomer,
   updateCustomer,
   deleteCustomer,
+  uploadFile,
 } from "./Handlers/Customer.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
@@ -49,5 +50,7 @@ router.put(
 
 // Delete Customer
 router.delete("/customer/:id", deleteCustomer);
+
+router.get("/uploadfile/Dhandha/:publicid", uploadFile);
 
 export default router;

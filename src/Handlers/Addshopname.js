@@ -8,7 +8,7 @@ export const Addshopname = async (cid, name) => {
       },
       body: JSON.stringify({
         shop_name: name,
-      }),
+      }), 
     }
   );
 

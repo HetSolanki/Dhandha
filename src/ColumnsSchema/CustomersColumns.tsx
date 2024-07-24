@@ -36,6 +36,7 @@ import Invoice from "@/Components/Section/Invoice";
 import InvoiceDataContext from "@/Context/InvoiceDataContext";
 import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
 import GetInvoice from "@/Components/UI/UI-Components/GetInvoice";
+import { InvoiceX } from "@/Components/Section/Invoicex";
 
 export type Customer = {
   _id: number;
@@ -213,7 +214,8 @@ export const columns: ColumnDef<Customer>[] = [
             <div className="flex gap-x-3">
               <Editcustomer id={customer._id} />
               <DeleteCustomer cid={customer._id} />
-              <GetInvoice cid={customer._id} />
+              {/* <GetInvoice cid={customer._id} /> */}
+              <InvoiceX />
               {/* <div className="cursor-pointer w-5 h-5">
                   <Sheet>
                     <SheetTrigger

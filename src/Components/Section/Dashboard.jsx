@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   Activity,
   ArrowUpRight,
+  Component,
   CreditCard,
   DollarSign,
   Users,
@@ -28,27 +29,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/UI/shadcn-UI/table";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
-import { columns } from "../../ColumnsSchema/CustomersEntryColumns";
-// import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Navbar from "./Navbar";
-import { useCustomer } from "@/Context/CustomerContext";
+import { InvoiceX, MyComponent } from "./Invoicex";
 
 export function Dashboard() {
   // const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   // const [data, setData] = useState({});
-
-  const { customer } = useCustomer();
-
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/signin");
-    } 
+    }
   }, []);
-
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Navbar />
@@ -107,7 +101,7 @@ export function Dashboard() {
             </CardContent>
           </Card>
         </div>
-       
+
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
           <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
             <CardHeader className="flex flex-row items-center">

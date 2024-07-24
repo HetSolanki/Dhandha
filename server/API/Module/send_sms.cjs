@@ -11,7 +11,7 @@ client.verify.v2
     const readline = require("readline").createInterface({
       input: process.stdin,
       output: process.stdout,
-    });
+    }); 
     readline.question("Please enter the OTP:", (otpCode) => {
       client.verify.v2
         .services(verifySid)

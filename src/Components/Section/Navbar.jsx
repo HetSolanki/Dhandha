@@ -39,7 +39,7 @@ const Navbar = () => {
             >
               {user?.shop_name}
             </h4>
-          </Link>
+          </Link> 
           <NavbarItems />
         </nav>
         <Sheet>
@@ -90,7 +90,9 @@ const Navbar = () => {
             </div>
           </form>
           <ModeToggle />
-          <span className="hidden sm:block">Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}</span>
+          <span className="hidden sm:block">
+            Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}
+          </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">

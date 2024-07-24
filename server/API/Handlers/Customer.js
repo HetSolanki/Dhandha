@@ -1,3 +1,4 @@
+import { main } from "../Module/cloudinaryHandler.js";
 import Customer from "../Schema/customer.js";
 
 export const getAllCustomer = async (req, res) => {
@@ -6,7 +7,7 @@ export const getAllCustomer = async (req, res) => {
       "uid"
     );
 
-    if(!allCustomers){
+    if (!allCustomers) {
       return res.json({ data: "No Customer Found", status: "failed" });
     }
 
@@ -23,7 +24,6 @@ export const getOneCustomer = async (req, res) => {
     if (!customer) {
       return res.json({ data: "No Customer Found", status: "failed" });
     }
-    
 
     res.json({ data: customer, status: "success" });
   } catch (error) {
@@ -75,5 +75,15 @@ export const deleteCustomer = async (req, res) => {
     res.json({ data: deletedCustomer, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
+  }
+};
+
+export const uploadFile = async (req, res) => {
+  try {
+    console.log(req.params.publicid);
+    const obj = main(req.params.publicid);
+    res.json({ message: obj });
+  } catch (error) {
+    res.json({ message: "Hello World!!" });
   }
 };
