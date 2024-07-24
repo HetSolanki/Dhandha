@@ -17,6 +17,8 @@ import { fetchCustomer } from "@/Hooks/fetchCustomer";
 import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
 import { useReactToPrint } from "react-to-print";
 import Invoice from "@/Components/Section/Invoice";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import Invoicex from "@/Components/Section/Invoicex";
 
 export default function GetInvoice({ cid }) {
   const [customerEntry, setCustomerEntry] = useState(null);
@@ -148,20 +150,28 @@ export default function GetInvoice({ cid }) {
                     Send Invoice Link
                   </span>
                 </Button>
-                <Button
+                {/* <Button
                   size="sm"
                   variant="outline"
                   className="h-8 gap-1"
                   onClick={() => {
-                    handleprint();
+                    // handleprint();
+                    alert("Printing");
+                    
                   }}
                 >
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Generate Invoice
                   </span>
-                </Button>
+                </Button> */}
+                <PDFDownloadLink  document={<Invoicex />} fileName="invoice">
+                  {
+                    ({loading}) => (loading ? <button>Loading....</button> : <Button >Download</Button>)
+                  }
+                </PDFDownloadLink>
               </div>
+
               <div className="items-center float-start" id="datatable1">
                 {customerEntry ? (
                   <DataTable columns={columns1} data={customerEntry} />

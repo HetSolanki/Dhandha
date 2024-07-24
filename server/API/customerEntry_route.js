@@ -10,6 +10,7 @@ import {
   getAllCustomerEntryCurrentMonth,
   getCustomerForPayment,
   getCustomerInvoice,
+  getdashboardData,
 } from "./Handlers/CustomerEntry.js";
 import { inputErrorHandler } from "./Module/middleware.js";
 import cors from "cors";
@@ -65,5 +66,7 @@ router.delete("/removecustomerentry/:id", deleteCustomerEntry);
 router.get("/customersforpayment", getCustomerForPayment);
 
 router.get("/getCustomerInvoice/:id", getCustomerInvoice);
+
+router.get("/getdashboarddata/", protect, getdashboardData);
 
 export default router;

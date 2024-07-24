@@ -82,6 +82,13 @@ export function NavbarItems() {
                             </Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                            <Link to="/paymentdetails" >
+                                Payment Details
+                            </Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
                     {/* <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
