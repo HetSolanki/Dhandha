@@ -6,6 +6,7 @@ import {
   getShop,
   updateShop,
   createShop,
+  uploadQR,
 } from "./Handlers/Shop.js";
 import { protect } from "./Module/auth.js";
 
@@ -34,5 +35,7 @@ router.put(
 
 // Delete Shop
 router.delete("/deleteshop/:id", protect, deleteShop);
+
+router.post("/uploadqr", protect, uploadQR);
 
 export default router;

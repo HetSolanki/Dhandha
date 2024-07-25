@@ -102,7 +102,7 @@ export function Editcustomer({ id }) {
         }}
       >
         <DialogTrigger asChild>
-          <div className="cursor-pointer items-center   ">
+          <div className="cursor-pointer items-center">
             <Pencil/>
           </div>
         </DialogTrigger>

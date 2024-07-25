@@ -66,7 +66,7 @@ export default function DeleteCustomer({ cid }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 }
