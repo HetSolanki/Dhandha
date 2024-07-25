@@ -1,13 +1,12 @@
 import cloudinary from "cloudinary";
-const { v2: cloudinaryV2 } = cloudinary;
 import fetch from "node-fetch";
-import fs from "fs";
+import process from "process";
 
 // Configure Cloudinary with your credentials
 cloudinary.config({
-  cloud_name: "dikxaelvp",
-  api_key: "211774992852877",
-  api_secret: "8WJ28UnL0ostRH6HYWbpnLFSlF0",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
 });
 
 // Path to the PDF file you want to upload

@@ -117,7 +117,7 @@ export default function SignIn() {
         closeOnClick: true,
         theme: "light",
         onClose: () => {
-          navigate("/");
+          navigate("/dashboard");
         },
       });
     } else if (signin.data === "Invalid Credentials") {
@@ -168,83 +168,81 @@ export default function SignIn() {
   };
   return (
     <>
-        <div className="h-screen flex justify-center items-center ">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(formSubmit)}>
-              <Card className="mx-auto max-w-sm">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-[700]">Login</CardTitle>
-                  <CardDescription>
-                    Enter your email below to login to your account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4">
-                    <div className="grid gap-2">
-                      <FormField
-                        control={form.control}
-                        name="phone_number"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Label className="font-semibold">
-                              Phone Number
-                            </Label>
-                            <FormControl>
-                              <Input
-                                name="phone_number"
-                                {...field}
-                                className={
-                                  form.formState.errors.phone_number
-                                    ? "border-red-500"
-                                    : ""
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Label>
-                              <div className="flex items-center">
-                                <Label
-                                  htmlFor="password"
-                                  className="font-semibold"
-                                >
-                                  Password
-                                </Label>
-                                <Link
-                                  to="#"
-                                  className="ml-auto inline-block text-sm underline"
-                                >
-                                  Forgot your password?
-                                </Link>
-                              </div>
-                            </Label>
-                            <FormControl>
-                              <Input
-                                id="password"
-                                type="password"
-                                {...field}
-                                className={
-                                  form.formState.errors.password
-                                    ? "border-red-500"
-                                    : ""
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    {/* <div className="flex items-center gap-x-1">
+      <div className="h-screen flex justify-center items-center ">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(formSubmit)}>
+            <Card className="mx-auto max-w-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl font-[700]">Login</CardTitle>
+                <CardDescription>
+                  Enter your email below to login to your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <FormField
+                      control={form.control}
+                      name="phone_number"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label className="font-semibold">Phone Number</Label>
+                          <FormControl>
+                            <Input
+                              name="phone_number"
+                              {...field}
+                              className={
+                                form.formState.errors.phone_number
+                                  ? "border-red-500"
+                                  : ""
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label>
+                            <div className="flex items-center">
+                              <Label
+                                htmlFor="password"
+                                className="font-semibold"
+                              >
+                                Password
+                              </Label>
+                              <Link
+                                to="#"
+                                className="ml-auto inline-block text-sm underline"
+                              >
+                                Forgot your password?
+                              </Link>
+                            </div>
+                          </Label>
+                          <FormControl>
+                            <Input
+                              id="password"
+                              type="password"
+                              {...field}
+                              className={
+                                form.formState.errors.password
+                                  ? "border-red-500"
+                                  : ""
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* <div className="flex items-center gap-x-1">
                     <input
                       type="checkbox"
                       value="remember"
@@ -253,24 +251,24 @@ export default function SignIn() {
                     />
                     <span className="mb-[.1rem]">Remember me</span>
                   </div> */}
-                    <Button type="submit" className="w-full font-semibold">
-                      Sign in
-                    </Button>
-                    <Button variant="outline" className="w-full font-semibold">
-                      Signin with Google
-                    </Button>
-                  </div>
-                  <div className="mt-4 text-center text-sm font-medium">
-                    Don&apos;t have an account?{" "}
-                    <Link to="/signup" className="underline font-medium">
-                      Sign up
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </form>
-          </Form>
-        </div>
+                  <Button type="submit" className="w-full font-semibold">
+                    Sign in
+                  </Button>
+                  <Button variant="outline" className="w-full font-semibold">
+                    Signin with Google
+                  </Button>
+                </div>
+                <div className="mt-4 text-center text-sm font-medium">
+                  Don&apos;t have an account?{" "}
+                  <Link to="/signup" className="underline font-medium">
+                    Sign up
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </form>
+        </Form>
+      </div>
       <ToastContainer />
     </>
   );

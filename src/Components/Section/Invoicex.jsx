@@ -193,11 +193,11 @@ export const InvoiceX = ({ cid }) => {
       try {
         const formData = new FormData();
         formData.append("file", `data:application/pdf;base64,${base64data}`);
-        formData.append("upload_preset", "wnjb2gh7");
+        formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
         formData.append("folder", "Dhandha");
 
         const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dikxaelvp/image/upload",
+          `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
           { method: "POST", body: formData }
         );
 
@@ -212,13 +212,12 @@ export const InvoiceX = ({ cid }) => {
 
         const date = new Date();
         const res = await fetch(
-          "https://graph.facebook.com/v19.0/366116843258872/messages",
+          `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization:
-                "Bearer EAAMpyLmGYZCYBO29jTcNg1ZAGK4PLFgyplZBT8DnLHZCZCur3UZCwcOXsKYXjOlpsUQ6Vmn2POJQyG00R5bpZAH3y6BdWlE34daRCDMZBryDb38BxZAuGGUCefeUFzD42vuQecrd9hGCXDWDQmHw67EhlhaAHIoaL83qgcsXRjtfIdolYPHK9RyJlAtbJOBMcfgMbcc8nXqxIXp9RACiD3ifTAhgm2GZCpisvBZCD850L6iXcUZD",
+              Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`,
             },
             body: JSON.stringify({
               messaging_product: "whatsapp",

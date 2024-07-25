@@ -23,10 +23,10 @@ import PaymentDetails from "./Components/Section/PaymentDetails";
 import PaymentsEntryData from "./Components/Section/PaymentsEntryData";
 
 function App() {
-  const [defaultRoute, setDefaultRoute] = useState('');
+  const [defaultRoute, setDefaultRoute] = useState("");
 
   useEffect(() => {
-    const savedDefaultRoute = localStorage.getItem('defaultRoute');
+    const savedDefaultRoute = localStorage.getItem("defaultRoute");
     if (savedDefaultRoute) {
       setDefaultRoute(savedDefaultRoute);
     }
@@ -43,9 +43,9 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/customerentry" element={<CustomerEntry />} />
-            <Route path="/customerentrydata" element={<CustomerEntryData />} />            
+            <Route path="/customerentrydata" element={<CustomerEntryData />} />
             <Route path="/paymentdetails" element={<PaymentDetails />} />
-            <Route path="/paymentsdata" element={<PaymentsEntryData />} />            
+            <Route path="/paymentsdata" element={<PaymentsEntryData />} />
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/invoicex" element={<Invoicex />} />
             <Route
@@ -54,7 +54,9 @@ function App() {
             />
             <Route
               path="/notifications-settings"
-              element={<SettingsLayout children={<SettingsNotificationsPage />} />}
+              element={
+                <SettingsLayout children={<SettingsNotificationsPage />} />
+              }
             />
             {/* <Route
               path="/bankdetails"
@@ -69,14 +71,23 @@ function App() {
             <Route
               path="/displaydetails"
               element={
-                <SettingsLayout children={<SettingsSettingsDisplayPage setDefaultRoute={setDefaultRoute} />} />
+                <SettingsLayout
+                  children={
+                    <SettingsSettingsDisplayPage
+                      setDefaultRoute={setDefaultRoute}
+                    />
+                  }
+                />
               }
             />
-            <Route path="/404" element={<Error />} />            
-            <Route path="/comming-soon" element={<ComingSoonPage />} /> 
-            <Route path="/under-construction" element={<UnderConstructionPage />} /> 
+            <Route path="/404" element={<Error />} />
+            <Route path="/comming-soon" element={<ComingSoonPage />} />
+            <Route
+              path="/under-construction"
+              element={<UnderConstructionPage />}
+            />
 
-            <Route path="*" element={<Navigate to="/404" />} />          
+            <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
