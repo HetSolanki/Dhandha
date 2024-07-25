@@ -18,6 +18,7 @@ import { useUser } from "@/Context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import { updateshop } from "@/Handlers/UpdateShop";
 import { useState } from "react";
+import { uploadFileCloudinary } from "@/Handlers/uploadFileCloudinary";
 
 const ShopFormSchema = z.object({
   shop_name: z.string(),
@@ -28,7 +29,7 @@ const ShopFormSchema = z.object({
     })
     .max(30, {
       message: "Address must not be longer than 30 characters.",
-    })    
+    }),
 });
 
 export function ShopForm() {
@@ -41,9 +42,10 @@ export function ShopForm() {
   const [file, setFile] = useState(null);
 
   async function onSubmit(data) {
-    console.log(file)
+    const res = await uploadFileCloudinary(file);
+    console.log(res.public_id);
     const uid = user.uid._id;
-    const updatedUser = await updateshop(data, uid);
+    const updatedUser = await updateshop(data, uid, res.public_id);
     updateUserContext();
     if (updatedUser.status === "success") {
       toast.success("Shop Details Updated Successfully", {
@@ -90,9 +92,10 @@ export function ShopForm() {
                 <FormItem>
                   <FormLabel>Shop Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="Shop Address" {...field} 
+                    <Input
+                      placeholder="Shop Address"
+                      {...field}
                       className="w-80"
-
                     />
                   </FormControl>
                   <FormDescription>
@@ -111,7 +114,9 @@ export function ShopForm() {
                 <FormItem>
                   <FormLabel>Payment QR Code</FormLabel>
                   <FormControl>
-                    <Input type="file" {...field}
+                    <Input
+                      type="file"
+                      {...field}
                       className="w-80"
                       onChange={(e) => setFile(e.target.files[0])}
                     />

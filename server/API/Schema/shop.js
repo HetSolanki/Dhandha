@@ -12,6 +12,9 @@ export const shopSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
+  publicid: {
+    type: String,
+  },
 });
 
 export default mongoose.model("Shop", shopSchema);

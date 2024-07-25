@@ -4,12 +4,11 @@ import { jsPDF } from "jspdf";
 import { cloudinaryHandler } from "@/Handlers/cloudinaryHandler";
 import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import { useUser } from "@/Context/UserContext";
-import { Button } from "../UI/shadcn-UI/button";
-import { Hand, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
-  console.log(user?.user?.shop_name);
+
   const [customerInvoice, setCustomerInvoice] = useState(null);
 
   const [firstPartCustomers, setFirstPartCustomers] = useState([]);

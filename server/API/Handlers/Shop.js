@@ -29,6 +29,7 @@ export const updateShop = async (req, res) => {
     {
       shop_name: req.body.shop_name,
       shop_address: req.body.shop_address,
+      publicid: req.body.publicid,
     },
     { new: true }
   );
@@ -37,6 +38,16 @@ export const updateShop = async (req, res) => {
 };
 
 export const deleteShop = async (req, res) => {
+  const deletedShop = await Shop.findByIdAndDelete(req.params.id);
+
+  if (!deletedShop) {
+    return res.json({ data: "No Shop Found", status: "failed" });
+  }
+
+  res.json({ data: deletedShop, status: "success" });
+};
+
+export const uploadQR = async (req, res) => {
   const deletedShop = await Shop.findByIdAndDelete(req.params.id);
 
   if (!deletedShop) {
