@@ -176,44 +176,6 @@ export function Dashboard() {
                 ))}
               </CardContent>
             </Card>
-            <div className="space-y-5">
-              <Card x-chunk="dashboard-01-chunk-0">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Payment Details
-                  </CardTitle>
-                  <CurrencyRupee className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{data.pendingPaymentCustomersCount}/{data.totalCustomerData}</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card x-chunk="dashboard-01-chunk-5">
-                <CardHeader>
-                  <CardTitle>Due Payment Details</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-8">
-                  {
-                    data.pendingPaymentCustomers?.map((customer, index) => (
-                      <div key={index} className="flex flex-row items-center justify-between">
-                        <div className="flex flex-row items-center gap-4">                         
-                          <div>
-                            <p className="text-sm font-medium">{customer.customerDetails.cname}</p>
-                            <p className="text-xs text-muted-foreground">{customer.customerDetails.cphone_number}</p>
-                          </div>
-                        </div>
-                        <div className="text-sm font-medium">₹{customer.totalDue}</div>
-                      </div>
-                    ))
-                  }              
-
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </div>
       </main>
