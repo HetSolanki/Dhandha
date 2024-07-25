@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
-
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 const PaymentDetailContext = createContext();
 
 export default function PaymentDetailProvider({ children }) {
@@ -10,7 +10,7 @@ export default function PaymentDetailProvider({ children }) {
   useEffect(() => {
     const fetchPaymentData = async () => {
       const paymentDetails = await fetch(
-        `http://localhost:3001/api/customers/customerall`,
+        `${DOMAIN_NAME}/api/customers/customerall`,
         {
           method: "GET",
           headers: {
@@ -29,7 +29,7 @@ export default function PaymentDetailProvider({ children }) {
 
   const updatePaymentDetailContext = async () => {
     const paymentDetails = await fetch(
-      `http://localhost:3001/api/customers/customerall`,
+      `${DOMAIN_NAME}/api/customers/customerall`,
       {
         method: "GET",
         headers: {

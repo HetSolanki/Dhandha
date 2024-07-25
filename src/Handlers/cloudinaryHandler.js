@@ -1,6 +1,8 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const cloudinaryHandler = async (public_id) => {
   const customer = await fetch(
-    `http://localhost:3001/api/customers/uploadfile/${public_id}`
+    `${DOMAIN_NAME}/api/customers/uploadfile/${public_id}`
   );
 
   return customer.json();

@@ -1,5 +1,6 @@
-export const updateshop = async (data, uid, publicid) => {
-  const user = await fetch(`http://localhost:3001/api/shop/updateshop`, {
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+export const updateshop = async (data) => {
+  const user = await fetch(`${DOMAIN_NAME}/api/shop/updateshop`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

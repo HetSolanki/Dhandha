@@ -1,6 +1,8 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const fetchCustomerEnteries = async (cid) => {
   const customerEnteries = await fetch(
-    `http://localhost:3001/api/customerentry/getallcustomerentry/${cid}`,
+    `${DOMAIN_NAME}/api/customerentry/getallcustomerentry/${cid}`,
     {
       method: "GET",
       headers: {

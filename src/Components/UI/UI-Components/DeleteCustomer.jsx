@@ -16,12 +16,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Trash2 } from "lucide-react";
 
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export default function DeleteCustomer({ cid }) {
   const { updateCustomerContext } = useCustomer();
 
   const deleteRecord = async (cid) => {
     const deletedCustomer = await fetch(
-      `http://localhost:3001/api/customers/customer/${cid}`,
+      `${DOMAIN_NAME}/api/customers/customer/${cid}`,
       {
         method: "DELETE",
       }

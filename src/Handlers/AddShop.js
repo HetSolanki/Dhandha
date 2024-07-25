@@ -1,6 +1,7 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const createShop = async (data) => {
-  
-  const shop = await fetch("http://localhost:3001/api/shop/createshop", {
+  const shop = await fetch(`${DOMAIN_NAME}/api/shop/createshop`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

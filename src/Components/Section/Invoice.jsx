@@ -7,6 +7,8 @@ import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import React, { useContext, useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 const Invoice = React.forwardRef((props, ref) => {
   const [firstPartCustomers, setFirstPartCustomers] = useState([]);
   const [secondPartCustomers, setSecondPartCustomers] = useState([]);
@@ -48,7 +50,7 @@ const Invoice = React.forwardRef((props, ref) => {
   const getData = async (deliveryDate) => {
     alert("Fetching Data.............");
     const customers = await fetch(
-      `http://localhost:3001/api/customerentry/getallcustomerentry/${props.c_id}`,
+      `${DOMAIN_NAME}/api/customerentry/getallcustomerentry/${props.c_id}`,
       {
         method: "GET",
         headers: {

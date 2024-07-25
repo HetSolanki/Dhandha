@@ -1,5 +1,7 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const sendOtp = async (data) => {
-  const verification = await fetch("http://localhost:3001/api/auth/sendotp", {
+  const verification = await fetch(`${DOMAIN_NAME}/api/auth/sendotp`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

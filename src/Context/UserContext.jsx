@@ -2,6 +2,7 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Router, useNavigate } from "react-router-dom";
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 const UserContext = createContext({
   user: null,
@@ -21,7 +22,7 @@ export default function UserProvider({ children }) {
   useEffect(() => {
     const fetchUserData = async () => {
       const userDetails = await fetch(
-        `http://localhost:3001/api/shop/getshop/${userToken.id}`,
+        `${DOMAIN_NAME}/api/shop/getshop/${userToken.id}`,
         {
           method: "GET",
           headers: {
@@ -44,7 +45,7 @@ export default function UserProvider({ children }) {
     const userToken = jwtDecode(token);
 
     const userDetails = await fetch(
-      `http://localhost:3001/api/shop/getshop/${userToken.id}`,
+      `${DOMAIN_NAME}/api/shop/getshop/${userToken.id}`,
       {
         method: "GET",
         headers: {

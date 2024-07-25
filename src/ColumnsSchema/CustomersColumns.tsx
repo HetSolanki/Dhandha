@@ -32,7 +32,6 @@ import {
 } from "@/Components/UI/shadcn-UI/sheet";
 import React, { useId, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import Invoice from "@/Components/Section/Invoice";
 import InvoiceDataContext from "@/Context/InvoiceDataContext";
 import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
 import GetInvoice from "@/Components/UI/UI-Components/GetInvoice";
@@ -222,7 +221,7 @@ export const columns: ColumnDef<Customer>[] = [
                       onClick={async () => {
                         setIsLoading(true); // Start loading
                         const response = await fetch(
-                          `http://localhost:3001/api/customerentry/getallcustomerentry/${customer._id}`,
+                          `${DOMAIN_NAME}/api/customerentry/getallcustomerentry/${customer._id}`,
                           {
                             method: "GET",
                             headers: {
@@ -316,16 +315,16 @@ export const columns: ColumnDef<Customer>[] = [
                   </Sheet>
               </div> */}
             </div>
-            <div className="hidden">
+            {/* <div className="hidden">
               {isLoading ? (
                 <div className="flex justify-center items-center h-64">
                   <div className="loader">Loading</div>{" "}
-                  {/* Add your loader component or spinner here */}
+                  Add your loader component or spinner here
                 </div>
               ) : (
                 <Invoice ref={componentRef} c_id={customer._id} />
               )}
-            </div>
+            </div> */}
           </InvoiceDataContext.Provider>
         </>
       );

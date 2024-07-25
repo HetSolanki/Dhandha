@@ -1,5 +1,7 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const signinuser = async (data) => {
-  const user = await fetch("http://localhost:3001/api/auth/signin", {
+  const user = await fetch(`${DOMAIN_NAME}/api/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

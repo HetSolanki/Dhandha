@@ -1,5 +1,7 @@
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
 export const fetchCustomers = async () => {
-  const res = await fetch("http://localhost:3001/api/customers/customerall", {
+  const res = await fetch(`${DOMAIN_NAME}/api/customers/customerall`, {
     method: "GET",
     headers: {
       authorization: "Bearer " + localStorage.getItem("token"),
