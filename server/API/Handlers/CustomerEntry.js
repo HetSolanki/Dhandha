@@ -203,6 +203,11 @@ export const getCustomerInvoice = async (req, res) => {
         },
       },
       {
+        $sort: {
+          createdAt: 1, // Sort by createdAt in descending order
+        },
+      },
+      {
         $lookup: {
           from: "customers",
           localField: "cid",
@@ -236,7 +241,72 @@ export const getCustomerInvoice = async (req, res) => {
           customerEntry: 1,
         },
       },
-    ]).exec();
+    ]);
+
+    res.json({ data: customerEntry });
+  } catch (error) {
+    res.json({ message: error });
+  }
+};
+
+export const getAllCustomerInvoice = async (req, res) => {
+  const date = new Date();
+  const firstDate = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)
+  );
+  const lastDate = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)
+  );
+  try {
+    const customerEntry = await CustomerEntry.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gt: firstDate,
+            $lt: lastDate,
+          },
+        },
+      },
+      {
+        $sort: {
+          createdAt: 1, // Sort by createdAt in descending order
+        },
+      },
+      {
+        $lookup: {
+          from: "customers",
+          localField: "cid",
+          foreignField: "_id",
+          as: "customerDetails",
+        },
+      },
+      {
+        $unwind: "$customerDetails",
+      },
+      {
+        $group: {
+          _id: "$cid",
+          totalBottle: { $sum: "$bottle_count" },
+          customerDetails: { $first: "$customerDetails" },
+          customerEntry: {
+            $push: {
+              bottle_count: "$bottle_count",
+              delivery_date: "$delivery_date",
+              delivery_status: "$delivery_status",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          cid: "$_id",
+          totalBottle: 1,
+          customerDetails: 1,
+          customerEntry: 1,
+        },
+      },
+    ]);
 
     res.json({ data: customerEntry });
   } catch (error) {

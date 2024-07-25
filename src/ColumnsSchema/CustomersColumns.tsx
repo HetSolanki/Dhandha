@@ -211,11 +211,11 @@ export const columns: ColumnDef<Customer>[] = [
       return (
         <>
           <InvoiceDataContext.Provider value={{ invoicedata, setInvoicedata }}>
-            <div className="flex gap-x-3">
+            <div className="flex gap-x-2">
               <Editcustomer id={customer._id} />
               <DeleteCustomer cid={customer._id} />
+              <InvoiceX cid={customer._id} />
               {/* <GetInvoice cid={customer._id} /> */}
-              <InvoiceX />
               {/* <div className="cursor-pointer w-5 h-5">
                   <Sheet>
                     <SheetTrigger

@@ -54,3 +54,4 @@ router.delete("/customer/:id", deleteCustomer);
 router.get("/uploadfile/Dhandha/:publicid", uploadFile);
 
 export default router;
+  

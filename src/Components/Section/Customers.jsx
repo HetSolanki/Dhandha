@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RotatingLines } from "react-loader-spinner";
 import { createPaymentLinkAll } from "@/Handlers/CreatePaymentLinkAll";
+import InvoiceAll from "./InvoiceAll";
 
 const Customers = () => {
   const { customer } = useCustomer();
@@ -98,16 +99,7 @@ const Customers = () => {
                         <CardTitle>
                           Customers
                           <div className="ml-auto flex items-center gap-2 float-end">
-                            <Button
-                              size="sm"
-                              className="h-8 gap-1"
-                              onClick={handlesendinvoice}
-                            >
-                              <Send className="h-3.5 w-3.5" />
-                              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                Send Invoice to All Customers
-                              </span>
-                            </Button>
+                            <InvoiceAll />
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
