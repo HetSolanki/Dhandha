@@ -1,0 +1,16 @@
+/* Hide columns by default */
+.hide-mobile {
+  display: none;
+}
+
+/* Show columns on screens wider than 640px */
+@media (min-width: 640px) {
+  .hide-mobile {
+    display: table-cell;
+  }
+}
+
+/* Ensure action column is always visible */
+.show-mobile {
+  display: table-cell;
+}

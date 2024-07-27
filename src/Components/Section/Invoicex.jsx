@@ -5,6 +5,7 @@ import { cloudinaryHandler } from "@/Handlers/cloudinaryHandler";
 import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import { useUser } from "@/Context/UserContext";
 import { Send } from "lucide-react";
+import { Button } from "../UI/shadcn-UI/button";
 
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
@@ -290,9 +291,9 @@ export const InvoiceX = ({ cid }) => {
   };
 
   return (
-    <div className="cursor-pointer items-center">
-      <Send onClick={handleClick} size={24} color="black" />
-    </div>
+    <Button className="cursor-pointer items-center">
+      <Send onClick={handleClick} size={24} color="white" width={17} height={17} className="mr-2" />Send Invoice
+    </Button>
   );
 };
 

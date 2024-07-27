@@ -26,6 +26,15 @@ export const InvoiceAll = () => {
     console.log(customerInvoice);
     alert("Generating PDF...");
 
+    // const confirmation = confirm(
+    //   "Are you sure you want to send invoice to all customers?"
+    // );
+
+    // if (!confirmation) {
+    //   return;
+    // } else {
+    alert("Send Invoice to All Customers");
+
     customerInvoice.map((customer, index) => {
       const partitionSize = Math.ceil(
         customerInvoice[index].customerEntry.length / 3
@@ -247,12 +256,19 @@ export const InvoiceAll = () => {
 
       reader.readAsDataURL(pdfBlob);
     });
+    // }
   };
 
   return (
     <div>
-      <Button onClick={handleClick}>
-        Send Invoice To All Customers <Send />
+      <Button
+        onClick={handleClick}
+        variant="default"
+        size="sm"
+        className="h-8 gap-1"
+      >
+        <Send className="h-3.5 w-3.5" />
+        Send Invoice
       </Button>
     </div>
   );
