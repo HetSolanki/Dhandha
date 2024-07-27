@@ -16,7 +16,7 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello From Server" });
-});
+});   
 
 app.use("/api/auth", user_api);
 app.use("/api/customers", customer_api);

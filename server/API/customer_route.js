@@ -19,7 +19,7 @@ router.get("/customerall", protect, getAllCustomer);
 
 // Get Customer by it's id
 router.get("/customer/:id", getOneCustomer);
-
+  
 // Create Customer
 router.post(
   "/customer",
