@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
-import { cloudinaryHandler } from "@/Handlers/cloudinaryHandler";
 import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import { useUser } from "@/Context/UserContext";
 import { Send } from "lucide-react";
@@ -291,8 +290,9 @@ export const InvoiceX = ({ cid }) => {
   };
 
   return (
-    <Button className="cursor-pointer items-center">
-      <Send onClick={handleClick} size={24} color="white" width={17} height={17} className="mr-2" />Send Invoice
+    <Button onClick={handleClick} className="cursor-pointer items-center">
+      <Send size={24} color="white" width={17} height={17} className="mr-2" />
+      Send Invoice
     </Button>
   );
 };

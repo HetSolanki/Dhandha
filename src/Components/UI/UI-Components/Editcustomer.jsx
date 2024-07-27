@@ -106,7 +106,7 @@ export function Editcustomer({ id }) {
             <Pencil/>
           </div>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-lg sm:rounded-none">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(formSubmit)}>
               <DialogHeader>
@@ -241,7 +241,7 @@ export function Editcustomer({ id }) {
                   />
                 </div>
               </div>
-              <DialogFooter className="flex justify-between">
+              <DialogFooter className="flex-row flex justify-between gap-y-2 sm:gap-y-0">
                 <Button type="submit" className="font-semibold">
                   Update Customer
                 </Button>

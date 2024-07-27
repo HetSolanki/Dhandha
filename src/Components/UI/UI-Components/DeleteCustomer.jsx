@@ -48,7 +48,7 @@ export default function DeleteCustomer({ cid }) {
             <Trash2 />
           </div>
         </AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent className="w-[90%] rounded-md">
           <AlertDialogHeader>
             <AlertDialogTitle>
               Are you sure you want to delete this customer?
@@ -58,11 +58,11 @@ export default function DeleteCustomer({ cid }) {
               customer.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex flex-col">
             <AlertDialogAction onClick={() => deleteRecord(cid)}>
               Delete
             </AlertDialogAction>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

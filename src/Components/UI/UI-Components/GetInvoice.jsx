@@ -92,7 +92,7 @@ export default function GetInvoice({ cid }) {
         >
           <EyeIcon strokeWidth={3} />
         </SheetTrigger>
-        <SheetContent className="p-4  w-auto h-auto overflow-y-auto">
+        <SheetContent className="p-6 w-full">
           <SheetHeader>
             <SheetTitle>Customer Details</SheetTitle>
             <SheetDescription>

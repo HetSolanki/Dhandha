@@ -3,9 +3,9 @@ import Customer from "../Schema/customer.js";
 
 export const getAllCustomer = async (req, res) => {
   try {
-    const allCustomers = await Customer.find({ uid: req.user.id }).populate(
-      "uid"
-    );
+    const allCustomers = await Customer.find({ uid: req.user.id })
+      .sort({ delivery_sequence_number: 1 })
+      .populate("uid");
 
     if (!allCustomers) {
       return res.json({ data: "No Customer Found", status: "failed" });

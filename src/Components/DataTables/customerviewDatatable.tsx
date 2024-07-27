@@ -32,7 +32,10 @@ export function DataTable({ data, columns }) {
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({
+      cname: false,
+      bottle_count: true,
+    });
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -59,7 +62,9 @@ export function DataTable({ data, columns }) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Entry By Date..."
-          value={(table.getColumn("delivery_date")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("delivery_date")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("delivery_date")?.setFilterValue(event.target.value)
           }

@@ -9,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/Components/UI/shadcn-UI/dropdown-menu";
-import { Input } from "@/Components/UI/shadcn-UI/input";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +19,7 @@ import { NAVBAR } from "@/Data/Navbar";
 import { useUser } from "@/Context/UserContext";
 import { NavbarItems } from "./NavbarItems";
 import { ModeToggle } from "../UI/UI-Components/ModeToggle";
+import { Input } from "../UI/shadcn-UI/input";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <header className="sticky top-0 flex h-16 justify-between sm:justify-normal items-center gap-4 border-b bg-background/50 z-50 backdrop-blur-lg px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             to="/dashboard"
@@ -39,7 +39,7 @@ const Navbar = () => {
             >
               {user?.shop_name}
             </h4>
-          </Link> 
+          </Link>
           <NavbarItems />
         </nav>
         <Sheet>
@@ -57,7 +57,7 @@ const Navbar = () => {
             <nav className="grid gap-6 text-lg font-medium">
               <Link
                 to="/"
-                className="flex items-center gap-2 text-lg font-semibold"
+                className="flex items-center border-b-2 border-b-black/50 gap-2 text-lg font-semibold"
               >
                 <h4
                   className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
@@ -69,7 +69,7 @@ const Navbar = () => {
               {NAVBAR.map((item, index) => (
                 <Link
                   to={item.link}
-                  className="text-foreground transition-colors hover:text-foreground"
+                  className="text-foreground text-[16px] font-normal transition-colors hover:text-foreground"
                   key={index}
                 >
                   {item.name}
@@ -78,20 +78,23 @@ const Navbar = () => {
             </nav>
           </SheetContent>
         </Sheet>
-        <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          {/* <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form> */}
+        <div className="flex sm:hidden">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 text-lg font-semibold md:text-base "
+          >
+            <h4
+              className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
+              id="titleheading"
+            >
+              {user?.shop_name}
+            </h4>
+          </Link>
+        </div>
+        <div className="flex sm:items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <ModeToggle />
           <span className="hidden sm:block">
-            Kem palty 👋, {user?.uid.fname + " " + user?.uid.lname}
+            Hey 👋, {user?.uid.fname + " " + user?.uid.lname}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

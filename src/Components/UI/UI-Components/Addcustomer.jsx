@@ -25,7 +25,7 @@ import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
 import { useCustomer } from "@/Context/CustomerContext";
 import { useUser } from "@/Context/UserContext";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
@@ -96,7 +96,7 @@ export function Addcustomer() {
             </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-lg sm:rounded-none">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(formSubmit)}>
               <DialogHeader>
@@ -226,7 +226,7 @@ export function Addcustomer() {
                   />
                 </div>
               </div>
-              <DialogFooter className="flex justify-between">
+              <DialogFooter className="flex-row flex justify-between">
                 <Button type="submit" className="font-semibold">
                   Add Customer
                 </Button>

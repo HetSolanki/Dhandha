@@ -61,12 +61,12 @@ export default function CustomerEntry() {
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
-              <CardTitle>Customer Entry</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-xl sm:text-2xl">Customer Entry</CardTitle>
+              <CardDescription >
                 List of all the customers and their entries
               </CardDescription>
             </div>
-            <Button  size="sm" className="ml-auto gap-1" onClick={handleNavigate}>
+            <Button  size="sm" className="ml-auto gap-1 self-start" onClick={handleNavigate}>
                 View All
                 <ArrowUpRight className="h-4 w-4" />
             </Button>

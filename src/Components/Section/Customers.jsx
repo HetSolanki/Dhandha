@@ -51,6 +51,10 @@ const Customers = () => {
     queryFn: fetchCustomers,
   });
 
+  if (!customers.isLoading) {
+    console.log("Customer", customers.data.data);
+  }
+
   return (
     <>
       <Navbar />
@@ -80,29 +84,25 @@ const Customers = () => {
         </div>
       )}
       {!customers.isLoading && (
-        <div className="flex min-h-screen mx-auto w-screen flex-col bg-muted/40">
+        <div className="flex min-h-screen mx-auto flex-col bg-muted/40">
           <TooltipProvider>
             <div className="flex flex-col sm:gap-4 sm:py-4">
-              <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+              <main className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
                 <Tabs defaultValue="all">
                   <TabsContent value="all">
                     <Card x-chunk="dashboard-06-chunk-0">
-                      <CardHeader>
+                      <CardHeader className="px-4">
                         <CardTitle
-                          className="flex-col sm:flex-row  sm:flex sm:items-center 
+                          className="flex-col sm:flex-row sm:flex sm:items-center 
                         sm:justify-between
                       "
                         >
                           <span
                             className="
-                            text-2xl
+                            text-xl
                             font-semibold
                             text-primary
-                            sm:text-3xl
-                            sm:font-bold
-                            sm:leading-9
-                            sm:truncate
-                            
+                            sm:text-2xl
                           "
                           >
                             Customers
@@ -149,18 +149,18 @@ const Customers = () => {
                             <Addcustomer />
                           </div>
                         </CardTitle>
-                        {/* <CardDescription>
+                        <CardDescription className="hidden sm:block">
                           Manage your customers and view their sales
                           performance.
-                        </CardDescription> */}
+                        </CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-3">
                         <DataTable
                           data={customers?.data?.data}
                           columns={columns}
                         />
                       </CardContent>
-                      <CardFooter>
+                      <CardFooter className="px-3 pb-4">
                         <div className="text-xs text-muted-foreground">
                           Showing <strong>1-10</strong> of <strong>32</strong>{" "}
                           customers
