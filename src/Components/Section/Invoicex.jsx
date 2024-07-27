@@ -211,32 +211,75 @@ export const InvoiceX = ({ cid }) => {
         );
 
         const date = new Date();
+
+        const total_amount =
+          customerInvoice[0]?.totalBottle *
+          customerInvoice[0]?.customerDetails?.bottle_price;
+
         const res = await fetch(
           `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`,
+              Authorization: `Bearer EAAQs6aaQ9cABO76X0ZAxOG5ZBczyZAZChwH0LxcmvOKevXXbQcizygEHnpHZA8qtuzuWTSOarg8pPKrcYI2ZA6QEZBPUe2TSxg6liI7Uo7RQzRl6aJyrPrd9BPMOsdtyIK4W2YJevhWBkgZBpWCm5cQCEtchJlFqXdqetlHxFkwnwfWI6UE4sntWq9inrnuARXkHZBwZDZD`, // Use your access token
             },
             body: JSON.stringify({
               messaging_product: "whatsapp",
               recipient_type: "individual",
               to: `91${customerInvoice[0]?.customerDetails?.cphone_number}`,
-              type: "document",
-              document: {
-                link: responseData.secure_url,
-                caption: "Kem Palty, Mamlad-Dar 👋",
-                filename: `${date.getMonth()} - ${date.getFullYear()}`,
+              type: "template",
+              // template: {
+              //   name: "hello_world",
+              //   language: {
+              //     code: "en_US",
+              //   },
+              // },
+              template: {
+                name: "purchase_receipt_2",
+                language: {
+                  code: "en_US",
+                },
+                components: [
+                  {
+                    type: "header",
+                    parameters: [
+                      {
+                        type: "document",
+                        document: {
+                          link: responseData.secure_url,
+                          filename: `${date.getMonth()} - ${date.getFullYear()}`,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: "body",
+                    parameters: [
+                      { type: "text", text: total_amount },
+                      {
+                        type: "text",
+                        text: customerInvoice[0]?.customerDetails?.caddress,
+                      },
+                      { type: "text", text: "Invoice" },
+                    ],
+                  },
+                ],
               },
             }),
           }
         );
 
-        console.log(res);
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(`Error: ${data.error.message}`);
+        } else {
+          console.log("Message sent successfully!", data);
+          alert("Message sent successfully!");
+        }
 
-        const resDelete = await cloudinaryHandler(responseData.public_id);
-        console.log(resDelete);
+        // const resDelete = await cloudinaryHandler(responseData.public_id);
+        // console.log(resDelete);
       } catch (error) {
         console.error("Failed to upload PDF:", error);
         alert("Failed to upload PDF.");
