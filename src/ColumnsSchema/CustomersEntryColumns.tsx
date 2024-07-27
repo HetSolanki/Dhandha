@@ -24,6 +24,7 @@ import { Input } from "@/Components/UI/shadcn-UI/input";
 import "../index.css";
 import { toast, ToastContainer } from "react-toastify";
 import React from "react";
+import styled from "styled-components";
 
 export type Customer = {
   cname: string;
@@ -238,10 +239,19 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       const [customers, setCustomers] = React.useState<Customer[]>([]);
       const customer = row.original;
-
+      const ResponsiveStack = styled.div`
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    
+      @media (max-width: 600px) {
+        flex-direction: column;
+        margin-left: -10px;        
+      }
+    `;
       return (
         <>
-          <Stack direction="row" spacing={1}>
+          <ResponsiveStack>
             <Button
               size="icon"
               className="h-8 gap-1 inl"
@@ -267,7 +277,7 @@ export const columns: ColumnDef<Customer>[] = [
             >
               <EyeIcon />
             </Button> */}
-          </Stack>
+      </ResponsiveStack>
         </>
       );
     },

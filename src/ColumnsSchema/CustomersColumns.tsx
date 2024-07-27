@@ -11,29 +11,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
-  EyeIcon,
-  File,
-  MoreHorizontal,
-  PlusCircle,
+  ArrowUpDown
 } from "lucide-react";
-import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import { Button } from "../Components/UI/shadcn-UI/button";
 import { Editcustomer } from "@/Components/UI/UI-Components/Editcustomer";
 import DeleteCustomer from "@/Components/UI/UI-Components/DeleteCustomer";
-import { DataTable } from "@/Components/UI/shadcn-UI/DataTable";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/Components/UI/shadcn-UI/sheet";
-import React, { useId, useRef } from "react";
-import { useReactToPrint } from "react-to-print";
-import InvoiceDataContext from "@/Context/InvoiceDataContext";
-import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
+import React from "react";
 import GetInvoice from "@/Components/UI/UI-Components/GetInvoice";
 import { InvoiceX } from "@/Components/Section/Invoicex";
 
@@ -52,6 +35,32 @@ export type Customer = {
 
 export const columns: ColumnDef<Customer>[] = [
   {
+    accessorKey: "delivery_sequence_number",
+    header: ({ column }) => {
+      return (
+        <div className="
+        ">
+          <Button
+            variant="ghost"
+            className="px-0 
+            text-left          
+            "            
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sequence <br />
+            Number
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="lowercase text-left ">
+        {row.getValue("delivery_sequence_number")}
+      </div>
+    ),
+  },
+  {
     accessorKey: "cname",
     header: () => <div className="text-left">Customer Names</div>,
     cell: ({ row }) => (
@@ -62,13 +71,13 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "cphone_number",
     header: ({ column }) => {
       return (
-        <div className="text-left">
+        <div className="text-left w-10  ">
           <Button
             variant="ghost"
             className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Phone Number
+            Phone <br /> Number
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -105,28 +114,7 @@ export const columns: ColumnDef<Customer>[] = [
       return <div className="font-medium">{formatted}</div>;
     },
   },
-  {
-    accessorKey: "delivery_sequence_number",
-    header: ({ column }) => {
-      return (
-        <div className="text-left">
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sequence Number
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase text-left ">
-        {row.getValue("delivery_sequence_number")}
-      </div>
-    ),
-  },
+
   {
     header: () => <div className="text-left">Actions</div>,
     id: "actions",
@@ -145,77 +133,15 @@ export const columns: ColumnDef<Customer>[] = [
         total_bottles: 0,
         shorturl: "",
       }); // Invoice Data
-      const [customerentrydetails, setCustomerentrydetails] = React.useState(
-        []
-      );
-      // const navigate = useNavigate();
-      const componentRef = useRef();
 
-      const sendinvoicelink = async () => {
-        alert("Sending Invoice Link");
-        console.log(invoicedata);
-        const cname = invoicedata.data.cid.cname;
-        const cphone_number = invoicedata.data.cid.cphone_number;
-        const amount =
-          invoicedata.data.cid.bottle_price * invoicedata.total_bottles;
-        console.log(amount, cname, cphone_number);
-        const data = {
-          amount: amount,
-          description: "Payment for Bottles",
-          customer_name: cname,
-          customer_phone: cphone_number,
-          customer_email: "",
-          smsnotify: true,
-          emailnotify: false,
-          reminder_enable: false,
-          account_number: "acc_OXH9Xd6WTvaZ9m",
-        };
-        const newpaymentlink = await createPaymentLink(data);
-
-        if (newpaymentlink.status === "success") {
-          alert("Payment Link Created");
-          console.log(newpaymentlink);
-          console.log(newpaymentlink.data.short_url);
-          setInvoicedata({
-            data: {
-              cid: {
-                cname: cname,
-                cphone_number: cphone_number,
-                bottle_price: amount,
-              },
-            },
-            total_bottles: invoicedata.total_bottles,
-            shorturl: newpaymentlink.data.short_url,
-          });
-        } else {
-          console.log(newpaymentlink);
-        }
-      };
-
-      const handleprint = useReactToPrint({
-        content: () => componentRef.current,
-        onBeforeGetContent: () => {
-          console.log(invoicedata);
-          alert("Content will Load now");
-          // setLoadinvoice(true);
-        },
-        onBeforePrint() {
-          alert("Printing will start now");
-        },
-        onAfterPrint() {
-          alert("Printing is done");
-        },
-        // pageStyle: "@page { size: auto;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
-      });
       return (
         <>
-          <InvoiceDataContext.Provider value={{ invoicedata, setInvoicedata }}>
-            <div className="flex gap-x-2">
-              <Editcustomer id={customer._id} />
-              <DeleteCustomer cid={customer._id} />
-              <InvoiceX cid={customer._id} />
-              {/* <GetInvoice cid={customer._id} /> */}
-              {/* <div className="cursor-pointer w-5 h-5">
+          <div className="flex gap-x-2">
+            <Editcustomer id={customer._id} />
+            <DeleteCustomer cid={customer._id} />
+            <GetInvoice cid={customer._id} />
+
+            {/* <div className="cursor-pointer w-5 h-5">
                   <Sheet>
                     <SheetTrigger
                       onClick={async () => {
@@ -314,8 +240,8 @@ export const columns: ColumnDef<Customer>[] = [
                     </SheetContent>
                   </Sheet>
               </div> */}
-            </div>
-            {/* <div className="hidden">
+          </div>
+          {/* <div className="hidden">
               {isLoading ? (
                 <div className="flex justify-center items-center h-64">
                   <div className="loader">Loading</div>{" "}
@@ -325,7 +251,6 @@ export const columns: ColumnDef<Customer>[] = [
                 <Invoice ref={componentRef} c_id={customer._id} />
               )}
             </div> */}
-          </InvoiceDataContext.Provider>
         </>
       );
     },

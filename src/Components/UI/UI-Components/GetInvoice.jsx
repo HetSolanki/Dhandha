@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { EyeIcon, File, PlusCircle } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 import {
   Sheet,
   SheetDescription,
@@ -8,32 +8,16 @@ import {
   SheetContent,
   SheetHeader,
 } from "../shadcn-UI/sheet";
-import { Button } from "../shadcn-UI/button";
-import { DataTable } from "../shadcn-UI/DataTable";
-import { useRef, useState } from "react";
+import { DataTable } from "@/Components/DataTables/customerviewDatatable";
+import { useState } from "react";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import { fetchCustomerEnteries } from "@/Hooks/fetchCustomerEnteries";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
-import { createPaymentLink } from "@/Handlers/CreatepaymentLinkHandler";
-import { useReactToPrint } from "react-to-print";
-import Invoice from "@/Components/Section/Invoice";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import Invoicex from "@/Components/Section/Invoicex";
+import  { InvoiceX } from "@/Components/Section/Invoicex";
 
 export default function GetInvoice({ cid }) {
   const [customerEntry, setCustomerEntry] = useState(null);
   const [customer, setCustomer] = useState();
-  const [invoicedata, setInvoicedata] = useState({
-    data: {
-      cid: {
-        cname: "",
-        cphone_number: "",
-        bottle_price: 0,
-      },
-    },
-    total_bottles: 0,
-    shorturl: "",
-  }); // Invoice Data
 
   // const componentRef = useRef();
 
@@ -137,6 +121,7 @@ export default function GetInvoice({ cid }) {
                 </div>
               </div>
               <div className="ml-auto flex items-center gap-2 float-start m-3">
+              <InvoiceX cid={cid} />
                 {/* <Button
                   size="sm"
                   variant="outline"
