@@ -1,7 +1,5 @@
-import { Link } from "react-router-dom";
-import { ArrowUpRight, CreditCard, Users } from "lucide-react";
+import {CreditCard, Users } from "lucide-react";
 // import { Badge } from "@/Components/UI/shadcn-UI/badge";
-import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
   CardContent,
@@ -17,7 +15,7 @@ import {
 //   TableHeader,
 //   TableRow,
 // } from "@/Components/UI/shadcn-UI/table";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/ToprevenueDataTable";
 // import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -120,12 +118,12 @@ export function Dashboard() {
                   Top 5 customers with the highest revenue
                 </CardDescription>
               </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
+              {/* <Button asChild size="sm" className="ml-auto gap-1">
                 <Link to="#">
                   View All
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
-              </Button>
+              </Button> */}
             </CardHeader>
             <CardContent>
               <DataTable columns={columns} data={transformedTopCustomers} />

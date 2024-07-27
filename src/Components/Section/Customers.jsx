@@ -32,7 +32,7 @@ import {
 } from "@/Components/UI/shadcn-UI/tooltip";
 import Navbar from "./Navbar";
 import { Addcustomer } from "../UI/UI-Components/Addcustomer";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/CustomerDataTable";
 import { columns } from "../../ColumnsSchema/CustomersColumns";
 // import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -41,7 +41,6 @@ import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RotatingLines } from "react-loader-spinner";
-import { createPaymentLinkAll } from "@/Handlers/CreatePaymentLinkAll";
 import InvoiceAll from "./InvoiceAll";
 
 const Customers = () => {
@@ -51,13 +50,6 @@ const Customers = () => {
     queryKey: ["customers", customer],
     queryFn: fetchCustomers,
   });
-
-  const handlesendinvoice = async () => {
-    alert("Send Invoice to All Customers");
-
-    const paymentLink = await createPaymentLinkAll();
-    console.log(paymentLink);
-  };
 
   return (
     <>
@@ -96,9 +88,26 @@ const Customers = () => {
                   <TabsContent value="all">
                     <Card x-chunk="dashboard-06-chunk-0">
                       <CardHeader>
-                        <CardTitle>
-                          Customers
-                          <div className="ml-auto flex items-center gap-2 float-end">
+                        <CardTitle
+                          className="flex-col sm:flex-row  sm:flex sm:items-center 
+                        sm:justify-between
+                      "
+                        >
+                          <span
+                            className="
+                            text-2xl
+                            font-semibold
+                            text-primary
+                            sm:text-3xl
+                            sm:font-bold
+                            sm:leading-9
+                            sm:truncate
+                            
+                          "
+                          >
+                            Customers
+                          </span>
+                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                             <InvoiceAll />
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -140,10 +149,10 @@ const Customers = () => {
                             <Addcustomer />
                           </div>
                         </CardTitle>
-                        <CardDescription>
+                        {/* <CardDescription>
                           Manage your customers and view their sales
                           performance.
-                        </CardDescription>
+                        </CardDescription> */}
                       </CardHeader>
                       <CardContent>
                         <DataTable

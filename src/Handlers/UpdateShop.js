@@ -1,5 +1,5 @@
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
-export const updateshop = async (data) => {
+export const updateshop = async (data, publicid) => {
   const user = await fetch(`${DOMAIN_NAME}/api/shop/updateshop`, {
     method: "PUT",
     headers: {

@@ -1,5 +1,5 @@
 import { useCustomer } from "@/Context/CustomerContext";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/CustomerEntryDatatable";
 import { columns } from "@/ColumnsSchema/CustomersEntryColumns";
 import Navbar from "./Navbar";
 import {
