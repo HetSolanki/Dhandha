@@ -96,7 +96,7 @@ export function Addcustomer() {
             </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-lg sm:rounded-none">
+        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(formSubmit)}>
               <DialogHeader>

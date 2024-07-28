@@ -40,8 +40,10 @@ import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { RotatingLines } from "react-loader-spinner";
+import { ColorRing, RotatingLines } from "react-loader-spinner";
 import InvoiceAll from "./InvoiceAll";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Customers = () => {
   const { customer } = useCustomer();
@@ -58,42 +60,17 @@ const Customers = () => {
   return (
     <>
       <Navbar />
-      {customers.isLoading && (
-        <div
-          className="
-        flex
-        items-center
-        justify-center
-        min-h-screen
-        mx-auto
-        w-screen
-        flex-col
-        bg-muted/40
-        "
-        >
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-            wrapperStyle={{}}
-          />
-        </div>
-      )}
-      {!customers.isLoading && (
-        <div className="flex min-h-screen mx-auto flex-col bg-muted/40">
-          <TooltipProvider>
-            <div className="flex flex-col sm:gap-4 sm:py-4">
-              <main className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
-                <Tabs defaultValue="all">
-                  <TabsContent value="all">
-                    <Card x-chunk="dashboard-06-chunk-0">
+      <div className="flex min-h-screen mx-auto flex-col bg-muted/40">
+        <TooltipProvider>
+          <div className="flex flex-col sm:gap-4 sm:py-4">
+            <main className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
+              <Tabs defaultValue="all">
+                <TabsContent value="all">
+                  <Card x-chunk="dashboard-06-chunk-0">
+                    {!customers.isLoading ? (
                       <CardHeader className="px-4">
                         <CardTitle
-                          className="flex-col sm:flex-row sm:flex sm:items-center 
+                          className="flex-col pt-4 px-2 sm:flex-row sm:flex sm:items-center 
                         sm:justify-between
                       "
                         >
@@ -103,11 +80,12 @@ const Customers = () => {
                             font-semibold
                             text-primary
                             sm:text-2xl
+                            align-bottom
                           "
                           >
                             Customers
                           </span>
-                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                          <div className="mt-4 sm:mt-0 flex sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                             <InvoiceAll />
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -149,32 +127,46 @@ const Customers = () => {
                             <Addcustomer />
                           </div>
                         </CardTitle>
-                        <CardDescription className="hidden sm:block">
+                        <CardDescription className="hidden sm:block px-2">
                           Manage your customers and view their sales
                           performance.
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="p-3">
+                    ) : (
+                      <div className="mt-4 py-3 px-4">
+                        <Skeleton className="h-[90px]" enableAnimation={true} />
+                      </div>
+                    )}
+
+                    <CardContent className="py-3 px-4">
+                      {!customers.isLoading ? (
                         <DataTable
                           data={customers?.data?.data}
                           columns={columns}
                         />
-                      </CardContent>
-                      <CardFooter className="px-3 pb-4">
-                        <div className="text-xs text-muted-foreground">
-                          Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                          customers
+                      ) : (
+                        <div className="mb-4">
+                          <Skeleton
+                            className="h-[300px]"
+                            enableAnimation={true}
+                          />
                         </div>
-                      </CardFooter>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </main>
-            </div>
-          </TooltipProvider>
-          <ToastContainer />
-        </div>
-      )}
+                      )}
+                    </CardContent>
+                    {/* <CardFooter className="px-3 pb-4">
+                      <div className="text-xs text-muted-foreground">
+                        Showing <strong>1-10</strong> of <strong>32</strong>{" "}
+                        customers
+                      </div>
+                    </CardFooter> */}
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </main>
+          </div>
+        </TooltipProvider>
+        <ToastContainer />
+      </div>
     </>
   );
 };
