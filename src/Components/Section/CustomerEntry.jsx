@@ -12,7 +12,6 @@ import {
 import { Button } from "../UI/shadcn-UI/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
@@ -20,7 +19,6 @@ const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
-  const [intialdata, setIntialdata] = useState([]);
 
   const handleNavigate = async () => {
     const data = getintialdata();

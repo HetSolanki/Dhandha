@@ -37,7 +37,7 @@ const CustomerEntryData = () => {
   const [customers, setCustomers] = useState([...intialdata]);
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
-
+console.log(customers.cid.cid);
   const getallfilteredcustomers = (option) => {
     if (option === "Absent") {
       const absentcustomers = customers.filter((customer) => {
@@ -182,6 +182,7 @@ const CustomerEntryData = () => {
                       )}
 
                       {/* <CardFooter>
+>>>>>>> 06d6ec857a781f35541053c981951c641862994f
                         <div className="text-xs text-muted-foreground">
                           Showing <strong>1-10</strong> of <strong>32</strong>{" "}
                           customers

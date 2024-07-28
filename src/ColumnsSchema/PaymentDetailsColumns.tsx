@@ -24,6 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import React from "react";
 import { PendingActions } from "@mui/icons-material";
 import { addpaymententry } from "@/Handlers/AddPaymentEntry";
+import styled from "styled-components";
 
 export type Customer = {
   _id: string;
@@ -148,36 +149,38 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       const [customers, setCustomers] = React.useState<Customer[]>([]);
       const customer = row.original;
-
+      const ResponsiveStack = styled.div`
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    
+      @media (max-width: 600px) {
+        flex-direction: column;
+        margin-left: -10px;        
+      }
+    `;
       return (
         <>
-          <Stack direction="row" spacing={1}>
+          <ResponsiveStack>
             <Button
               size="icon"
               className="h-8 gap-1 inl"
+              title="Received"
               onClick={() => handleEntry(customer, "Received", row.original.totalamount, setCustomers)}
             >
               <ClipboardCheckIcon />
             </Button>          
             <Button
               size="icon"
+              title="Pending"              
               className="h-8 gap-1"
               onClick={() => {
                 handleEntry(customer, "Pending", row.original.totalamount, setCustomers);
               }}
             >
               <PendingActions />
-            </Button>
-            {/* <Button
-                size="icon"
-                className="h-8 gap-1"
-                onClick={() => {
-                  alert(customer.cname);
-                }}
-              >
-                <EyeIcon />
-              </Button> */}
-          </Stack>
+            </Button>       
+        </ResponsiveStack>
         </>
       );
     },

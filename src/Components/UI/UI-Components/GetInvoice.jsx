@@ -167,24 +167,7 @@ export default function GetInvoice({ cid }) {
             </SheetDescription>
           </SheetHeader>
         </SheetContent>
-      </Sheet>
-
-      <div className="hidden">
-        {/* {false ? ( */}
-        {/* <div className="flex justify-center items-center h-64"> */}
-        {/* <div className="loader">Loading</div>{" "} */}
-        {/* Add your loader component or spinner here */}
-        {/* </div> */}
-        {/* ) : ( */}
-        {/* <Invoice ref={componentRef} c_id={customer._id} /> */}
-        {/* )} */}
-{/* 
-        {customer ? (
-          <Invoice ref={componentRef} c_id={customer?._id} />
-        ) : (
-          "loading"
-        )} */}
-      </div>
+      </Sheet>      
     </div>
   );
 }
