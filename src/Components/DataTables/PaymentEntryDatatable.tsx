@@ -63,7 +63,7 @@ export function DataTable({ data, columns }) {
     function handleResize() {
       if (window.innerWidth <= 768) {
         setColumnVisibility({
-          cid : false,
+          cid : true,
           cname: true,
           payment_date: false,
           amount: true,

@@ -24,7 +24,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
 import { useState } from "react";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/PaymentEntryDatatable";
 import { columns1 } from "@/ColumnsSchema/PaymentsEntryDataColumns";
 import { useLocation, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
