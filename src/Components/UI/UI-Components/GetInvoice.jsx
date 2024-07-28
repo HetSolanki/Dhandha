@@ -13,11 +13,12 @@ import { useState } from "react";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import { fetchCustomerEnteries } from "@/Hooks/fetchCustomerEnteries";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
-import  { InvoiceX } from "@/Components/Section/Invoicex";
+import { InvoiceX } from "@/Components/Section/Invoicex";
+import Skeleton from "react-loading-skeleton";
 
 export default function GetInvoice({ cid }) {
   const [customerEntry, setCustomerEntry] = useState(null);
-  const [customer, setCustomer] = useState();
+  const [customer, setCustomer] = useState(null);
 
   // const componentRef = useRef();
 
@@ -94,35 +95,39 @@ export default function GetInvoice({ cid }) {
         </SheetTrigger>
         <SheetContent className="p-6 w-full">
           <SheetHeader>
-            <SheetTitle>Customer Details</SheetTitle>
-            <SheetDescription>
-              <div className="text-left">
-                <div className="flex justify-between">
-                  <div className="font-medium">Name</div>
-                  <div className="font-light">{customer?.cname}</div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="font-medium">Phone Number</div>
-                  <div className="font-light">{customer?.cphone_number}</div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="font-medium">Address</div>
-                  <div className="font-light">{customer?.caddress}</div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="font-medium">Bottle Price</div>
-                  <div className="font-light">{customer?.bottle_price}</div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="font-medium">Sequence Number</div>
-                  <div className="font-light">
-                    {customer?.delivery_sequence_number}
+            {customer ? (
+              <div>
+                <SheetTitle>Customer Details</SheetTitle>
+                <SheetDescription>
+                  <div className="text-left">
+                    <div className="flex justify-between">
+                      <div className="font-medium">Name</div>
+                      <div className="font-light">{customer?.cname}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Phone Number</div>
+                      <div className="font-light">
+                        {customer?.cphone_number}
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Address</div>
+                      <div className="font-light">{customer?.caddress}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Bottle Price</div>
+                      <div className="font-light">{customer?.bottle_price}</div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="font-medium">Sequence Number</div>
+                      <div className="font-light">
+                        {customer?.delivery_sequence_number}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="ml-auto flex items-center gap-2 float-start m-3">
-              <InvoiceX cid={cid} />
-                {/* <Button
+                  <div className="ml-auto flex items-center gap-2 float-start m-3">
+                    <InvoiceX cid={cid} />
+                    {/* <Button
                   size="sm"
                   variant="outline"
                   className="h-8 gap-1"
@@ -135,7 +140,7 @@ export default function GetInvoice({ cid }) {
                     Send Invoice Link
                   </span>
                 </Button> */}
-                {/* <Button
+                    {/* <Button
                   size="sm"
                   variant="outline"
                   className="h-8 gap-1"
@@ -150,24 +155,32 @@ export default function GetInvoice({ cid }) {
                     Generate Invoice
                   </span>
                 </Button> */}
-                {/* <PDFDownloadLink  document={<Invoicex />} fileName="invoice">
+                    {/* <PDFDownloadLink  document={<Invoicex />} fileName="invoice">
                   {
                     ({loading}) => (loading ? <button>Loading....</button> : <Button >Download</Button>)
                   }
                 </PDFDownloadLink> */}
+                  </div>
+                </SheetDescription>
               </div>
+            ) : (
+              <div className="mt-4">
+                <Skeleton className="h-[90px] w-full" enableAnimation={true} />
+              </div>
+            )}
 
-              <div className="items-center float-start" id="datatable1">
-                {customerEntry ? (
-                  <DataTable columns={columns1} data={customerEntry} />
-                ) : (
-                  "Loading"
-                )}
-              </div>
-            </SheetDescription>
+            <div className="items-center float-start" id="datatable1">
+              {customerEntry ? (
+                <DataTable columns={columns1} data={customerEntry} />
+              ) : (
+                <div className="mb-4">
+                  <Skeleton className="h-[300px]" enableAnimation={true} />
+                </div>
+              )}
+            </div>
           </SheetHeader>
         </SheetContent>
-      </Sheet>      
+      </Sheet>
     </div>
   );
 }
