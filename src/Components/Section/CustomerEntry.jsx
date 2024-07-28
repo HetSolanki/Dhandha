@@ -12,19 +12,17 @@ import {
 import { Button } from "../UI/shadcn-UI/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { useState } from "react";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
-  const [intialdata, setIntialdata] = useState([]);
 
-  const handleNavigate =async () => {
+  const handleNavigate = async () => {
     const data = getintialdata();
-    console.log(await data)
-    navigate('/customerentrydata', { state: await data});
+    console.log(await data);
+    navigate("/customerentrydata", { state: await data });
   };
 
   const getintialdata = async () => {
@@ -43,11 +41,11 @@ export default function CustomerEntry() {
     if (res.status === "success") {
       const todayscustomer = res.data.filter((customer) => {
         return (
-          customer.delivery_date === new Date(Date.now()).toISOString().split("T")[0]
+          customer.delivery_date ===
+          new Date(Date.now()).toISOString().split("T")[0]
         );
       });
-      console.log(todayscustomer)
-      setIntialdata(todayscustomer);
+      console.log(todayscustomer);
       return todayscustomer;
     } else {
       console.log(res);
@@ -61,15 +59,41 @@ export default function CustomerEntry() {
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
-              <CardTitle className="text-xl sm:text-2xl">Customer Entry</CardTitle>
-              <CardDescription >
+              <CardTitle className="text-xl sm:text-2xl">
+                <span
+                  className="
+                            text-xl
+                            font-semibold
+                            text-primary
+                            sm:text-2xl"
+                >
+                  Customer Entry
+                </span>
+              </CardTitle>
+              <CardDescription className="hidden sm:block">
                 List of all the customers and their entries
               </CardDescription>
             </div>
-            <Button  size="sm" className="ml-auto gap-1 self-start" onClick={handleNavigate}>
+            <div
+              className="
+                        flex
+                        items-center
+                        justify-center
+                        mx-auto
+                        w-screen
+                        flex-col
+                        sm:flex-row                        
+                        "
+            >
+              <Button
+                size="sm"
+                className="ml-auto gap-1 self-start "
+                onClick={handleNavigate}
+              >
                 View All
                 <ArrowUpRight className="h-4 w-4" />
-            </Button>
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             {customer && <DataTable data={customer} columns={columns} />}

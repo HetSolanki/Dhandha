@@ -74,10 +74,17 @@ const PaymentsEntryData = () => {
                   <TabsContent value="all">
                     <Card x-chunk="dashboard-06-chunk-0">
                       <CardHeader>
-                        <CardTitle>
-                          Customers Entry Data
-                          <div className="ml-auto flex items-center gap-2 float-end">
-                            <DropdownMenu>
+                        <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between"><span
+                            className="
+                            text-xl
+                            font-semibold
+                            text-primary
+                            sm:text-2xl"
+                          >
+                          Payment Entry Data
+                          </span>
+                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                          <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -138,19 +145,18 @@ const PaymentsEntryData = () => {
                                 Export
                               </span>
                             </Button>
-                            <Button size="sm" className="h-8 gap-1">
                               <span
-                                className="sr-only sm:not-sr-only sm:whitespace-nowrap"
                                 onClick={() => {
                                   navigate("/paymentdetails");
                                 }}
-                              >
+                              > 
+                                  <Button size="sm" className="h-8 gap-1">
                                 Back to Entry
-                              </span>
                             </Button>
+                              </span>
                           </div>
                         </CardTitle>
-                        <CardDescription>
+                        <CardDescription className="hidden sm:block">
                           <div className=" mt-4 flex items-center gap-1 float-end">
                             {/* <DatePickerForm /> */}
                           </div>

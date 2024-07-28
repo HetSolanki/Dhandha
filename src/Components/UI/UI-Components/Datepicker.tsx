@@ -36,7 +36,7 @@ const FormSchema = z.object({
 
 export function DatePickerForm() {
 
-  const {customers, setCustomers} = useContext(CustomerEntryContext)
+  const { customers, setCustomers } = useContext(CustomerEntryContext)
 
   const token = localStorage.getItem("token");
   const getData = async (date) => {
@@ -62,7 +62,7 @@ export function DatePickerForm() {
     }
   }
   const getdeliverydateData = (date) => {
-      // getData("2024-05-29")
+    // getData("2024-05-29")
     getData(format(date, "yyyy-MM-dd"))
   }
 
@@ -72,7 +72,11 @@ export function DatePickerForm() {
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form className="space-y-8 max-w-md
+        w-full
+        mx-auto
+        sm:max-w-xl
+      ">
         <FormField
           control={form.control}
           name="delivery_date"

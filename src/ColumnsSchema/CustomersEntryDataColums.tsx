@@ -13,13 +13,23 @@ import {
 } from "@tanstack/react-table";
 
 export type Customer = {
-  cid: string;
+  _id: string;
   bottle_count: number;
   delivery_date: string;
   delivery_status: string;
+  cname: string;
 };
 
-export const columns1: ColumnDef<Customer>[] = [
+export const columns1: ColumnDef<Customer>[] = [  
+  // {
+  //   accessorKey: "cid.cname",
+  //   header: () => <div className="text-center sm:text-left">Customer Name</div>,
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="capitalize">{row.getValue("cname")}</div>
+  //     );
+  //   }
+  // },
   {
     accessorKey: "delivery_date",
     header: () => <div className="text-center sm:text-left">Delivery Date</div>,

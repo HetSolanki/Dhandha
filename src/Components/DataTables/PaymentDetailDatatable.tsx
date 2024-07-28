@@ -13,8 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
 import {
   Table,
   TableBody,
@@ -32,10 +30,7 @@ export function DataTable({ data, columns }) {
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({
-      cname: false,
-      bottle_count: true,
-    });
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -57,40 +52,42 @@ export function DataTable({ data, columns }) {
     },
   });
 
-  // React.useEffect(() => {
-  //   function handleResize() {
-  //     if (window.innerWidth <= 768) {
-  //       setColumnVisibility({
-  //         bottle_price: false,
-  //         cname: true,
-  //         cphone_number: false,
-  //         totalRevenue: true
-  //       });
-  //     } else {
-  //       setColumnVisibility({
-  //         bottle_price: true,
-  //         cname: true,          
-  //         cphone_number: true,
-  //         totalRevenue: true
-  //       });
-  //     }
-  //   }
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 768) {
+        setColumnVisibility({
+          id: false,
+          cname: true,
+          caddress: false,
+          cphone_number : false,
+          totalamount: true,
+          Actions: true
+        });
+      } else {
+        setColumnVisibility({
+          id: true,
+          cname: true,
+          caddress: true,
+          cphone_number : true,
+          totalamount: true,
+          Actions: true
+        });
+      }
+    }
 
-  //   handleResize(); // Call on mount to set the initial state
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
+    handleResize(); // Call on mount to set the initial state
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Entry By Date..."
-          value={
-            (table.getColumn("delivery_date")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter Customers..."
+          value={(table.getColumn("cname")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("delivery_date")?.setFilterValue(event.target.value)
+            table.getColumn("cname")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

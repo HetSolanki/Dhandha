@@ -15,6 +15,18 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
+import { Button } from "../shadcn-UI/button";
+import { Checkbox } from "../shadcn-UI/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../shadcn-UI/dropdown-menu";
+import { Input } from "../shadcn-UI/input";
 import {
   Table,
   TableBody,
@@ -22,9 +34,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../UI/shadcn-UI/table";
-import { Input } from "../UI/shadcn-UI/input";
-import { Button } from "../UI/shadcn-UI/button";
+} from "../shadcn-UI/table";
 
 export function DataTable({ data, columns }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -32,10 +42,7 @@ export function DataTable({ data, columns }) {
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({
-      cname: false,
-      bottle_count: true,
-    });
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -57,40 +64,14 @@ export function DataTable({ data, columns }) {
     },
   });
 
-  // React.useEffect(() => {
-  //   function handleResize() {
-  //     if (window.innerWidth <= 768) {
-  //       setColumnVisibility({
-  //         bottle_price: false,
-  //         cname: true,
-  //         cphone_number: false,
-  //         totalRevenue: true
-  //       });
-  //     } else {
-  //       setColumnVisibility({
-  //         bottle_price: true,
-  //         cname: true,          
-  //         cphone_number: true,
-  //         totalRevenue: true
-  //       });
-  //     }
-  //   }
-
-  //   handleResize(); // Call on mount to set the initial state
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Entry By Date..."
-          value={
-            (table.getColumn("delivery_date")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter Customers..."
+          value={(table.getColumn("cname")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("delivery_date")?.setFilterValue(event.target.value)
+            table.getColumn("cname")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

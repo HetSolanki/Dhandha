@@ -1,5 +1,5 @@
 import { useCustomer } from "@/Context/CustomerContext";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/PaymentDetailDatatable";
 import { columns } from "@/ColumnsSchema/PaymentDetailsColumns";
 import Navbar from "./Navbar";
 import {
@@ -72,7 +72,7 @@ export default function PaymentDetails() {
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const currentYear = currentDate.getFullYear();
-      
+
       const thisMonthCustomers = res.data.filter((customer) => {
         const PaymentDate = new Date(customer.payment_date);
         return (
@@ -80,50 +80,63 @@ export default function PaymentDetails() {
           PaymentDate.getFullYear() === currentYear
         );
       });
-      
+
       console.log(thisMonthCustomers);
       return thisMonthCustomers;
     } else {
       console.log(res);
     }
   };
-  
 
   const handleNavigate = async () => {
     const data = getintialdata();
-    console.log(await data)
-    navigate("/paymentsdata",  { state: await data});
+    console.log(await data);
+    navigate("/paymentsdata", { state: await data });
   };
 
   return (
     <>
-    <div>
-      <Navbar />
-      <div className="p-8">
-        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-          <CardHeader className="flex flex-row items-center">
-            <div className="grid gap-2">
-              <CardTitle>Payment Details</CardTitle>
-              <CardDescription>
-                View all the payments made by customers
-              </CardDescription>
-            </div>
-            <Button
-              size="sm"
-              className="ml-auto gap-1"
-              onClick={handleNavigate}
+      <div>
+        <Navbar />
+        <div className="p-8">
+          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle>Payment Details</CardTitle>
+                <CardDescription className="hidden sm:block">
+                  View all the payments made by customers
+                </CardDescription>
+              </div>
+              <div
+              className="
+                        flex
+                        items-center
+                        justify-center
+                        mx-auto
+                        w-screen
+                        flex-col
+                        sm:flex-row                        
+                        "
             >
-              View All
-              <ArrowUpRight className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {customer && <DataTable data={transformedpaymentdata} columns={columns} />}
-          </CardContent>
-        </Card>
+                <Button
+                  size="sm"
+                  className="ml-auto gap-1"
+                  onClick={handleNavigate}
+                >
+                  View All
+                  <ArrowUpRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {customer && (
+                <DataTable data={transformedpaymentdata} columns={columns} />
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
-    <ToastContainer />
+      <ToastContainer />
     </>
   );
 }

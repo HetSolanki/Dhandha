@@ -36,7 +36,7 @@ const CustomerEntryData = () => {
   const [customers, setCustomers] = useState([...intialdata]);
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
-  console.log(customers);
+  // console.log(customers.cid.cid);
   const getallfilteredcustomers = (option) => {
     if (option === "Absent") {
       const absentcustomers = customers.filter((customer) => {
@@ -76,9 +76,19 @@ const CustomerEntryData = () => {
                   <TabsContent value="all">
                     <Card x-chunk="dashboard-06-chunk-0">
                       <CardHeader>
-                        <CardTitle>
-                          Customers Entry Data
-                          <div className="ml-auto flex items-center gap-2 float-end">
+                        <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between">
+                          <span
+                            className="
+                            text-xl
+                            font-semibold
+                            text-primary
+                            sm:text-2xl"
+                          >
+                            {" "}
+                            Customers Entry Data
+                          </span>
+                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                            {/* <div className="ml-auto flex items-center gap-2 float-end"> */}
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -96,13 +106,12 @@ const CustomerEntryData = () => {
                                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuCheckboxItem
-                                  checked={presentcheck}                                  
+                                  checked={presentcheck}
                                   onClick={() => {
                                     setPresentcheck(!presentcheck);
                                     if (!presentcheck === true) {
                                       getallfilteredcustomers("Present");
-                                    }
-                                    else{
+                                    } else {
                                       getallfilteredcustomers("All");
                                     }
                                   }}
@@ -115,11 +124,10 @@ const CustomerEntryData = () => {
                                     setAbsentcheck(!absentcheck);
                                     if (!absentcheck === true) {
                                       getallfilteredcustomers("Absent");
-                                    }else{
+                                    } else {
                                       getallfilteredcustomers("All");
-                                    }                   
+                                    }
                                   }}
-                                  
                                 >
                                   Absent
                                 </DropdownMenuCheckboxItem>
@@ -138,23 +146,27 @@ const CustomerEntryData = () => {
                                 Export
                               </span>
                             </Button>
-                            <Button size="sm" className="h-8 gap-1">
-                              <span
-                                className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-                                onClick={() => {
-                                  navigate("/customerentry");
-                                }}
-                              >
+                            <span
+                              // className="h-8 gap-1"
+                              onClick={() => {
+                                navigate("/customerentry");
+                              }}
+                            >
+                              <Button size="sm" className="h-8 gap-1">
                                 Back to Entry
-                              </span>
-                            </Button>
+                              </Button>
+                            </span>
                           </div>
                         </CardTitle>
                         <CardDescription>
-                          <div className=" mt-4 flex items-center gap-1 float-end">
+                          <div className=" mt-4 flex items-center gap-1
+                           sm:gap-4 sm:float-end sm:justify-end sm:items-center sm:flex-row
+                          ">
                             <DatePickerForm />
                           </div>
-                          List of all the customers and their entries
+                          <span className="hidden sm:block">
+                            List of all the customers and their entries
+                          </span>
                         </CardDescription>
                       </CardHeader>
                       <CardContent>

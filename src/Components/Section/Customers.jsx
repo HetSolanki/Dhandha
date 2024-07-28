@@ -93,21 +93,18 @@ const Customers = () => {
                     <Card x-chunk="dashboard-06-chunk-0">
                       <CardHeader className="px-4">
                         <CardTitle
-                          className="flex-col sm:flex-row sm:flex sm:items-center 
-                        sm:justify-between
-                      "
+                          className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between"
                         >
                           <span
                             className="
                             text-xl
                             font-semibold
                             text-primary
-                            sm:text-2xl
-                          "
+                            sm:text-2xl"
                           >
                             Customers
                           </span>
-                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                          <div className="flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                             <InvoiceAll />
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
