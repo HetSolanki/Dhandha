@@ -10,7 +10,7 @@ import {
   DialogClose,
 } from "@/Components/UI/shadcn-UI/dialog";
 import { Input } from "@/Components/UI/shadcn-UI/input";
-import { PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -25,8 +25,10 @@ import { z } from "zod";
 import { addcustomer } from "@/Handlers/AddcustomerHandler";
 import { useCustomer } from "@/Context/CustomerContext";
 import { useUser } from "@/Context/UserContext";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "../shadcn-UI/toaster";
+import { useToast } from "../shadcn-UI/use-toast";
+import { useState } from "react";
 
 const formSchema = z.object({
   cname: z
@@ -61,22 +63,31 @@ export function Addcustomer() {
   });
 
   const { updateCustomerContext } = useCustomer();
+  const [click, setClick] = useState(false);
   const { user } = useUser();
-
+  const { toast } = useToast();
   const formSubmit = async (data) => {
+    setClick(true);
     const newcustomer = await addcustomer(data, user.uid._id);
 
-    if (newcustomer.status === "success") {
-      toast.success("Customer Added Successfully", {
-        position: "bottom-right",
-        autoClose: 1000,
-        theme: "light",
-        draggable: true,
+    if (newcustomer.error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "This number is already in use.",
       });
+    }
+    if (newcustomer.status === "success") {
+      toast({
+        title: "Success",
+        description: "Customer added successfully.",
+      }); 
+      setClick(false);
       updateCustomerContext();
       form.reset();
     }
   };
+
   const clearfield = () => {
     form.reset();
   };
@@ -227,9 +238,16 @@ export function Addcustomer() {
                 </div>
               </div>
               <DialogFooter className="flex-row flex justify-between">
-                <Button type="submit" className="font-semibold">
-                  Add Customer
-                </Button>
+                {!click ? (
+                  <Button type="submit" className="font-semibold">
+                    Add Customer
+                  </Button>
+                ) : (
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </Button>
+                )}
                 <DialogClose asChild>
                   <Button type="button" variant="secondary">
                     Close
@@ -239,6 +257,7 @@ export function Addcustomer() {
             </form>
           </Form>
         </DialogContent>
+        <Toaster />
       </Dialog>
     </>
   );

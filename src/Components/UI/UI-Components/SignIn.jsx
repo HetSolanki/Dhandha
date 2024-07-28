@@ -28,6 +28,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "@/Context/UserContext";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../shadcn-UI/input-otp";
+import { Loader2 } from "lucide-react";
+import { useToast } from "../shadcn-UI/use-toast";
+import { Toaster } from "../shadcn-UI/toaster";
 
 const formSchema = z.object({
   phone_number: z
@@ -88,8 +91,11 @@ export default function SignIn() {
   // const [cookies, setCookie] = useCookies(["token"]);
   let phone_numberInput = document.getElementById("phone_number");
   let passwordInput = document.getElementById("password");
+
   const navigate = useNavigate();
   const { updateUserContext } = useUser();
+  const [click, setClick] = useState(false);
+  const { toast } = useToast();
 
   // useEffect(() => {
   //   if (cookies.token) {
@@ -100,6 +106,7 @@ export default function SignIn() {
   // }, []);
 
   const formSubmit = async (data) => {
+    setClick(true);
     const signin = await signinuser(data);
 
     if (signin.success === true) {
@@ -110,32 +117,26 @@ export default function SignIn() {
       phone_numberInput = data.phone_number;
       passwordInput = data.password;
       // lsRememberMe(phone_numberInput, passwordInput);
-      toast.success("Login Successful", {
-        position: "top-right",
-        autoClose: 2000,
-        draggable: true,
-        closeOnClick: true,
-        theme: "light",
-        onClose: () => {
-          navigate("/dashboard");
-        },
+      toast({
+        title: "Login Sucessfully",
       });
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 800);
     } else if (signin.data === "Invalid Credentials") {
-      toast.error("Invalid Credentials", {
-        position: "top-right",
-        autoClose: 2000,
-        draggable: true,
-        closeOnClick: true,
-        theme: "light",
+      toast({
+        variant: "destructive",
+        title: "Login Error",
+        description: "Invalid Credentials",
       });
+      setClick(false);
     } else if (signin.data === "Invalid Phone Number") {
-      toast.error("Invalid Phone Number", {
-        position: "top-right",
-        autoClose: 2000,
-        draggable: true,
-        closeOnClick: true,
-        theme: "light",
+      toast({
+        variant: "destructive",
+        title: "Login Error",
+        description: "Invalid Phone Number",
       });
+      setClick(false);
     }
   };
 
@@ -166,6 +167,7 @@ export default function SignIn() {
       console.log("Not checked");
     }
   };
+
   return (
     <>
       <div className="h-screen flex justify-center items-center ">
@@ -217,12 +219,6 @@ export default function SignIn() {
                               >
                                 Password
                               </Label>
-                              <Link
-                                to="#"
-                                className="ml-auto inline-block text-sm underline"
-                              >
-                                Forgot your password?
-                              </Link>
                             </div>
                           </Label>
                           <FormControl>
@@ -251,25 +247,27 @@ export default function SignIn() {
                     />
                     <span className="mb-[.1rem]">Remember me</span>
                   </div> */}
-                  <Button type="submit" className="w-full font-semibold">
-                    Sign in
-                  </Button>
-                  <Button variant="outline" className="w-full font-semibold">
+                  {!click ? (
+                    <Button type="submit" className="w-full font-semibold">
+                      Sign in
+                    </Button>
+                  ) : (
+                    <Button disabled>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
+                    </Button>
+                  )}
+                  {/* <Button variant="outline" className="w-full font-semibold">
                     Signin with Google
-                  </Button>
-                </div>
-                <div className="mt-4 text-center text-sm font-medium">
-                  Don&apos;t have an account?{" "}
-                  <Link to="/signup" className="underline font-medium">
-                    Sign up
-                  </Link>
+                  </Button> */}
                 </div>
               </CardContent>
             </Card>
           </form>
         </Form>
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
+      <Toaster />
     </>
   );
 }

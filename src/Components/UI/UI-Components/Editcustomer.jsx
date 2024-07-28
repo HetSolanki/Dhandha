@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "@/Components/UI/shadcn-UI/dialog";
 import { Input } from "@/Components/UI/shadcn-UI/input";
-import { Pencil } from "lucide-react";
+import { Loader2, Pencil } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -27,8 +27,10 @@ import { useCustomer } from "@/Context/CustomerContext";
 import { editcustomer } from "@/Handlers/EditcustomerHandler";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "../shadcn-UI/use-toast";
+import { Toaster } from "../shadcn-UI/toaster";
+import { useState } from "react";
 
 const formSchema = z.object({
   cname: z.string().min(1, {
@@ -74,24 +76,32 @@ export function Editcustomer({ id }) {
     } = customerDetails.data.data;
   }
 
+  const [click, setClick] = useState(false);
   const { updateCustomerContext } = useCustomer();
+  const { toast } = useToast();
 
   const formSubmit = async (data) => {
+    setClick(true);
     const newcustomer = await editcustomer(data, id);
-
     if (newcustomer.status === "success") {
-      toast.success("Customer Edited Successfully", {
-        position: "bottom-right",
-        autoClose: 1000,
-        theme: "light",
-        draggable: true,
-      });
       updateCustomerContext();
+      toast({
+        title: "Success",
+        description: "Customer details updated successfully.",
+      });
+      setClick(false);
       form.reset();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Success",
+        description: "Customer details updated successfully.",
+      });
     }
   };
   const clearfield = () => {
     form.reset();
+    
   };
 
   return (
@@ -242,9 +252,16 @@ export function Editcustomer({ id }) {
                 </div>
               </div>
               <DialogFooter className="flex-row flex justify-between gap-y-2 sm:gap-y-0">
-                <Button type="submit" className="font-semibold">
-                  Update Customer
-                </Button>
+                {!click ? (
+                  <Button type="submit" className="font-semibold">
+                    Update Customer
+                  </Button>
+                ) : (
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </Button>
+                )}
                 <DialogClose asChild>
                   <Button type="button" variant="secondary">
                     Close
@@ -255,6 +272,7 @@ export function Editcustomer({ id }) {
           </Form>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </>
   );
 }

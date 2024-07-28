@@ -14,14 +14,20 @@ import {
 } from "@/Components/UI/shadcn-UI/alert-dialog";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
+import { useToast } from "../shadcn-UI/use-toast";
+import { useState } from "react";
+import { Button } from "../shadcn-UI/button";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 export default function DeleteCustomer({ cid }) {
   const { updateCustomerContext } = useCustomer();
+  const [click, setClick] = useState(false);
 
+  const { toast } = useToast();
   const deleteRecord = async (cid) => {
+    setClick(true);
     const deletedCustomer = await fetch(
       `${DOMAIN_NAME}/api/customers/customer/${cid}`,
       {
@@ -30,13 +36,18 @@ export default function DeleteCustomer({ cid }) {
     );
     const res = await deletedCustomer.json();
     if (res.status === "success") {
-      toast.success("Customer Delete Successfully", {
-        position: "bottom-right",
-        autoClose: 1000,
-        theme: "light",
-        draggable: true,
+      toast({
+        title: "Success",
+        description: "Customer Deleted",
       });
       updateCustomerContext();
+      setClick(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Something Went Wrong",
+      });
     }
   };
 
@@ -59,9 +70,17 @@ export default function DeleteCustomer({ cid }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex flex-col">
-            <AlertDialogAction onClick={() => deleteRecord(cid)}>
-              Delete
-            </AlertDialogAction>
+            {!click ? (
+              <AlertDialogAction onClick={() => deleteRecord(cid)}>
+                Delete
+              </AlertDialogAction>
+            ) : (
+              <Button disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            )}
+
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>

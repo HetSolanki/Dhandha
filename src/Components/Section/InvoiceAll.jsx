@@ -5,12 +5,16 @@ import { cloudinaryHandler } from "@/Handlers/cloudinaryHandler";
 import { useUser } from "@/Context/UserContext";
 import { GetAllCustomerInvoice } from "@/Handlers/GetAllCustomerInvoice";
 import { Button } from "../UI/shadcn-UI/button";
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
+import { useToast } from "../UI/shadcn-UI/use-toast";
 
 export const InvoiceAll = () => {
   const user = useUser();
   console.log(user?.user?.shop_name);
   const [customerInvoice, setCustomerInvoice] = useState(null);
+  const [click, setClick] = useState(false);
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -23,8 +27,9 @@ export const InvoiceAll = () => {
   }, []);
 
   const handleClick = async () => {
-    console.log(customerInvoice);
-    alert("Generating PDF...");
+    setClick(true);
+    // console.log(customerInvoice);
+    // alert("Generating PDF...");
 
     // const confirmation = confirm(
     //   "Are you sure you want to send invoice to all customers?"
@@ -33,7 +38,7 @@ export const InvoiceAll = () => {
     // if (!confirmation) {
     //   return;
     // } else {
-    alert("Send Invoice to All Customers");
+    // alert("Send Invoice to All Customers");
 
     customerInvoice.map((customer, index) => {
       const partitionSize = Math.ceil(
@@ -278,15 +283,32 @@ export const InvoiceAll = () => {
 
           const data = await res.json();
           if (!res.ok) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: "Failed to send message!",
+            });
+            setClick(false);
             throw new Error(`Error: ${data.error.message}`);
           } else {
-            console.log("Message sent successfully!", data);
-            alert("Message sent successfully!");
+            // console.log("Message sent successfully!", data);
+            // alert("Message sent successfully!");
+            toast({
+              title: "Success",
+              description: "Message sent successfully!",
+            });
+            setClick(false);
           }
 
           // const resDelete = await cloudinaryHandler(responseData.public_id);
           // console.log(resDelete);
         } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to send message!",
+          });
+          setClick(false);
           console.error("Failed to upload PDF:", error);
           alert("Failed to upload PDF.");
         }
@@ -299,15 +321,22 @@ export const InvoiceAll = () => {
 
   return (
     <div>
-      <Button
-        onClick={handleClick}
-        variant="default"
-        size="sm"
-        className="h-8 gap-1"
-      >
-        <Send className="h-3.5 w-3.5" />
-        Send Invoice
-      </Button>
+      {click ? (
+        <Button disabled>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </Button>
+      ) : (
+        <Button
+          onClick={handleClick}
+          variant="default"
+          size="sm"
+          className="h-8 gap-1"
+        >
+          <Send className="h-3.5 w-3.5" />
+          Send Invoice
+        </Button>
+      )}
     </div>
   );
 };

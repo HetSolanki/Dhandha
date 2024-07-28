@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import { GetCustomerInvoice } from "@/Handlers/GetCustomerInvoice";
 import { useUser } from "@/Context/UserContext";
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { Button } from "../UI/shadcn-UI/button";
+import { useToast } from "../UI/shadcn-UI/use-toast";
 
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
+  const [click, setClick] = useState(false);
+  const { toast } = useToast();
 
   const [customerInvoice, setCustomerInvoice] = useState(null);
 
@@ -41,9 +44,11 @@ export const InvoiceX = ({ cid }) => {
     fetchCustomerData();
   }, [cid]);
 
+  // console.log(customerInvoice);
   const handleClick = async () => {
-    console.log(customerInvoice);
-    alert("Generating PDF...");
+    // console.log(customerInvoice);
+    // alert("Generating PDF...");
+    setClick(true);
     const pdf = new jsPDF();
 
     // Shop details
@@ -68,9 +73,9 @@ export const InvoiceX = ({ cid }) => {
     pdf.text("Bill to:", 15, 35);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`${customerInvoice[0]?.customerDetails?.cname}`, 15, 42);
-    pdf.text(`${customerInvoice[0]?.customerDetails?.caddress}`, 15, 49);
-    pdf.text(`${customerInvoice[0]?.customerDetails?.cphone_number}`, 15, 56);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cname}`, 15, 42);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.caddress}`, 15, 49);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cphone_number}`, 15, 56);
 
     // Invoice dates
     pdf.setFontSize(12);
@@ -98,16 +103,24 @@ export const InvoiceX = ({ cid }) => {
 
     for (let i = 0; i < maxRows; i++) {
       if (firstPartCustomers[i]) {
-        pdf.text(firstPartCustomers[i]?.delivery_date, 15, yOffset);
-        pdf.text(firstPartCustomers[i]?.bottle_count.toString(), 45, yOffset);
+        pdf.text(firstPartCustomers?.[i]?.delivery_date, 15, yOffset);
+        pdf.text(firstPartCustomers?.[i]?.bottle_count.toString(), 45, yOffset);
       }
       if (secondPartCustomers[i]) {
-        pdf.text(secondPartCustomers[i]?.delivery_date, 85, yOffset);
-        pdf.text(secondPartCustomers[i]?.bottle_count.toString(), 115, yOffset);
+        pdf.text(secondPartCustomers?.[i]?.delivery_date, 85, yOffset);
+        pdf.text(
+          secondPartCustomers?.[i]?.bottle_count.toString(),
+          115,
+          yOffset
+        );
       }
       if (thirdPartCustomers[i]) {
-        pdf.text(thirdPartCustomers[i]?.delivery_date, 145, yOffset);
-        pdf.text(thirdPartCustomers[i]?.bottle_count.toString(), 175, yOffset);
+        pdf.text(thirdPartCustomers?.[i]?.delivery_date, 145, yOffset);
+        pdf.text(
+          thirdPartCustomers?.[i]?.bottle_count.toString(),
+          175,
+          yOffset
+        );
       }
       yOffset += 7;
     }
@@ -119,7 +132,7 @@ export const InvoiceX = ({ cid }) => {
     pdf.text("Bottle Price:", 15, yOffset);
     pdf.setFont("helvetica", "normal");
     pdf.text(
-      `${customerInvoice[0]?.customerDetails?.bottle_price}`,
+      `${customerInvoice?.[0]?.customerDetails?.bottle_price}`,
       95,
       yOffset
     );
@@ -128,12 +141,12 @@ export const InvoiceX = ({ cid }) => {
     pdf.setFont("helvetica", "bold");
     pdf.text("Total Delivered Bottle:", 15, yOffset);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`${customerInvoice[0]?.totalBottle}`, 95, yOffset);
+    pdf.text(`${customerInvoice?.[0]?.totalBottle}`, 95, yOffset);
     yOffset += 10;
 
     const total_amount =
-      customerInvoice[0]?.totalBottle *
-      customerInvoice[0]?.customerDetails?.bottle_price;
+      customerInvoice?.[0]?.totalBottle *
+      customerInvoice?.[0]?.customerDetails?.bottle_price;
 
     pdf.setFont("helvetica", "bold");
     pdf.text("Subtotal:", 15, yOffset);
@@ -213,8 +226,8 @@ export const InvoiceX = ({ cid }) => {
         const date = new Date();
 
         const total_amount =
-          customerInvoice[0]?.totalBottle *
-          customerInvoice[0]?.customerDetails?.bottle_price;
+          customerInvoice?.[0]?.totalBottle *
+          customerInvoice?.[0]?.customerDetails?.bottle_price;
 
         const res = await fetch(
           `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
@@ -227,7 +240,7 @@ export const InvoiceX = ({ cid }) => {
             body: JSON.stringify({
               messaging_product: "whatsapp",
               recipient_type: "individual",
-              to: `91${customerInvoice[0]?.customerDetails?.cphone_number}`,
+              to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
               type: "template",
               // template: {
               //   name: "hello_world",
@@ -272,15 +285,31 @@ export const InvoiceX = ({ cid }) => {
 
         const data = await res.json();
         if (!res.ok) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to send message!",
+          });
+          setClick(false);
           throw new Error(`Error: ${data.error.message}`);
         } else {
           console.log("Message sent successfully!", data);
-          alert("Message sent successfully!");
+          toast({
+            title: "Success",
+            description: "Message sent successfully!",
+          });
+          setClick(false);
         }
 
         // const resDelete = await cloudinaryHandler(responseData.public_id);
         // console.log(resDelete);
       } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to send message!",
+        });
+        setClick(false);
         console.error("Failed to upload PDF:", error);
         alert("Failed to upload PDF.");
       }
@@ -289,7 +318,12 @@ export const InvoiceX = ({ cid }) => {
     reader.readAsDataURL(pdfBlob);
   };
 
-  return (
+  return click ? (
+    <Button disabled>
+      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      Please wait
+    </Button>
+  ) : (
     <Button onClick={handleClick} className="cursor-pointer items-center">
       <Send size={24} color="white" width={17} height={17} className="mr-2" />
       Send Invoice
