@@ -191,6 +191,8 @@ export const getCustomerInvoice = async (req, res) => {
   const lastDate = new Date(
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)
   );
+
+  
   try {
     const customerEntry = await CustomerEntry.aggregate([
       {

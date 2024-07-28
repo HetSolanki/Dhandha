@@ -192,6 +192,9 @@ export const InvoiceX = ({ cid }) => {
     yOffset += 7;
     pdf.text("dhruvprajapati66572@gmail.com", 15, yOffset);
     yOffset += 15;
+    // const img = new Image();
+    // img.src = user?.user?.image_url;
+    // pdf.addImage(img, "png", 100, yOffset);
 
     pdf.setTextColor(0, 0, 0, 0.5);
     pdf.setFont("helvetica", "italic");

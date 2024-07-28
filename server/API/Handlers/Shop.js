@@ -24,12 +24,13 @@ export const createShop = async (req, res) => {
 };
 
 export const updateShop = async (req, res) => {
+  console.log(req.body.image_url);
   const updatedShop = await Shop.findOneAndUpdate(
     { uid: req.user.id },
     {
       shop_name: req.body.shop_name,
       shop_address: req.body.shop_address,
-      publicid: req.body.publicid,
+      image_url: req.body.image_url,
     },
     { new: true }
   );

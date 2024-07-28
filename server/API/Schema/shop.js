@@ -12,7 +12,7 @@ export const shopSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
-  publicid: {
+  image_url: {
     type: String,
   },
 });
