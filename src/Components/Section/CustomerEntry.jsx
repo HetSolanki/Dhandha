@@ -12,6 +12,7 @@ import {
 import { Button } from "../UI/shadcn-UI/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
@@ -46,6 +47,7 @@ export default function CustomerEntry() {
         );
       });
       console.log(todayscustomer);
+      setIntialdata(todayscustomer);
       return todayscustomer;
     } else {
       console.log(res);
@@ -57,47 +59,39 @@ export default function CustomerEntry() {
       <Navbar />
       <div className="p-8">
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-          <CardHeader className="flex flex-row items-center">
-            <div className="grid gap-2">
-              <CardTitle className="text-xl sm:text-2xl">
-                <span
-                  className="
-                            text-xl
-                            font-semibold
-                            text-primary
-                            sm:text-2xl"
-                >
+          {customer ? (
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle className="text-xl sm:text-2xl">
                   Customer Entry
-                </span>
-              </CardTitle>
-              <CardDescription className="hidden sm:block">
-                List of all the customers and their entries
-              </CardDescription>
-            </div>
-            <div
-              className="
-                        flex
-                        items-center
-                        justify-center
-                        mx-auto
-                        w-screen
-                        flex-col
-                        sm:flex-row                        
-                        "
-            >
+                </CardTitle>
+                <CardDescription>
+                  List of all the customers and their entries
+                </CardDescription>
+              </div>
               <Button
                 size="sm"
-                className="ml-auto gap-1 self-start "
+                className="ml-auto gap-1 self-start"
                 onClick={handleNavigate}
               >
                 View All
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
+            </CardHeader>
+          ) : (
+            <div className="mt-4 py-3 px-4">
+              <Skeleton className="h-[90px]" enableAnimation={true} />
             </div>
-          </CardHeader>
-          <CardContent>
-            {customer && <DataTable data={customer} columns={columns} />}
-          </CardContent>
+          )}
+          {customer ? (
+            <CardContent>
+              {customer && <DataTable data={customer} columns={columns} />}
+            </CardContent>
+          ) : (
+            <div className="py-3 px-4 mb-4">
+              <Skeleton className="h-[300px]" enableAnimation={true} />
+            </div>
+          )}
         </Card>
       </div>
     </div>

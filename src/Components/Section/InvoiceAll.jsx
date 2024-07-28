@@ -220,34 +220,72 @@ export const InvoiceAll = () => {
             `PDF uploaded! Download it from ${responseData.secure_url}`
           );
 
+          console.log(
+            customer?.customerDetails?.cphone_number,
+            total_amount,
+            customer?.customerDetails?.caddress
+          );
+
           const date = new Date();
           const res = await fetch(
-            "https://graph.facebook.com/v19.0/366116843258872/messages",
+            `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization:
-                  "Bearer EAAMpyLmGYZCYBO29jTcNg1ZAGK4PLFgyplZBT8DnLHZCZCur3UZCwcOXsKYXjOlpsUQ6Vmn2POJQyG00R5bpZAH3y6BdWlE34daRCDMZBryDb38BxZAuGGUCefeUFzD42vuQecrd9hGCXDWDQmHw67EhlhaAHIoaL83qgcsXRjtfIdolYPHK9RyJlAtbJOBMcfgMbcc8nXqxIXp9RACiD3ifTAhgm2GZCpisvBZCD850L6iXcUZD",
+                Authorization: `Bearer EAAMfDZCmvZCH4BOZCtP1QWHjVZBZBBqQZAJqr1aWLFanasj5GWsxxpXPtcDZAPVyLnSDCbXQ2T9yQm8BP89yWNx5isMZC7sKCX3awqjZAhZBKtXvnzTq99UKh9tfL6T182ZCpzH0YtVWMUtE9uNZAvelLX1PjtPW5JOqXcrnSGVBw9VUAxi6FqxPQAIW9vnnl3odfoPGPwZDZD`, // Use your access token
               },
               body: JSON.stringify({
                 messaging_product: "whatsapp",
                 recipient_type: "individual",
                 to: `91${customer?.customerDetails?.cphone_number}`,
-                type: "document",
-                document: {
-                  link: responseData.secure_url,
-                  caption: "Kem Palty, Mamlad-Dar 👋",
-                  filename: `${date.getMonth()} - ${date.getFullYear()}`,
+                type: "template",
+                template: {
+                  name: "purchase_receipt_2",
+                  language: {
+                    code: "en_US",
+                  },
+                  components: [
+                    {
+                      type: "header",
+                      parameters: [
+                        {
+                          type: "document",
+                          document: {
+                            link: responseData.secure_url,
+                            filename: `${date.getMonth()} - ${date.getFullYear()}`,
+                          },
+                        },
+                      ],
+                    },
+                    {
+                      type: "body",
+                      parameters: [
+                        { type: "text", text: total_amount || "Amount" },
+                        {
+                          type: "text",
+                          text:
+                            customer?.customerDetails?.caddress || "Address",
+                        },
+                        { type: "text", text: "Invoice" },
+                      ],
+                    },
+                  ],
                 },
               }),
             }
           );
 
-          console.log(res);
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(`Error: ${data.error.message}`);
+          } else {
+            console.log("Message sent successfully!", data);
+            alert("Message sent successfully!");
+          }
 
-          const resDelete = await cloudinaryHandler(responseData.public_id);
-          console.log(resDelete);
+          // const resDelete = await cloudinaryHandler(responseData.public_id);
+          // console.log(resDelete);
         } catch (error) {
           console.error("Failed to upload PDF:", error);
           alert("Failed to upload PDF.");

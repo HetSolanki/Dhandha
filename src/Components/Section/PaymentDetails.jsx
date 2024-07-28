@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-// import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
@@ -46,6 +46,7 @@ export default function PaymentDetails() {
       console.log(res);
     }
   };
+
   const transformedpaymentdata = data.map((customer, index) => ({
     _id: customer.cid,
     id: index + 1,
@@ -100,24 +101,14 @@ export default function PaymentDetails() {
         <Navbar />
         <div className="p-8">
           <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-            <CardHeader className="flex flex-row items-center">
-              <div className="grid gap-2">
-                <CardTitle>Payment Details</CardTitle>
-                <CardDescription className="hidden sm:block">
-                  View all the payments made by customers
-                </CardDescription>
-              </div>
-              <div
-              className="
-                        flex
-                        items-center
-                        justify-center
-                        mx-auto
-                        w-screen
-                        flex-col
-                        sm:flex-row                        
-                        "
-            >
+            {transformedpaymentdata.length ? (
+              <CardHeader className="flex flex-row items-center">
+                <div className="grid gap-2">
+                  <CardTitle>Payment Details</CardTitle>
+                  <CardDescription>
+                    View all the payments made by customers
+                  </CardDescription>
+                </div>
                 <Button
                   size="sm"
                   className="ml-auto gap-1"
@@ -126,13 +117,23 @@ export default function PaymentDetails() {
                   View All
                   <ArrowUpRight className="h-4 w-4" />
                 </Button>
+              </CardHeader>
+            ) : (
+              <div className="mt-4 py-3 px-4">
+                <Skeleton className="h-[90px]" enableAnimation={true} />
               </div>
-            </CardHeader>
-            <CardContent>
-              {customer && (
-                <DataTable data={transformedpaymentdata} columns={columns} />
-              )}
-            </CardContent>
+            )}
+            {transformedpaymentdata.length ? (
+              <CardContent>
+                {transformedpaymentdata.length && (
+                  <DataTable data={transformedpaymentdata} columns={columns} />
+                )}
+              </CardContent>
+            ) : (
+              <div className="py-3 px-4 mb-4">
+                <Skeleton className="h-[300px]" enableAnimation={true} />
+              </div>
+            )}
           </Card>
         </div>
       </div>

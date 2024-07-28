@@ -27,6 +27,7 @@ import { useState } from "react";
 import { DataTable } from "@/Components/DataTables/PaymentEntryDatatable";
 import { columns1 } from "@/ColumnsSchema/PaymentsEntryDataColumns";
 import { useLocation, useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const PaymentsEntryData = () => {
   const location = useLocation();
@@ -65,14 +66,15 @@ const PaymentsEntryData = () => {
 
   return (
     <>
-        <Navbar />
-        <div className="flex min-h-screen mx-auto w-screen flex-col bg-muted/40">
-          <TooltipProvider>
-            <div className="flex flex-col sm:gap-4 sm:py-4">
-              <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-                <Tabs defaultValue="all">
-                  <TabsContent value="all">
-                    <Card x-chunk="dashboard-06-chunk-0">
+      <Navbar />
+      <div className="flex min-h-screen mx-auto w-screen flex-col bg-muted/40">
+        <TooltipProvider>
+          <div className="flex flex-col sm:gap-4 sm:py-4">
+            <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+              <Tabs defaultValue="all">
+                <TabsContent value="all">
+                  <Card x-chunk="dashboard-06-chunk-0">
+                    {paymentEntrys.length ? (
                       <CardHeader>
                         <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between"><span
                             className="
@@ -101,7 +103,7 @@ const PaymentsEntryData = () => {
                                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuCheckboxItem
-                                  // checked={presentcheck}                                  
+                                  // checked={presentcheck}
                                   onClick={() => {
                                     // setPresentcheck(!presentcheck);
                                     // if (!presentcheck === true) {
@@ -110,7 +112,6 @@ const PaymentsEntryData = () => {
                                     // else{
                                     //   getallfilteredcustomers("All");
                                     // }
-
                                   }}
                                 >
                                   Present
@@ -123,10 +124,9 @@ const PaymentsEntryData = () => {
                                     //   getallfilteredcustomers("Absent");
                                     // }else{
                                     //   getallfilteredcustomers("All");
-                                    // }       
-                                    console.log("Absent");            
+                                    // }
+                                    console.log("Absent");
                                   }}
-                                  
                                 >
                                   Absent
                                 </DropdownMenuCheckboxItem>
@@ -163,23 +163,39 @@ const PaymentsEntryData = () => {
                           List of all the customers and their entries
                         </CardDescription>
                       </CardHeader>
+                    ) : (
+                      <div className="mt-4 py-3 px-4">
+                        <Skeleton className="h-[90px]" enableAnimation={true} />
+                      </div>
+                    )}
+
+                    {paymentEntrys.length ? (
                       <CardContent>
                         <DataTable data={paymentEntrys} columns={columns1} />
                       </CardContent>
-                      <CardFooter>
-                        <div className="text-xs text-muted-foreground">
-                          Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                          customers
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </main>
-            </div>
-          </TooltipProvider>
-          <ToastContainer />
-        </div>
+                    ) : (
+                      <div className="py-3 px-4 mb-4">
+                        <Skeleton
+                          className="h-[300px]"
+                          enableAnimation={true}
+                        />
+                      </div>
+                    )}
+
+                    {/* <CardFooter>
+                      <div className="text-xs text-muted-foreground">
+                        Showing <strong>1-10</strong> of <strong>32</strong>{" "}
+                        customers
+                      </div>
+                    </CardFooter> */}
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </main>
+          </div>
+        </TooltipProvider>
+        <ToastContainer />
+      </div>
     </>
   );
 };

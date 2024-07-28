@@ -19,7 +19,6 @@ import { NAVBAR } from "@/Data/Navbar";
 import { useUser } from "@/Context/UserContext";
 import { NavbarItems } from "./NavbarItems";
 import { ModeToggle } from "../UI/UI-Components/ModeToggle";
-import { Input } from "../UI/shadcn-UI/input";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const Navbar = () => {
               className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
               id="titleheading"
             >
-              {user?.shop_name}
+              {(user && user.shop_name) || "Your Company"}
             </h4>
           </Link>
           <NavbarItems />
@@ -60,10 +59,10 @@ const Navbar = () => {
                 className="flex items-center border-b-2 border-b-black/50 gap-2 text-lg font-semibold"
               >
                 <h4
-                  className="scroll-m-20 text-xl font-semibold tracking-tight w-28"
+                  className="scroll-m-20 text-lg font-semibold tracking-tight w-28"
                   id="titleheading"
                 >
-                  {user?.shop_name}
+                  {user ? user?.shop_name : "Your Company"}
                 </h4>
               </Link>
               {NAVBAR.map((item, index) => (
@@ -87,7 +86,7 @@ const Navbar = () => {
               className="scroll-m-20 text-xl font-semibold tracking-tight w-max"
               id="titleheading"
             >
-              {user?.shop_name}
+              {user ? user?.shop_name : "Your Company"}
             </h4>
           </Link>
         </div>
