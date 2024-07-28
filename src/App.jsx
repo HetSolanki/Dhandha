@@ -21,9 +21,10 @@ import UnderConstructionPage from "./Components/Section/UnderConstructionPage";
 import Invoicex from "./Components/Section/Invoicex";
 import PaymentDetails from "./Components/Section/PaymentDetails";
 import PaymentsEntryData from "./Components/Section/PaymentsEntryData";
+import LandingPage from "./Components/Section/LandingPage";
 
 function App() {
-  const [defaultRoute, setDefaultRoute] = useState("");
+  const [defaultRoute, setDefaultRoute] = useState("/mainpage");
 
   useEffect(() => {
     const savedDefaultRoute = localStorage.getItem("defaultRoute");
@@ -36,11 +37,12 @@ function App() {
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <BrowserRouter>
+
           <Routes>
             <Route path="/" element={<Navigate to={defaultRoute} replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signupdp" element={<SignUp />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/customerentry" element={<CustomerEntry />} />
             <Route path="/customerentrydata" element={<CustomerEntryData />} />
@@ -48,6 +50,7 @@ function App() {
             <Route path="/paymentsdata" element={<PaymentsEntryData />} />
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/invoicex" element={<Invoicex />} />
+            <Route path="/mainpage" element={<LandingPage />} />
             <Route
               path="/profile"
               element={<SettingsLayout children={<SettingsProfilePage />} />}
@@ -90,7 +93,7 @@ function App() {
             <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
         </BrowserRouter>
-      </ThemeProvider>
+    </ThemeProvider>
     </>
   );
 }
