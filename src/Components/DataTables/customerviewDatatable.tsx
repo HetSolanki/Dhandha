@@ -53,14 +53,14 @@ export function DataTable({ data, columns }) {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
+      rowSelection,    
     },
   });
 
   React.useEffect(() => {
     function handleResize() {
       if (window.innerWidth <= 768) {
-        setColumnVisibility({
+        setColumnVisibility({          
           bottle_count: true,
          delivery_date: true,
           delivery_status: true
@@ -119,14 +119,14 @@ export function DataTable({ data, columns }) {
           </DropdownMenuContent>
         </DropdownMenu> */}
       </div>
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border h-96 overflow-y-auto">
+        <Table >
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id}  >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} >
                       {header.isPlaceholder
                         ? null
                         : flexRender(

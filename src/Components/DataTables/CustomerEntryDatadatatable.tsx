@@ -52,6 +52,28 @@ export function DataTable({ data, columns }) {
     },
   });
 
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 768) {
+        setColumnVisibility({
+          bottle_count: true,
+          delivery_date: true,
+          delivery_status: true
+        });
+      } else {
+        setColumnVisibility({
+          bottle_count: true,
+          delivery_date: true,
+          delivery_status: true
+        });
+      }
+    }
+
+    handleResize(); // Call on mount to set the initial state
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -101,9 +123,9 @@ export function DataTable({ data, columns }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

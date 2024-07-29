@@ -2,10 +2,14 @@ import { useNavigate } from "react-router-dom";
 import mainimg from "@/assets/main.png";
 import subimg1 from "@/assets/sub1.png";
 import subimg2 from "@/assets/sub2.png";
-import paaniwale from "@/assets/paniwala.jpg";
+import paaniwale from "@/assets/paniwalalogo.png";
 import { Button } from "../UI/shadcn-UI/button";
+import { useEffect } from 'react';
 
-const LandingPage = () => {
+const LandingPage = () => {  
+  useEffect(() => {
+    document.title = "Paani Wale";
+  }, []);
   
   const navigate = useNavigate();
   return (

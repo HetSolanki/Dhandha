@@ -66,7 +66,7 @@ export function Dashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">₹{data?.totalRevenue}</div>
                 <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
+                  {/* +20.1% from last month */}
                 </p>
               </CardContent>
             </Card>
@@ -92,7 +92,7 @@ export function Dashboard() {
                   {data?.totalCustomerData}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +10% from last month
+                  {/* +10% from last month */}
                 </p>
               </CardContent>
             </Card>
@@ -114,7 +114,7 @@ export function Dashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">₹{data?.totalRevenue}</div>
                 <p className="text-xs text-muted-foreground">
-                  +19% from last month
+                  {/* +19% from last month */}
                 </p>
               </CardContent>
             </Card>
@@ -138,7 +138,7 @@ export function Dashboard() {
                   ₹{data?.totalDueAmount}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  +5% from last month
+                  {/* +5% from last month */}
                 </p>
               </CardContent>
             </Card>
@@ -197,7 +197,7 @@ export function Dashboard() {
                     {data?.totalCustomerData}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                    {/* +20.1% from last month */}
                   </p>
                 </CardContent>
               </Card>
@@ -216,7 +216,7 @@ export function Dashboard() {
                   <CardTitle>Due Payment Details</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-8">
-                  {data?.pendingPaymentCustomers?.map((customer, index) => (
+                  {data.length == 0 ? data?.pendingPaymentCustomers?.map((customer, index) => (
                     <div
                       key={index}
                       className="flex flex-row items-center justify-between"
@@ -235,7 +235,12 @@ export function Dashboard() {
                         ₹{customer.totalDue}
                       </div>
                     </div>
-                  ))}
+                  )) : 
+                  <div>
+                     <div className="flex flex-row items-center gap-4">
+                      No Due Payment
+                     </div>
+                  </div>}
                 </CardContent>
               </Card>
             ) : (
