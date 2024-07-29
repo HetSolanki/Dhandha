@@ -45,7 +45,7 @@ export function ShopForm() {
     const res = await uploadFileCloudinary(file);
     console.log(res.secure_url);
     const uid = user.uid._id;
-    const updatedUser = await updateshop(data, uid, res.secure_url);
+    const updatedUser = await updateshop(data, res.secure_url);
     updateUserContext();
     if (updatedUser.status === "success") {
       toast.success("Shop Details Updated Successfully", {
