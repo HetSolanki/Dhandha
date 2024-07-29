@@ -1,10 +1,9 @@
-import { File, ListFilter, PlusCircle, Send } from "lucide-react";
+import { File, ListFilter } from "lucide-react";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
@@ -40,10 +39,10 @@ import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ColorRing, RotatingLines } from "react-loader-spinner";
 import InvoiceAll from "./InvoiceAll";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+
 
 const Customers = () => {
   const { customer } = useCustomer();
@@ -55,6 +54,10 @@ const Customers = () => {
 
   if (!customers.isLoading) {
     console.log("Customer", customers.data.data);
+  }
+
+  const exportToPdf = () => {
+    console.log("Exporting to PDF");
   }
 
   return (
@@ -118,6 +121,7 @@ const Customers = () => {
                               size="sm"
                               variant="outline"
                               className="h-8 gap-1"
+                              onClick={exportToPdf}
                             >
                               <File className="h-3.5 w-3.5" />
                               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -138,7 +142,7 @@ const Customers = () => {
                       </div>
                     )}
 
-                    <CardContent className="py-3 px-4">
+                    <CardContent className="py-3 px-4" >
                       {!customers.isLoading ? (
                         <DataTable
                           data={customers?.data?.data}

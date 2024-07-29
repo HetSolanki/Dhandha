@@ -46,8 +46,6 @@ export default function CustomerEntry() {
           new Date(Date.now()).toISOString().split("T")[0]
         );
       });
-      console.log(todayscustomer);
-      setIntialdata(todayscustomer);
       return todayscustomer;
     } else {
       console.log(res);

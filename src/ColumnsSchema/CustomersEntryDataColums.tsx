@@ -17,18 +17,16 @@ export type Customer = {
   bottle_count: number;
   delivery_date: string;
   delivery_status: string;
-  cname: string;
+  cid: string;
 };
 
 export const columns1: ColumnDef<Customer>[] = [  
-  {
-    accessorKey: "cid.cname",
+  {  
+    accessorKey: "cid",    
     header: () => <div className="text-center sm:text-left">Customer Name</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="capitalize">{row.getValue("cname")}</div>
-      );
-    }
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("cid").cname}</div>
+    ),
   },
   {
     accessorKey: "delivery_date",

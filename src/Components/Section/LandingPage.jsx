@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import mainimg from "@/assets/main.png";
 import subimg1 from "@/assets/sub1.png";
-import subimg2 from "@/assets/sub2.png";    
+import subimg2 from "@/assets/sub2.png";
 import paaniwale from "@/assets/paniwala.jpg";
+import { Button } from "../UI/shadcn-UI/button";
 
 const LandingPage = () => {
+  
+  const navigate = useNavigate();
   return (
     <>
       <header>
@@ -21,18 +24,26 @@ const LandingPage = () => {
               </span>
             </a>
             <div className="flex items-center lg:order-2">
-              <Link
-                to={"/signin"}
-                className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+              <Button
+                className="mr-2 text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-700 dark:hover:bg-blue-700 dark:focus:ring-primary-800"
+                onClick={() => {
+
+                  if (localStorage.getItem("token")) {
+                    navigate("/dashboard");
+                  }
+                  else {
+                    navigate("/signin");
+                  }
+                }}
               >
                 Log in
-              </Link>
-              <a
+              </Button>
+              {/* <a
                 href="#"
                 className="text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-primary-800"
               >
                 Get started
-              </a>
+              </a> */}
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
@@ -131,10 +142,11 @@ const LandingPage = () => {
         <div className="grid py-8 px-4 mx-auto max-w-screen-xl lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           <div className="place-self-center mr-auto lg:col-span-7">
             <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none md:text-5xl xl:text-6xl dark:text-white">
-            Manage your water bottle supply efficiently
+              Manage your water bottle supply efficiently
             </h1>
             <p className="mb-6 max-w-2xl font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
-            From customer management to monthly billing, Paani Wale simplifies your water bottle supply billing system.
+              From customer management to monthly billing, Paani Wale simplifies
+              your water bottle supply billing system.
             </p>
             <a
               href="#"

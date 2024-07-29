@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
@@ -22,8 +21,7 @@ import { TooltipProvider } from "@/Components/UI/shadcn-UI/tooltip";
 import Navbar from "./Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DatePickerForm } from "../UI/UI-Components/Datepicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "@/Components/DataTables/PaymentEntryDatatable";
 import { columns1 } from "@/ColumnsSchema/PaymentsEntryDataColumns";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -34,6 +32,12 @@ const PaymentsEntryData = () => {
   const intialdata = location.state;
   const navigate = useNavigate();
   const [paymentEntrys, setPaymentEntrys] = useState([...intialdata]);
+
+  useEffect(() => {
+    if (intialdata === undefined || intialdata.length === 0) {
+      navigate("/paymentdetails");
+    }
+  }, [intialdata, navigate]);
   // const [presentcheck, setPresentcheck] = useState(false);
   // const [absentcheck, setAbsentcheck] = useState(false);
   // console.log(customers);

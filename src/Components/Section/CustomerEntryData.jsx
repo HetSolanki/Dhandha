@@ -24,7 +24,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
 import { useState } from "react";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/CustomerEntryDatadatatable";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ const CustomerEntryData = () => {
   const [customers, setCustomers] = useState([...intialdata]);
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
-console.log(customers.cid.cid);
+
   const getallfilteredcustomers = (option) => {
     if (option === "Absent") {
       const absentcustomers = customers.filter((customer) => {
@@ -179,15 +179,7 @@ console.log(customers.cid.cid);
                             enableAnimation={true}
                           />
                         </div>
-                      )}
-
-                      {/* <CardFooter>
->>>>>>> 06d6ec857a781f35541053c981951c641862994f
-                        <div className="text-xs text-muted-foreground">
-                          Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                          customers
-                        </div>
-                      </CardFooter> */}
+                      )}                    
                     </Card>
                   </TabsContent>
                 </Tabs>

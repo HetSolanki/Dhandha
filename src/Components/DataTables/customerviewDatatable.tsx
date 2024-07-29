@@ -57,29 +57,27 @@ export function DataTable({ data, columns }) {
     },
   });
 
-  // React.useEffect(() => {
-  //   function handleResize() {
-  //     if (window.innerWidth <= 768) {
-  //       setColumnVisibility({
-  //         bottle_price: false,
-  //         cname: true,
-  //         cphone_number: false,
-  //         totalRevenue: true
-  //       });
-  //     } else {
-  //       setColumnVisibility({
-  //         bottle_price: true,
-  //         cname: true,          
-  //         cphone_number: true,
-  //         totalRevenue: true
-  //       });
-  //     }
-  //   }
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 768) {
+        setColumnVisibility({
+          bottle_count: true,
+         delivery_date: true,
+          delivery_status: true
+        });
+      } else {
+        setColumnVisibility({
+          bottle_count: true,
+          delivery_date: true,
+          delivery_status: true
+        });
+      }
+    }
 
-  //   handleResize(); // Call on mount to set the initial state
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
+    handleResize(); // Call on mount to set the initial state
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="w-full">
