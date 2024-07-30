@@ -20,11 +20,13 @@ const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 export default function PaymentDetails() {
   const navigate = useNavigate();
-  const { customer } = useCustomer();
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchpaymentdata();
+    if(!fetchpaymentdata){
+      alert("No Data Found")
+    }
   }, []);
 
   const fetchpaymentdata = async () => {
@@ -57,7 +59,6 @@ export default function PaymentDetails() {
   }));
 
   const getintialdata = async () => {
-    alert(new Date(Date.now()).toISOString().split("T")[0]);
     const token = localStorage.getItem("token");
     const entrys = await fetch(
       `${DOMAIN_NAME}/api/paymentdetails/getAllPaymentEntrys`,
@@ -91,6 +92,7 @@ export default function PaymentDetails() {
 
   const handleNavigate = async () => {
     const data = getintialdata();
+    console.log("payment view data")
     console.log(await data);
     navigate("/paymentsdata", { state: await data });
   };

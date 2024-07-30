@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
@@ -24,20 +23,60 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
 import { useState } from "react";
-import { DataTable } from "../UI/shadcn-UI/DataTable";
+import { DataTable } from "@/Components/DataTables/CustomerEntryDatadatatable";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReportPDFGenarator from "./ReportPDFGenarator";
+import { useUser } from "@/Context/UserContext";
+import logo from "@/assets/paniwalalogo.png";
 
 const CustomerEntryData = () => {
+  const {user} = useUser();
   const location = useLocation();
   const intialdata = location.state;
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([...intialdata]);
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
-console.log(customers.cid.cid);
+  
+  const pdfData = customers.map((customer) => {
+    return {
+      delivery_sequence_number: customer.cid.delivery_sequence_number,
+      cname: customer.cid.cname,
+      bottle_count: customer.bottle_count,
+      delivery_date: customer.delivery_date,
+      delivery_status: customer.delivery_status,
+    };
+  });
+  const pdfColumns = [
+    {
+      header: "Sequence Number",
+      accessorKey: "delivery_sequence_number",
+    },
+    {
+      header: "Customer Name",
+      accessorKey: "cname",
+    },
+    {
+      header: "Bottle Count",
+      accessorKey: "bottle_count",
+    },
+    {
+      header: "Delivery Date",
+      accessorKey: "delivery_date",
+    },
+    {
+      header: "Delivery Status",
+      accessorKey: "delivery_status",
+    },
+  ];
+
+
+
+  console.log("PDF Data", pdfData);
   const getallfilteredcustomers = (option) => {
     if (option === "Absent") {
       const absentcustomers = customers.filter((customer) => {
@@ -78,10 +117,17 @@ console.log(customers.cid.cid);
                     <Card x-chunk="dashboard-06-chunk-0">
                       {customers.length ? (
                         <CardHeader>
-                          <CardTitle>
-                            Customers Entry Data
-                            <div className="ml-auto flex items-center gap-2 float-end">
-                              <DropdownMenu>
+                      <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between"><span
+                            className="
+                            text-xl
+                            font-semibold
+                            text-primary
+                            sm:text-2xl"
+                          >
+                          Customer Entry Data
+                          </span>
+                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                         <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button
                                     variant="outline"
@@ -130,20 +176,28 @@ console.log(customers.cid.cid);
                               </DropdownMenuCheckboxItem> */}
                                 </DropdownMenuContent>
                               </DropdownMenu>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-8 gap-1"
+                              <PDFDownloadLink
+                                document={<ReportPDFGenarator data={pdfData} columns={pdfColumns} table_name={"Customer Entry Data"}  shop_name={user?.shop_name}  logo={logo}
+                                />}
+                                fileName="customers_entry_data.pdf"
                               >
-                                <File className="h-3.5 w-3.5" />
-                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                  Export
-                                </span>
-                              </Button>
+                                {({ loading }) => (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-8 gap-1"
+                                    disabled={loading}
+                                  >
+                                    <File className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                      Export
+                                    </span>
+                                  </Button>
+                                )}
+                              </PDFDownloadLink>
                               <Button size="sm" className="h-8 gap-1">
                                 <span
-                                  className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-                                  onClick={() => {
+                                   onClick={() => {
                                     navigate("/customerentry");
                                   }}
                                 >
@@ -152,7 +206,7 @@ console.log(customers.cid.cid);
                               </Button>
                             </div>
                           </CardTitle>
-                          <CardDescription>
+                          <CardDescription className="hidden sm:block">
                             <div className=" mt-4 flex items-center gap-1 float-end">
                               <DatePickerForm />
                             </div>
@@ -179,15 +233,7 @@ console.log(customers.cid.cid);
                             enableAnimation={true}
                           />
                         </div>
-                      )}
-
-                      {/* <CardFooter>
->>>>>>> 06d6ec857a781f35541053c981951c641862994f
-                        <div className="text-xs text-muted-foreground">
-                          Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-                          customers
-                        </div>
-                      </CardFooter> */}
+                      )}                    
                     </Card>
                   </TabsContent>
                 </Tabs>

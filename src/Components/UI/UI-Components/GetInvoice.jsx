@@ -10,7 +10,7 @@ import {
 } from "../shadcn-UI/sheet";
 import { DataTable } from "@/Components/DataTables/customerviewDatatable";
 import { useState } from "react";
-import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
+import { columns1 } from "@/ColumnsSchema/CustomerssheetColums";
 import { fetchCustomerEnteries } from "@/Hooks/fetchCustomerEnteries";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
 import { InvoiceX } from "@/Components/Section/Invoicex";

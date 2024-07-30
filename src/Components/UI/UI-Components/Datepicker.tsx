@@ -54,7 +54,6 @@ export function DatePickerForm() {
       const selectedcustomers = res.data.filter((customer) => {
         return customer.delivery_date === date;
       });
-      console.log(selectedcustomers)
       setCustomers(selectedcustomers)
     }
     else {
