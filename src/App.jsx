@@ -14,7 +14,6 @@ import { ThemeProvider } from "./Context/ThemeProviderContext ";
 import Invoice from "./Components/Section/Invoice";
 import { useEffect, useState } from "react";
 import SettingsNotificationsPage from "./Components/Section/forms/notifications/page";
-// import SettingsBankDetailsPage from "./Components/Section/forms/bankdetails/page";
 import Error from "./Components/Section/404";
 import ComingSoonPage from "./Components/Section/ComingSoonPage";
 import UnderConstructionPage from "./Components/Section/UnderConstructionPage";
@@ -37,7 +36,6 @@ function App() {
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <BrowserRouter>
-
           <Routes>
             <Route path="/" element={<Navigate to={defaultRoute} replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -93,7 +91,7 @@ function App() {
             <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
         </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
     </>
   );
 }

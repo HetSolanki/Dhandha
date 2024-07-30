@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/Components/UI/shadcn-UI/button"
-import { Calendar } from "@/Components/UI/shadcn-UI/calendar"
+import { cn } from "@/lib/utils";
+import { Button } from "@/Components/UI/shadcn-UI/button";
+import { Calendar } from "@/Components/UI/shadcn-UI/calendar";
 import {
   Form,
   FormControl,
@@ -17,14 +17,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/Components/UI/shadcn-UI/form"
+} from "@/Components/UI/shadcn-UI/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/Components/UI/shadcn-UI/popover"
-import { useContext } from "react"
-import CustomerEntryContext from "@/Context/CustomerEntryContext"
+} from "@/Components/UI/shadcn-UI/popover";
+import { useContext } from "react";
+import CustomerEntryContext from "@/Context/CustomerEntryContext";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
@@ -32,11 +32,10 @@ const FormSchema = z.object({
   delivery_date: z.date({
     required_error: "A date of birth is required.",
   }),
-})
+});
 
 export function DatePickerForm() {
-
-  const { customers, setCustomers } = useContext(CustomerEntryContext)
+  const { customers, setCustomers } = useContext(CustomerEntryContext);
 
   const token = localStorage.getItem("token");
   const getData = async (date) => {
@@ -49,34 +48,35 @@ export function DatePickerForm() {
         },
       }
     );
+
     const res = await customers.json();
     if (res.status === "success") {
       const selectedcustomers = res.data.filter((customer) => {
         return customer.delivery_date === date;
       });
-      console.log(selectedcustomers)
-      setCustomers(selectedcustomers)
+      setCustomers(selectedcustomers);
+    } else {      
+      setCustomers([{ Message: "No Data" }]);
     }
-    else {
-      console.log(res)
-    }
-  }
+  };
   const getdeliverydateData = (date) => {
     // getData("2024-05-29")
-    getData(format(date, "yyyy-MM-dd"))
-  }
+    getData(format(date, "yyyy-MM-dd"));
+  };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
 
   return (
     <Form {...form}>
-      <form className="space-y-8 max-w-md
+      <form
+        className="space-y-8 max-w-md
         w-full
         mx-auto
         sm:max-w-xl
-      ">
+      "
+      >
         <FormField
           control={form.control}
           name="delivery_date"
@@ -106,12 +106,10 @@ export function DatePickerForm() {
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={
-                      (date) => {
-                        form.setValue("delivery_date", date)
-                        getdeliverydateData(date)
-                      }
-                    }
+                    onSelect={(date) => {
+                      form.setValue("delivery_date", date);
+                      getdeliverydateData(date);
+                    }}
                     disabled={(date) =>
                       date > new Date() || date < new Date("1900-01-01")
                     }
@@ -129,5 +127,5 @@ export function DatePickerForm() {
         {/* <Button type="submit">Submit</Button> */}
       </form>
     </Form>
-  )
+  );
 }

@@ -26,7 +26,7 @@ export const getAllCustomerEntrys = async (req, res) => {
     if (!allCustomerEntry) {
       return res.json({
         message: "No any Customer's Entry Found",
-        status: "error",
+        status: "error",  
       });
     }
     res.json({ data: allCustomerEntry, status: "success" });

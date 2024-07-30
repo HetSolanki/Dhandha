@@ -59,45 +59,14 @@ export const InvoiceAll = () => {
       const pdf = new jsPDF();
 
       // Shop details
-      pdf.setFontSize(18);
+      pdf.setFontSize(24);
       pdf.setFont("Helvetica-Bold", "bold");
-      pdf.text(`${user?.user?.shop_name}`, 15, 20);
-      pdf.setFontSize(18);
+      pdf.text(`${user?.user?.shop_name}`, 15, 15);
+      pdf.setFontSize(16);
       pdf.setFont("Helvetica-Bold", "bold");
-      pdf.text("Jalaram Vadapav", 145, 20);
-
-      // Invoice details
-      pdf.setFontSize(16);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Invoice #", 145, 35);
-      pdf.setFontSize(12);
-      pdf.setFont("helvetica", "normal");
-      pdf.text("INV-20240616-0134", 145, 42);
-
-      // Customer details
-      pdf.setFontSize(16);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("Bill to:", 15, 35);
-      pdf.setFontSize(14);
-      pdf.setFont("helvetica", "normal");
-      pdf.text(`${customer?.customerDetails?.cname}`, 15, 42);
-      pdf.text(`${customer?.customerDetails?.caddress}`, 15, 49);
-      pdf.text(`${customer?.customerDetails?.cphone_number}`, 15, 56);
-
-      // Invoice dates
-      pdf.setFontSize(12);
-      pdf.text("Invoice date: 2024-06-16", 145, 49);
-      pdf.text("Due date: 2024-06-21", 145, 56);
-
-      // Table headers
-      pdf.setFontSize(12);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("DATE", 15, 80);
-      pdf.text("QTY", 45, 80);
-      pdf.text("DATE", 85, 80);
-      pdf.text("QTY", 115, 80);
-      pdf.text("DATE", 145, 80);
-      pdf.text("QTY", 175, 80);
+      pdf.text("Address:", 15, 25);
+      pdf.setFont("Helvetica", "normal");
+      pdf.text(`${user?.user?.shop_address}`, 38, 25);
 
       // Table content
       pdf.setFont("helvetica", "normal");
@@ -133,22 +102,28 @@ export const InvoiceAll = () => {
       }
 
       // Total section
-      yOffset += 20;
+      // Total section
+      yOffset += 7;
       pdf.setFontSize(14);
       pdf.setFont("helvetica", "bold");
       pdf.text("Bottle Price:", 15, yOffset);
       pdf.setFont("helvetica", "normal");
-      pdf.text(`${customer?.customerDetails?.bottle_price}`, 95, yOffset);
+      pdf.text(
+        `${customerInvoice?.[0]?.customerDetails?.bottle_price}`,
+        95,
+        yOffset
+      );
       yOffset += 10;
 
       pdf.setFont("helvetica", "bold");
       pdf.text("Total Delivered Bottle:", 15, yOffset);
       pdf.setFont("helvetica", "normal");
-      pdf.text(`${customer?.totalBottle}`, 95, yOffset);
+      pdf.text(`${customerInvoice?.[0]?.totalBottle}`, 95, yOffset);
       yOffset += 10;
 
       const total_amount =
-        customer?.totalBottle * customer?.customerDetails?.bottle_price;
+        customerInvoice?.[0]?.totalBottle *
+        customerInvoice?.[0]?.customerDetails?.bottle_price;
 
       pdf.setFont("helvetica", "bold");
       pdf.text("Subtotal:", 15, yOffset);
@@ -165,7 +140,7 @@ export const InvoiceAll = () => {
       pdf.setFont("helvetica", "bold");
       pdf.text("Amount paid:", 15, yOffset);
       pdf.setFont("helvetica", "normal");
-      pdf.text(`${total_amount}`, 95, yOffset);
+      pdf.text(`Rs. ${total_amount}`, 95, yOffset);
       yOffset += 10;
 
       pdf.setFont("helvetica", "bold");
@@ -174,7 +149,7 @@ export const InvoiceAll = () => {
       pdf.text(`Rs. ${total_amount}`, 95, yOffset);
 
       // Footer
-      yOffset += 20;
+      yOffset += 10;
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "bold");
       pdf.text("Thank you!", 15, yOffset);
@@ -187,17 +162,22 @@ export const InvoiceAll = () => {
         15,
         yOffset
       );
+
+      const img = new Image();
+      img.src = user?.user?.image_url;
+      pdf.addImage(img, "png", 130, yOffset + 5, 50, 50);
+
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(12);
       yOffset += 10;
-      pdf.text("9909066572", 15, yOffset);
+      pdf.text(`${user.user.cphone_number}`, 15, yOffset);
       yOffset += 7;
       pdf.text("dhruvprajapati66572@gmail.com", 15, yOffset);
       yOffset += 15;
 
       pdf.setTextColor(0, 0, 0, 0.5);
       pdf.setFont("helvetica", "italic");
-      pdf.text("© 2024 Dhandha pvt. ltd.", 15, yOffset);
+      pdf.text("https://dhandha.vercel.app", 15, yOffset);
 
       const pdfBlob = pdf.output("blob");
       const reader = new FileReader();

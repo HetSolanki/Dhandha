@@ -6,11 +6,27 @@ import { useUser } from "@/Context/UserContext";
 import { Loader2, Send } from "lucide-react";
 import { Button } from "../UI/shadcn-UI/button";
 import { useToast } from "../UI/shadcn-UI/use-toast";
+import { ToastAction } from "../UI/shadcn-UI/toast";
 
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
   const [click, setClick] = useState(false);
   const { toast } = useToast();
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const [customerInvoice, setCustomerInvoice] = useState(null);
 
@@ -44,7 +60,7 @@ export const InvoiceX = ({ cid }) => {
     fetchCustomerData();
   }, [cid]);
 
-  // console.log(customerInvoice);
+  console.log(customerInvoice);
   const handleClick = async () => {
     // console.log(customerInvoice);
     // alert("Generating PDF...");
@@ -52,35 +68,42 @@ export const InvoiceX = ({ cid }) => {
     const pdf = new jsPDF();
 
     // Shop details
-    pdf.setFontSize(18);
+    pdf.setFontSize(24);
     pdf.setFont("Helvetica-Bold", "bold");
-    pdf.text(`${user?.user?.shop_name}`, 15, 20);
-    pdf.setFontSize(18);
+    pdf.text(`${user?.user?.shop_name}`, 15, 15);
+    pdf.setFontSize(16);
     pdf.setFont("Helvetica-Bold", "bold");
-    pdf.text("Jalaram Vadapav", 145, 20);
+    pdf.text("Address:", 15, 25);
+    pdf.setFont("Helvetica", "normal");
+    pdf.text(`${user?.user?.shop_address}`, 38, 25);
+
+    const logo = new Image();
+    logo.src =
+      "https://res.cloudinary.com/dikxaelvp/image/upload/v1722239069/Dhandha-Assests/paniwala-1300x1300_xks3or.png";
+    pdf.addImage(logo, "png", 180, 10, 20, 20);
 
     // Invoice details
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Invoice #", 145, 35);
+    pdf.text("Invoice #", 145, 45);
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "normal");
-    pdf.text("INV-20240616-0134", 145, 42);
+    pdf.text("INV-20240616-0134", 145, 52);
 
     // Customer details
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Bill to:", 15, 35);
+    pdf.text("Bill to:", 15, 45);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cname}`, 15, 42);
-    pdf.text(`${customerInvoice?.[0]?.customerDetails?.caddress}`, 15, 49);
-    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cphone_number}`, 15, 56);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cname}`, 15, 52);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.caddress}`, 15, 59);
+    pdf.text(`${customerInvoice?.[0]?.customerDetails?.cphone_number}`, 15, 66);
 
     // Invoice dates
     pdf.setFontSize(12);
-    pdf.text("Invoice date: 2024-06-16", 145, 49);
-    pdf.text("Due date: 2024-06-21", 145, 56);
+    pdf.text("Invoice date: 2024-06-16", 145, 59);
+    pdf.text("Due date: 2024-06-21", 145, 66);
 
     // Table headers
     pdf.setFontSize(12);
@@ -126,7 +149,7 @@ export const InvoiceX = ({ cid }) => {
     }
 
     // Total section
-    yOffset += 20;
+    yOffset += 7;
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.text("Bottle Price:", 15, yOffset);
@@ -163,7 +186,7 @@ export const InvoiceX = ({ cid }) => {
     pdf.setFont("helvetica", "bold");
     pdf.text("Amount paid:", 15, yOffset);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`${total_amount}`, 95, yOffset);
+    pdf.text(`Rs. ${total_amount}`, 95, yOffset);
     yOffset += 10;
 
     pdf.setFont("helvetica", "bold");
@@ -172,7 +195,7 @@ export const InvoiceX = ({ cid }) => {
     pdf.text(`Rs. ${total_amount}`, 95, yOffset);
 
     // Footer
-    yOffset += 20;
+    yOffset += 10;
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "bold");
     pdf.text("Thank you!", 15, yOffset);
@@ -185,20 +208,22 @@ export const InvoiceX = ({ cid }) => {
       15,
       yOffset
     );
+
+    const img = new Image();
+    img.src = user?.user?.image_url;
+    pdf.addImage(img, "png", 130, yOffset + 5, 50, 50);
+
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(12);
     yOffset += 10;
-    pdf.text("9909066572", 15, yOffset);
+    pdf.text(`${user.user.cphone_number}`, 15, yOffset);
     yOffset += 7;
     pdf.text("dhruvprajapati66572@gmail.com", 15, yOffset);
     yOffset += 15;
-    // const img = new Image();
-    // img.src = user?.user?.image_url;
-    // pdf.addImage(img, "png", 100, yOffset);
 
     pdf.setTextColor(0, 0, 0, 0.5);
     pdf.setFont("helvetica", "italic");
-    pdf.text("© 2024 Dhandha pvt. ltd.", 15, yOffset);
+    pdf.text("https://dhandha.vercel.app", 15, yOffset);
 
     const pdfBlob = pdf.output("blob");
     const reader = new FileReader();
@@ -245,12 +270,6 @@ export const InvoiceX = ({ cid }) => {
               recipient_type: "individual",
               to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
               type: "template",
-              // template: {
-              //   name: "hello_world",
-              //   language: {
-              //     code: "en_US",
-              //   },
-              // },
               template: {
                 name: "purchase_receipt_2",
                 language: {
@@ -264,7 +283,9 @@ export const InvoiceX = ({ cid }) => {
                         type: "document",
                         document: {
                           link: responseData.secure_url,
-                          filename: `${date.getMonth()} - ${date.getFullYear()}`,
+                          filename: `${
+                            months[date.getMonth()]
+                          } - ${date.getFullYear()}`,
                         },
                       },
                     ],
@@ -311,6 +332,11 @@ export const InvoiceX = ({ cid }) => {
           variant: "destructive",
           title: "Error",
           description: "Failed to send message!",
+          action: (
+            <ToastAction altText="Try again" onClick={handleClick}>
+              Try again
+            </ToastAction>
+          ),
         });
         setClick(false);
         console.error("Failed to upload PDF:", error);

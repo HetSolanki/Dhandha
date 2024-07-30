@@ -99,10 +99,10 @@ export default function PaymentDetails() {
     <>
       <div>
         <Navbar />
-        <div className="p-8">
+        <div className="p-2 py-4 sm:p-8">
           <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
             {transformedpaymentdata.length ? (
-              <CardHeader className="flex flex-row items-center">
+              <CardHeader className="flex flex-row items-center px-4 sm:p-6">
                 <div className="grid gap-2">
                   <CardTitle>Payment Details</CardTitle>
                   <CardDescription>
@@ -124,7 +124,7 @@ export default function PaymentDetails() {
               </div>
             )}
             {transformedpaymentdata.length ? (
-              <CardContent>
+              <CardContent className="px-3 sm:p-6">
                 {transformedpaymentdata.length && (
                   <DataTable data={transformedpaymentdata} columns={columns} />
                 )}

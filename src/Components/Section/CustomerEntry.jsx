@@ -20,14 +20,14 @@ export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
 
-  const handleNavigate = async () => {
+  const handleNavigate = async () => {      
     const data = getintialdata();
     console.log(await data);
     navigate("/customerentrydata", { state: await data });
-  };
+  };    
 
   const getintialdata = async () => {
-    alert(new Date(Date.now()).toISOString().split("T")[0]);
+    alert(new Date(Date.now()).toISOString().split("T")[0]);  
     const token = localStorage.getItem("token");
     const customers = await fetch(
       `${DOMAIN_NAME}/api/customerentry/getallcustomerentrys/`,
@@ -47,7 +47,6 @@ export default function CustomerEntry() {
         );
       });
       console.log(todayscustomer);
-      setIntialdata(todayscustomer);
       return todayscustomer;
     } else {
       console.log(res);
@@ -57,10 +56,10 @@ export default function CustomerEntry() {
   return (
     <div>
       <Navbar />
-      <div className="p-8">
+      <div className="p-2 py-4 sm:p-8">
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
           {customer ? (
-            <CardHeader className="flex flex-row items-center">
+            <CardHeader className="flex flex-row items-center px-4 sm:p-6">
               <div className="grid gap-2">
                 <CardTitle className="text-xl sm:text-2xl">
                   Customer Entry
@@ -84,7 +83,7 @@ export default function CustomerEntry() {
             </div>
           )}
           {customer ? (
-            <CardContent>
+            <CardContent className="px-3 sm:p-6">
               {customer && <DataTable data={customer} columns={columns} />}
             </CardContent>
           ) : (
