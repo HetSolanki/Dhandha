@@ -46,7 +46,6 @@ export default function CustomerEntry() {
           new Date(Date.now()).toISOString().split("T")[0]
         );
       });
-      console.log(todayscustomer);
       return todayscustomer;
     } else {
       console.log(res);
@@ -64,7 +63,7 @@ export default function CustomerEntry() {
                 <CardTitle className="text-xl sm:text-2xl">
                   Customer Entry
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="hidden sm:block">
                   List of all the customers and their entries
                 </CardDescription>
               </div>

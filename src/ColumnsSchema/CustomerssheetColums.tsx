@@ -20,14 +20,7 @@ export type Customer = {
   cid: string;
 };
 
-export const columns1: ColumnDef<Customer>[] = [  
-  {  
-    accessorKey: "cid",    
-    header: () => <div className="text-center sm:text-left">Customer Name</div>,
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("cid").cname}</div>
-    ),
-  },
+export const columns1: ColumnDef<Customer>[] = [    
   {
     accessorKey: "delivery_date",
     header: () => <div className="text-center sm:text-left">Delivery Date</div>,

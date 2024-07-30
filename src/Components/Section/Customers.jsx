@@ -1,10 +1,9 @@
-import { File, ListFilter, PlusCircle, Send } from "lucide-react";
+import { File, ListFilter } from "lucide-react";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
@@ -40,13 +39,17 @@ import { fetchCustomers } from "@/Hooks/fetchAllCustomers";
 import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ColorRing, RotatingLines } from "react-loader-spinner";
 import InvoiceAll from "./InvoiceAll";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReportPDFGenarator from "./ReportPDFGenarator";
+import { useUser } from "@/Context/UserContext";
+import logo from "@/assets/paniwalalogo.png";
 
 const Customers = () => {
   const { customer } = useCustomer();
+  const { user } = useUser();
 
   const customers = useQuery({
     queryKey: ["customers", customer],
@@ -56,6 +59,39 @@ const Customers = () => {
   if (!customers.isLoading) {
     console.log("Customer", customers.data.data);
   }
+
+  const pdfData = customers.data?.data.map((customer) => {
+    return {  
+      delivery_sequence_number: customer.delivery_sequence_number,
+      cname: customer.cname,
+      cphone_number: customer.cphone_number,
+      caddress: customer.caddress,
+      bottle_price: customer.bottle_price,
+    };
+  });
+
+  const pdfColumns = [
+    {
+      header: "Sequence Number",
+      accessorKey: "delivery_sequence_number",
+    },
+    {
+      header: "Customer Name",
+      accessorKey: "cname",
+    },
+    {
+      header: "Phone Number",
+      accessorKey: "cphone_number",
+    },
+    {
+      header: "Address",
+      accessorKey: "caddress",
+    },
+    {
+      header: "Bottle Price",
+      accessorKey: "bottle_price",
+    },
+  ];
 
   return (
     <>
@@ -114,16 +150,24 @@ const Customers = () => {
                                 </DropdownMenuCheckboxItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-8 gap-1"
-                            >
-                              <File className="h-3.5 w-3.5" />
-                              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                Export
-                              </span>
-                            </Button>
+                            <PDFDownloadLink
+                                document={<ReportPDFGenarator data={pdfData} columns={pdfColumns} table_name={"Customer Data"} shop_name={user?.shop_name} logo={logo} />}
+                                fileName="customers_data.pdf"
+                              >
+                                {({ loading }) => (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-8 gap-1"
+                                    disabled={loading}
+                                  >
+                                    <File className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                      Export
+                                    </span>
+                                  </Button>
+                                )}
+                              </PDFDownloadLink>
                             <Addcustomer />
                           </div>
                         </CardTitle>
@@ -138,7 +182,7 @@ const Customers = () => {
                       </div>
                     )}
 
-                    <CardContent className="py-3 px-4">
+                    <CardContent className="py-3 px-4" >
                       {!customers.isLoading ? (
                         <DataTable
                           data={customers?.data?.data}

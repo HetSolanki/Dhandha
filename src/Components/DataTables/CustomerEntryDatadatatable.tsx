@@ -13,20 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
-import { Button } from "../shadcn-UI/button";
-import { Checkbox } from "../shadcn-UI/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../shadcn-UI/dropdown-menu";
-import { Input } from "../shadcn-UI/input";
 import {
   Table,
   TableBody,
@@ -34,7 +20,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../shadcn-UI/table";
+} from "../UI/shadcn-UI/table";
+import { Input } from "../UI/shadcn-UI/input";
+import { Button } from "../UI/shadcn-UI/button";
 
 export function DataTable({ data, columns }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -64,14 +52,36 @@ export function DataTable({ data, columns }) {
     },
   });
 
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 768) {
+        setColumnVisibility({
+          bottle_count: true,
+          delivery_date: true,
+          delivery_status: true
+        });
+      } else {
+        setColumnVisibility({
+          bottle_count: true,
+          delivery_date: true,
+          delivery_status: true
+        });
+      }
+    }
+
+    handleResize(); // Call on mount to set the initial state
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Customers..."
-          value={(table.getColumn("cname")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("cid")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("cname")?.setFilterValue(event.target.value)
+            table.getColumn("cid")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -113,9 +123,9 @@ export function DataTable({ data, columns }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

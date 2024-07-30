@@ -23,7 +23,6 @@ import { ModeToggle } from "../UI/UI-Components/ModeToggle";
 const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useUser();
-
   return (
     <>
       <header className="sticky top-0 flex h-16 justify-between sm:justify-normal items-center gap-4 border-b bg-background/50 z-50 backdrop-blur-lg px-4 md:px-6">
