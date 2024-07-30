@@ -104,7 +104,7 @@ const Customers = () => {
                 <TabsContent value="all">
                   <Card x-chunk="dashboard-06-chunk-0">
                     {!customers.isLoading ? (
-                      <CardHeader className="px-4">
+                      <CardHeader className="px-2 sm:px-4">
                         <CardTitle
                           className="flex-col pt-4 px-2 sm:flex-row sm:flex sm:items-center 
                         sm:justify-between
@@ -182,7 +182,7 @@ const Customers = () => {
                       </div>
                     )}
 
-                    <CardContent className="py-3 px-4" >
+                    <CardContent className="py-3 px-2 sm:px-4" >
                       {!customers.isLoading ? (
                         <DataTable
                           data={customers?.data?.data}

@@ -31,6 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useToast } from "../shadcn-UI/use-toast";
 import { Toaster } from "../shadcn-UI/toaster";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   cname: z.string().min(1, {
@@ -93,15 +94,17 @@ export function Editcustomer({ id }) {
       form.reset();
     } else {
       toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
         variant: "destructive",
-        title: "Success",
-        description: "Customer details updated successfully.",
+        title: "Error",
+        description: "Something Went Wrong.",
       });
     }
   };
   const clearfield = () => {
     form.reset();
-    
   };
 
   return (
