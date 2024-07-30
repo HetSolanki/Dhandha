@@ -15,6 +15,20 @@ export const InvoiceAll = () => {
   const [click, setClick] = useState(false);
 
   const { toast } = useToast();
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -68,6 +82,67 @@ export const InvoiceAll = () => {
       pdf.setFont("Helvetica", "normal");
       pdf.text(`${user?.user?.shop_address}`, 38, 25);
 
+      const logo = new Image();
+      logo.src =
+        "https://res.cloudinary.com/dikxaelvp/image/upload/v1722239069/Dhandha-Assests/paniwala-1300x1300_xks3or.png";
+      pdf.addImage(logo, "png", 180, 10, 20, 20);
+
+      // Invoice details
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Invoice #", 145, 45);
+      pdf.setFontSize(12);
+      pdf.setFont("helvetica", "normal");
+      pdf.text("INV-20240616-0134", 145, 52);
+
+      // Customer details
+      pdf.setFontSize(16);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Bill to:", 15, 45);
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`${customerInvoice?.[index]?.customerDetails?.cname}`, 15, 52);
+      pdf.text(
+        `${customerInvoice?.[index]?.customerDetails?.caddress}`,
+        15,
+        59
+      );
+      pdf.text(
+        `${customerInvoice?.[index]?.customerDetails?.cphone_number}`,
+        15,
+        66
+      );
+
+      const date = new Date();
+
+      // Invoice dates
+      pdf.setFontSize(12);
+      pdf.text(
+        `Invoice date: ${date.getDate()}-${
+          months[date.getMonth()]
+        }-${date.getFullYear()}`,
+        145,
+        59
+      );
+      date.setDate(date.getDate() + 7);
+      pdf.text(
+        `Due date: ${date.getDate()}-${
+          months[date.getMonth()]
+        }-${date.getFullYear()}`,
+        145,
+        66
+      );
+
+      // Table headers
+      pdf.setFontSize(12);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("DATE", 15, 80);
+      pdf.text("QTY", 45, 80);
+      pdf.text("DATE", 85, 80);
+      pdf.text("QTY", 115, 80);
+      pdf.text("DATE", 145, 80);
+      pdf.text("QTY", 175, 80);
+
       // Table content
       pdf.setFont("helvetica", "normal");
       let yOffset = 90;
@@ -76,6 +151,7 @@ export const InvoiceAll = () => {
         secondPartCustomers?.length,
         thirdPartCustomers?.length
       );
+      console.log(maxRows);
 
       for (let i = 0; i < maxRows; i++) {
         if (firstPartCustomers[i]) {
@@ -102,14 +178,13 @@ export const InvoiceAll = () => {
       }
 
       // Total section
-      // Total section
       yOffset += 7;
       pdf.setFontSize(14);
       pdf.setFont("helvetica", "bold");
       pdf.text("Bottle Price:", 15, yOffset);
       pdf.setFont("helvetica", "normal");
       pdf.text(
-        `${customerInvoice?.[0]?.customerDetails?.bottle_price}`,
+        `${customerInvoice?.[index]?.customerDetails?.bottle_price}`,
         95,
         yOffset
       );
@@ -118,12 +193,12 @@ export const InvoiceAll = () => {
       pdf.setFont("helvetica", "bold");
       pdf.text("Total Delivered Bottle:", 15, yOffset);
       pdf.setFont("helvetica", "normal");
-      pdf.text(`${customerInvoice?.[0]?.totalBottle}`, 95, yOffset);
+      pdf.text(`${customerInvoice?.[index]?.totalBottle}`, 95, yOffset);
       yOffset += 10;
 
       const total_amount =
-        customerInvoice?.[0]?.totalBottle *
-        customerInvoice?.[0]?.customerDetails?.bottle_price;
+        customerInvoice?.[index]?.totalBottle *
+        customerInvoice?.[index]?.customerDetails?.bottle_price;
 
       pdf.setFont("helvetica", "bold");
       pdf.text("Subtotal:", 15, yOffset);
@@ -167,17 +242,18 @@ export const InvoiceAll = () => {
       img.src = user?.user?.image_url;
       pdf.addImage(img, "png", 130, yOffset + 5, 50, 50);
 
+      console.log(user);
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(12);
       yOffset += 10;
-      pdf.text(`${user.user.cphone_number}`, 15, yOffset);
+      pdf.text(`${user?.user?.uid?.phone_number}`, 15, yOffset);
       yOffset += 7;
-      pdf.text("dhruvprajapati66572@gmail.com", 15, yOffset);
+      pdf.text(`${user?.user?.uid?.email}`, 15, yOffset);
       yOffset += 15;
 
       pdf.setTextColor(0, 0, 0, 0.5);
       pdf.setFont("helvetica", "italic");
-      pdf.text("https://dhandha.vercel.app", 15, yOffset);
+      pdf.text("https://paaniwale.com", 15, yOffset);
 
       const pdfBlob = pdf.output("blob");
       const reader = new FileReader();
@@ -238,7 +314,9 @@ export const InvoiceAll = () => {
                           type: "document",
                           document: {
                             link: responseData.secure_url,
-                            filename: `${date.getMonth()} - ${date.getFullYear()}`,
+                            filename: `${
+                              months[date.getMonth()]
+                            } - ${date.getFullYear()}`,
                           },
                         },
                       ],

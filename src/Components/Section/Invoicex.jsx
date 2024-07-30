@@ -60,10 +60,8 @@ export const InvoiceX = ({ cid }) => {
     fetchCustomerData();
   }, [cid]);
 
-  console.log(customerInvoice);
   const handleClick = async () => {
-    // console.log(customerInvoice);
-    // alert("Generating PDF...");
+    console.log(customerInvoice);
     setClick(true);
     const pdf = new jsPDF();
 
@@ -101,9 +99,23 @@ export const InvoiceX = ({ cid }) => {
     pdf.text(`${customerInvoice?.[0]?.customerDetails?.cphone_number}`, 15, 66);
 
     // Invoice dates
+    const date = new Date();
     pdf.setFontSize(12);
-    pdf.text("Invoice date: 2024-06-16", 145, 59);
-    pdf.text("Due date: 2024-06-21", 145, 66);
+    pdf.text(
+      `Invoice date: ${date.getDate()}-${
+        months[date.getMonth()]
+      }-${date.getFullYear()}`,
+      145,
+      59
+    );
+    date.setDate(date.getDate() + 7);
+    pdf.text(
+      `Due date: ${date.getDate()}-${
+        months[date.getMonth()]
+      }-${date.getFullYear()}`,
+      145,
+      66
+    );
 
     // Table headers
     pdf.setFontSize(12);
@@ -223,7 +235,7 @@ export const InvoiceX = ({ cid }) => {
 
     pdf.setTextColor(0, 0, 0, 0.5);
     pdf.setFont("helvetica", "italic");
-    pdf.text("https://dhandha.vercel.app", 15, yOffset);
+    pdf.text("https://paaniwale.com", 15, yOffset);
 
     const pdfBlob = pdf.output("blob");
     const reader = new FileReader();
