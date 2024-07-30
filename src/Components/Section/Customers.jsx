@@ -194,7 +194,7 @@ const Customers = () => {
                             className="h-[300px]"
                             enableAnimation={true}
                           />
-                        </div>
+                        </div>  
                       )}
                     </CardContent>
                     {/* <CardFooter className="px-3 pb-4">
