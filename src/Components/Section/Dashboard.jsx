@@ -216,7 +216,7 @@ export function Dashboard() {
                   <CardTitle>Due Payment Details</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-8">
-                  {data.length == 0 ? data?.pendingPaymentCustomers?.map((customer, index) => (
+                  {data?.pendingPaymentCustomers.length != 0 ? data?.pendingPaymentCustomers?.map((customer, index) => (
                     <div
                       key={index}
                       className="flex flex-row items-center justify-between"

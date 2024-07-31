@@ -1,7 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import { Separator } from "../../UI/shadcn-UI/separator";
 import { ProfileForm } from "./profile-form";
+import { useEffect } from "react";
 
 export default function SettingsProfilePage() {
+
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+
   return (
     <div className="space-y-6">
       <div>

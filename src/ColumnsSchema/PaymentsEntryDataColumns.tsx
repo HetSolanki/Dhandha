@@ -36,7 +36,7 @@ export const columns1: ColumnDef<Customer>[] = [
         accessorKey: "amount",
         header: () => <div className="text-left">Total Amount</div>,
         cell: ({ row }) => (
-            console.log(row.original),
+            // console.log(row.original),
             <div className="capitalize">{row.getValue("amount")}</div>
         ),
     },

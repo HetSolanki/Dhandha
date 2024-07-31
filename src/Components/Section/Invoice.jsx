@@ -60,10 +60,10 @@ const Invoice = React.forwardRef((props, ref) => {
     );
     const res = await customers.json();
     if (res.status === "success") {
-      console.log(res.data);
+      // console.log(res.data);
 
       const currentMonth = new Date().getMonth();
-      console.log(currentMonth);
+      // console.log(currentMonth);
       const currentYear = new Date().getFullYear();
       // const daysInMonth = getDaysInMonth(currentMonth, currentYear);
       const selectedCustomers = res.data.filter((customer) => {
@@ -90,11 +90,12 @@ const Invoice = React.forwardRef((props, ref) => {
       setThirdPartCustomers(sortedCustomers.slice(thirdIndex * 2));
 
       setCustomers(sortedCustomers);
-      console.log(sortedCustomers[0]);
+      // console.log(sortedCustomers[0]);
 
       return sortedCustomers[0];
     } else {
-      console.log(res);
+      // console.log(res);
+      return null;
     }
   };
 
@@ -107,8 +108,8 @@ const Invoice = React.forwardRef((props, ref) => {
         shorturl: "",
       });
       alert("Data Fetched");
-      console.log(totalBottles);
-      console.log(invoicedata);
+      // console.log(totalBottles);
+      // console.log(invoicedata);
     }
   };
 

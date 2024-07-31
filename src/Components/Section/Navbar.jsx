@@ -111,7 +111,7 @@ const Navbar = () => {
               >
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
+              {/* <DropdownMenuItem>Support</DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {

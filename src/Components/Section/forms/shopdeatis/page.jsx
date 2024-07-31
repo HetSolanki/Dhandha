@@ -1,7 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import { Separator } from "../../../UI/shadcn-UI/separator";
 import { ShopForm } from "./Shopdetails-form"
+import { useEffect } from "react";
 
 export default function SettingsAccountPage() {
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
     <div className="space-y-6">
       <div>

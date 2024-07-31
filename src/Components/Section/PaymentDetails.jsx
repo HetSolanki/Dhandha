@@ -1,4 +1,3 @@
-import { useCustomer } from "@/Context/CustomerContext";
 import { DataTable } from "@/Components/DataTables/PaymentDetailDatatable";
 import { columns } from "@/ColumnsSchema/PaymentDetailsColumns";
 import Navbar from "./Navbar";
@@ -27,7 +26,11 @@ export default function PaymentDetails() {
     if(!fetchpaymentdata){
       alert("No Data Found")
     }
-  }, []);
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
 
   const fetchpaymentdata = async () => {
     const paymentdata = await fetch(
@@ -41,11 +44,12 @@ export default function PaymentDetails() {
     );
     const res = await paymentdata.json();
     setData(res.message);
-    console.log(res.message);
+    // console.log(res.message);
     if (res.status === "success") {
       return res.data;
     } else {
-      console.log(res);
+      // console.log(res);
+      return [];
     }
   };
 
@@ -83,17 +87,18 @@ export default function PaymentDetails() {
         );
       });
 
-      console.log(thisMonthCustomers);
+      // console.log(thisMonthCustomers);
       return thisMonthCustomers;
     } else {
-      console.log(res);
+      // console.log(res);
+      return [];
     }
   };
 
   const handleNavigate = async () => {
     const data = getintialdata();
-    console.log("payment view data")
-    console.log(await data);
+    // console.log("payment view data")
+    // console.log(await data);
     navigate("/paymentsdata", { state: await data });
   };
 

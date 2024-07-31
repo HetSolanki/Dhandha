@@ -13,6 +13,6 @@ export const fetchCustomerEnteries = async (cid) => {
 
   const res = await customerEnteries.json();
 
-  console.log(res);
+  // console.log(res);
   return res;
 };
