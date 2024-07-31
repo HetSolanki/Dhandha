@@ -228,9 +228,9 @@ export const InvoiceX = ({ cid }) => {
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(12);
     yOffset += 10;
-    pdf.text(`${user.user.cphone_number}`, 15, yOffset);
+    pdf.text(`${user?.user?.uid?.phone_number}`, 15, yOffset);
     yOffset += 7;
-    pdf.text("dhruvprajapati66572@gmail.com", 15, yOffset);
+    pdf.text(`${user?.user?.uid?.email}`, 15, yOffset);
     yOffset += 15;
 
     pdf.setTextColor(0, 0, 0, 0.5);
