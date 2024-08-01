@@ -21,19 +21,21 @@ export const getAllPaymentDetails = async (req, res) => {
 };
 
 export const getAllPaymentEntrys = async (req, res) => {
-    try {
-      const allpaymentdetails = await PaymentDetail.find({uid: req.user.id}).populate("cid");
-      if (!allpaymentdetails) {
-        return res.json({
-          message: "No any Customer's Entry Found",
-          status: "error",
-        });
-      }
-      res.json({ data: allpaymentdetails, status: "success" });
-    } catch (error) {
-      res.json({ message: error });
+  try {
+    const allpaymentdetails = await PaymentDetail.find({
+      uid: req.user.id,
+    }).populate("cid");
+    if (!allpaymentdetails) {
+      return res.json({
+        message: "No any Customer's Entry Found",
+        status: "error",
+      });
     }
-  };
+    res.json({ data: allpaymentdetails, status: "success" });
+  } catch (error) {
+    res.json({ message: error });
+  }
+};
 
 export const getAllPaymentDetailsCurrentMonth = async (req, res) => {
   const date = new Date();
@@ -49,7 +51,7 @@ export const getAllPaymentDetailsCurrentMonth = async (req, res) => {
         $gte: firstDay,
         $lt: lastDay,
       },
-      uid: req.user.id
+      uid: req.user.id,
     }).populate("cid");
     if (!allpaymentdetails) {
       return res.json({
@@ -84,6 +86,7 @@ export const createPaymentEntry = async (req, res) => {
     const newPaymentEntry = await PaymentDetail.findOneAndUpdate(
       {
         cid: req.body.cid,
+        uid: req.user.id,
         payment_date: {
           $gte: monthStart.toISOString(),
           $lte: monthEnd.toISOString(),
@@ -91,6 +94,7 @@ export const createPaymentEntry = async (req, res) => {
       },
       {
         cid: req.body.cid,
+        uid: req.user.id,
         amount: req.body.amount,
         payment_date: req.body.payment_date,
         payment_status: req.body.payment_status,
@@ -108,12 +112,12 @@ export const updatePaymentEntry = async (req, res) => {
   try {
     const updatedPaymentEntry = await PaymentDetail.findByIdAndUpdate(
       req.params.id,
-        {
-            cid: req.body.cid,
-            amount: req.body.amount,
-            payment_date: req.body.payment_date,
-            payment_status: req.body.payment_status,
-        },
+      {
+        cid: req.body.cid,
+        amount: req.body.amount,
+        payment_date: req.body.payment_date,
+        payment_status: req.body.payment_status,
+      },
       { new: true }
     );
     res.json({ data: updatedPaymentEntry, status: "success" });
@@ -125,20 +129,18 @@ export const updatePaymentEntry = async (req, res) => {
 export const deletePaymentEntry = async (req, res) => {
   try {
     const deletedPaymentEntry = await PaymentDetail.findByIdAndDelete(
-        req.params.id
-        );
+      req.params.id
+    );
 
     if (!deletedPaymentEntry) {
-        return res.json({
-            message: "No Payment Entry Found",
-            status: "error",
-        });
+      return res.json({
+        message: "No Payment Entry Found",
+        status: "error",
+      });
     }
 
-
-        res.json({ data: deletedPaymentEntry, status: "success" });
-    }
-    catch (error) {
-        res.json({ error });
-    }
-}
+    res.json({ data: deletedPaymentEntry, status: "success" });
+  } catch (error) {
+    res.json({ error });
+  }
+};

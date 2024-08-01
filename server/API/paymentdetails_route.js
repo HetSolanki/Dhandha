@@ -56,11 +56,11 @@ router.put(
     body("payment_status").optional(),
   ],
   inputErrorHandler,
+  protect,
   updatePaymentEntry
 );
 
 // Delete Payment Details
 router.delete("/deletepaymentdetails/:id", protect, deletePaymentEntry);
-
 
 export default router;

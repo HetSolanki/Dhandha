@@ -588,7 +588,9 @@ export const getdashboardData = async (req, res) => {
 
     const totalCustomerData = totalCustomer.length;
 
-    const totalCustomerEntry = await CustomerEntry.find({}).countDocuments();
+    const totalCustomerEntry = await CustomerEntry.find({
+      uid: req.user.id,
+    }).countDocuments();
 
     // const monthlyRevenueResult = await CustomerEntry.aggregate([
     //   {
