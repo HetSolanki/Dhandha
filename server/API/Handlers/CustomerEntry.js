@@ -53,7 +53,6 @@ export const getAllCustomerEntryCurrentMonth = async (req, res) => {
         $lt: lastDay,
       },
       uid: req.user.id,
-      
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
@@ -208,6 +207,7 @@ export const getCustomerInvoice = async (req, res) => {
             $gt: firstDate,
             $lt: lastDate,
           },
+          uid: req.user.id,
         },
       },
       {
@@ -273,9 +273,7 @@ export const getAllCustomerInvoice = async (req, res) => {
             $gt: firstDate,
             $lt: lastDate,
           },
-          uid: {
-            uid: req.user.id,
-          },
+          uid: req.user.id,
         },
       },
       {
@@ -537,6 +535,11 @@ export const getdashboardData = async (req, res) => {
   try {
     const totalCustomer = await CustomerEntry.aggregate([
       {
+        $match: {
+          uid: req.user.id,
+        },
+      },
+      {
         $lookup: {
           from: "customers",
           localField: "cid",
@@ -623,6 +626,11 @@ export const getdashboardData = async (req, res) => {
     // const monthlyRevenue = monthlyRevenueResult.length ? monthlyRevenueResult[0].totalRevenue : 0;
 
     const topCustomers = await CustomerEntry.aggregate([
+      {
+        $match: {
+          uid: req.user.id,
+        },
+      },
       {
         $lookup: {
           from: "customers",
@@ -711,6 +719,7 @@ export const getdashboardData = async (req, res) => {
       {
         $match: {
           payment_status: "Pending",
+          uid: req.user.id,
         },
       },
       {

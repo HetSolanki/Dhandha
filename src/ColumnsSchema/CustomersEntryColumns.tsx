@@ -25,6 +25,7 @@ import "../index.css";
 import { toast, ToastContainer } from "react-toastify";
 import React from "react";
 import styled from "styled-components";
+import { useUser } from "@/Context/UserContext";
 
 export type Customer = {
   cname: string;
@@ -43,8 +44,6 @@ const handleEntry = async (
 ) => {
   const no_of_bottles = document.getElementById(customer._id);
 
-  const { user } = useUser();
-
   if (status === "Present") {
     if (no_of_bottles.value !== "") {
       if (parseInt(no_of_bottles.value) > 0) {
@@ -53,8 +52,7 @@ const handleEntry = async (
             no_of_bottles: parseInt(no_of_bottles.value),
             delivery_status: "Present",
           },
-          customer._id,
-          user.uid._id
+          customer._id
         );
 
         if (newEntry.status === "success") {

@@ -7,6 +7,7 @@ export const GetAllCustomerInvoice = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("token")}`,
       },
     }
   );
