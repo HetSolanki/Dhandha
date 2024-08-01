@@ -16,5 +16,5 @@ export const shopSchema = new mongoose.Schema({
     type: String,
   },
 });
-
+    
 export default mongoose.model("Shop", shopSchema);

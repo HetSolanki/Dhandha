@@ -6,6 +6,7 @@ export const getAllCustomerEntry = async (req, res) => {
   try {
     const allCustomerEntry = await CustomerEntry.find({
       cid: req.params.id,
+      uid: req.user.id,
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
@@ -22,11 +23,13 @@ export const getAllCustomerEntry = async (req, res) => {
 
 export const getAllCustomerEntrys = async (req, res) => {
   try {
-    const allCustomerEntry = await CustomerEntry.find({}).populate("cid");
+    const allCustomerEntry = await CustomerEntry.find({
+      uid: req.user.id,
+    }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
         message: "No any Customer's Entry Found",
-        status: "error",  
+        status: "error",
       });
     }
     res.json({ data: allCustomerEntry, status: "success" });
@@ -101,6 +104,7 @@ export const createCustomerEntry = async (req, res) => {
       },
       {
         cid: req.body.cid,
+        uid: req.user.id,
         bottle_count: req.body.bottle_count,
         delivery_date: req.body.delivery_date,
         delivery_status: req.body.delivery_status,
@@ -192,7 +196,6 @@ export const getCustomerInvoice = async (req, res) => {
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)
   );
 
-  
   try {
     const customerEntry = await CustomerEntry.aggregate([
       {
@@ -266,6 +269,9 @@ export const getAllCustomerInvoice = async (req, res) => {
           createdAt: {
             $gt: firstDate,
             $lt: lastDate,
+          },
+          uid: {
+            uid: req.user.id,
           },
         },
       },

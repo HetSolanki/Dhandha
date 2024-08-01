@@ -6,6 +6,10 @@ const customerEntrySchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Customer",
     },
+    uid: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
     bottle_count: {
       type: Number,
       required: true,
