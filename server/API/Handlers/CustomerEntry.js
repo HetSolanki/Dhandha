@@ -52,7 +52,7 @@ export const getAllCustomerEntryCurrentMonth = async (req, res) => {
         $gte: firstDay,
         $lt: lastDay,
       },
-      uid: req.user.id
+      uid: req.user.id,
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
@@ -102,10 +102,11 @@ export const createCustomerEntry = async (req, res) => {
           $gte: todayStart,
           $lte: todayEnd,
         },
+        uid: req.user.id,
       },
       {
-        cid: req.body.cid,
         uid: req.user.id,
+        cid: req.body.cid,
         bottle_count: req.body.bottle_count,
         delivery_date: req.body.delivery_date,
         delivery_status: req.body.delivery_status,
@@ -539,7 +540,7 @@ export const getdashboardData = async (req, res) => {
           from: "customers",
           localField: "cid",
           foreignField: "_id",
-          as: "customerDetails",          
+          as: "customerDetails",
         },
       },
       {
