@@ -156,7 +156,9 @@ export const getCustomerForPayment = async (req, res) => {
   try {
     const allCustomers = await CustomerEntry.aggregate([
       {
-        uid: req.user.id,
+        $match: {
+          uid: req.user.id,
+        },
       },
       {
         $lookup: {

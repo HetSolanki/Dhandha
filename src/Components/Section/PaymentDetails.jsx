@@ -23,14 +23,13 @@ export default function PaymentDetails() {
 
   useEffect(() => {
     fetchpaymentdata();
-    if(!fetchpaymentdata){
-      alert("No Data Found")
+    if (!fetchpaymentdata) {
+      alert("No Data Found");
     }
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
   }, [navigate]);
-
 
   const fetchpaymentdata = async () => {
     const paymentdata = await fetch(
@@ -40,11 +39,11 @@ export default function PaymentDetails() {
         headers: {
           "content-type": "application/json",
           authorization: `bearer ${localStorage.getItem("token")}`,
-          
         },
       }
     );
     const res = await paymentdata.json();
+    console.log(res.message);
     setData(res.message);
     // console.log(res.message);
     if (res.status === "success") {
