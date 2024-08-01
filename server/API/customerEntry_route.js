@@ -65,11 +65,11 @@ router.put(
 // Delete Customer Entry
 router.delete("/removecustomerentry/:id", deleteCustomerEntry);
 
-router.get("/customersforpayment", getCustomerForPayment);
+router.get("/customersforpayment", protect, getCustomerForPayment);
 
-router.get("/getCustomerInvoice/:id", getCustomerInvoice);
+router.get("/getCustomerInvoice/:id", protect, getCustomerInvoice);
 
-router.get("/getAllCustomerInvoice", getAllCustomerInvoice);
+router.get("/getAllCustomerInvoice", protect, getAllCustomerInvoice);
 
 router.get("/getdashboarddata/", protect, getdashboardData);
 
