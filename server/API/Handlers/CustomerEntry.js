@@ -148,7 +148,7 @@ export const deleteCustomerEntry = async (req, res) => {
     }
     res.json({ data: deletedCustomerEntry, status: "success" });
   } catch (error) {
-    res.json({ message: "Error" });
+    res.json({ message: error });
   }
 };
 
