@@ -39,6 +39,8 @@ export default function PaymentDetails() {
         method: "GET",
         headers: {
           "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("token")}`,
+          
         },
       }
     );
