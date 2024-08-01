@@ -43,6 +43,8 @@ const handleEntry = async (
 ) => {
   const no_of_bottles = document.getElementById(customer._id);
 
+  const { user } = useUser();
+
   if (status === "Present") {
     if (no_of_bottles.value !== "") {
       if (parseInt(no_of_bottles.value) > 0) {
@@ -51,7 +53,8 @@ const handleEntry = async (
             no_of_bottles: parseInt(no_of_bottles.value),
             delivery_status: "Present",
           },
-          customer._id
+          customer._id,
+          user.uid._id
         );
 
         if (newEntry.status === "success") {
@@ -240,15 +243,15 @@ export const columns: ColumnDef<Customer>[] = [
       const [customers, setCustomers] = React.useState<Customer[]>([]);
       const customer = row.original;
       const ResponsiveStack = styled.div`
-      display: flex;
-      flex-direction: row;
-      gap: 8px;
-    
-      @media (max-width: 600px) {
-        flex-direction: column;
-        margin-left: -10px;        
-      }
-    `;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+
+        @media (max-width: 600px) {
+          flex-direction: column;
+          margin-left: -10px;
+        }
+      `;
       return (
         <>
           <ResponsiveStack>
@@ -277,7 +280,7 @@ export const columns: ColumnDef<Customer>[] = [
             >
               <EyeIcon />
             </Button> */}
-      </ResponsiveStack>
+          </ResponsiveStack>
         </>
       );
     },

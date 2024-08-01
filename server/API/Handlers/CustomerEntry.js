@@ -53,6 +53,7 @@ export const getAllCustomerEntryCurrentMonth = async (req, res) => {
         $lt: lastDay,
       },
       uid: req.user.id,
+      
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({

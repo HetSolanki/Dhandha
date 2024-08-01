@@ -45,6 +45,7 @@ router.post(
     body("delivery_status").exists(),
   ],
   inputErrorHandler,
+  protect,
   createCustomerEntry
 );
 
