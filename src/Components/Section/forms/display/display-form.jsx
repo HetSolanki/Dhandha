@@ -44,7 +44,7 @@ export function DisplayForm({ setDefaultRoute }) {
 
   const dropbox = document.getElementById("DefaulPage");
   const checkvalidation = () => {
-    console.log(value);
+    // console.log(value);
     if (dropbox.outerText === "Select Default Page...") {
       toast.error("Please select a Default Page", {
         position: "bottom-right",

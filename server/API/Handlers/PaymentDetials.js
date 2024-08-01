@@ -5,6 +5,7 @@ export const getAllPaymentDetails = async (req, res) => {
   try {
     const allpaymentdetails = await PaymentDetail.find({
       cid: req.params.id,
+      uid: req.user.id,
     }).populate("cid");
     if (!allpaymentdetails) {
       return res.json({
@@ -21,7 +22,7 @@ export const getAllPaymentDetails = async (req, res) => {
 
 export const getAllPaymentEntrys = async (req, res) => {
     try {
-      const allpaymentdetails = await PaymentDetail.find({}).populate("cid");
+      const allpaymentdetails = await PaymentDetail.find({uid: req.user.id}).populate("cid");
       if (!allpaymentdetails) {
         return res.json({
           message: "No any Customer's Entry Found",
@@ -48,6 +49,7 @@ export const getAllPaymentDetailsCurrentMonth = async (req, res) => {
         $gte: firstDay,
         $lt: lastDay,
       },
+      uid: req.user.id
     }).populate("cid");
     if (!allpaymentdetails) {
       return res.json({

@@ -42,7 +42,7 @@ export const InvoiceX = ({ cid }) => {
         const partitionSize = Math.ceil(
           customerData.data[0]?.customerEntry?.length / 3
         );
-        console.log(partitionSize);
+        // console.log(partitionSize);
         setFirstPartCustomers(
           customerData.data[0]?.customerEntry?.slice(0, partitionSize)
         );
@@ -61,7 +61,7 @@ export const InvoiceX = ({ cid }) => {
   }, [cid]);
 
   const handleClick = async () => {
-    console.log(customerInvoice);
+    // console.log(customerInvoice);
     setClick(true);
     const pdf = new jsPDF();
 
@@ -259,9 +259,9 @@ export const InvoiceX = ({ cid }) => {
         }
 
         const responseData = await response.json();
-        console.log(
-          `PDF uploaded! Download it from ${responseData.secure_url}`
-        );
+        // console.log(
+        //   `PDF uploaded! Download it from ${responseData.secure_url}`
+        // );
 
         const date = new Date();
 
@@ -329,7 +329,7 @@ export const InvoiceX = ({ cid }) => {
           setClick(false);
           throw new Error(`Error: ${data.error.message}`);
         } else {
-          console.log("Message sent successfully!", data);
+          // console.log("Message sent successfully!", data);
           toast({
             title: "Success",
             description: "Message sent successfully!",

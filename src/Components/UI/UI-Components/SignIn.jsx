@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import { useCookies } from "react-cookie";
 import { signinuser } from "@/Handlers/SignInHandler";
 import { useForm } from "react-hook-form";
@@ -14,20 +14,16 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/Components/UI/shadcn-UI/form";
 import { Input } from "../shadcn-UI/input";
 import { Label } from "../shadcn-UI/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "@/Context/UserContext";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../shadcn-UI/input-otp";
 import { Loader2 } from "lucide-react";
 import { useToast } from "../shadcn-UI/use-toast";
 import { Toaster } from "../shadcn-UI/toaster";
@@ -81,12 +77,6 @@ export default function SignIn() {
     resolver: zodResolver(formSchema),
   });
 
-  const form1 = useForm({
-    resolver: zodResolver(formSchema1),
-    defaultValues: {
-      pin: "121223",
-    },
-  });
 
   // const [cookies, setCookie] = useCookies(["token"]);
   let phone_numberInput = document.getElementById("phone_number");
@@ -140,33 +130,33 @@ export default function SignIn() {
     }
   };
 
-  const [rmCheck, setRmCheck] = useState(false);
-  const handlecheckchange = (event) => {
-    if (event.target.checked) {
-      setRmCheck(true);
-    } else {
-      setRmCheck(false);
-    }
-  };
+  // const [rmCheck, setRmCheck] = useState(false);
+  // const handlecheckchange = (event) => {
+  //   if (event.target.checked) {
+  //     setRmCheck(true);
+  //   } else {
+  //     setRmCheck(false);
+  //   }
+  // };
 
-  const lsRememberMe = (phone_number, password) => {
-    let expiresdate = new Date();
-    expiresdate.setTime(expiresdate.getTime() + 30 * 24 * 60 * 60 * 1000);
+  // const lsRememberMe = (phone_number, password) => {
+  //   let expiresdate = new Date();
+  //   expiresdate.setTime(expiresdate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-    if (
-      rmCheck === true &&
-      phone_number.value !== "" &&
-      password.value !== ""
-    ) {
-      // setCookie("token", localStorage.getItem("token"), {
-      //   path: "/",
-      //   expires: expiresdate,
-      // });
-      console.log("Cookies Set");
-    } else {
-      console.log("Not checked");
-    }
-  };
+  //   if (
+  //     rmCheck === true &&
+  //     phone_number.value !== "" &&
+  //     password.value !== ""
+  //   ) {
+  //     // setCookie("token", localStorage.getItem("token"), {
+  //     //   path: "/",
+  //     //   expires: expiresdate,
+  //     // });
+  //     // console.log("Cookies Set");
+  //   } else {
+  //     // console.log("Not checked");
+  //   }
+  // };
 
   return (
     <>

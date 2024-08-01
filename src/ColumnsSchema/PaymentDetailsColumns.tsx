@@ -41,7 +41,7 @@ const handleEntry = async (
   totalamount: number,
   setCustomers: React.Dispatch<React.SetStateAction<Customer[]>>
 ) => {
-  console.log(totalamount)
+  // console.log(totalamount)
   if (status === "Received") {
     const newEntry = await addpaymententry(
       {
@@ -51,13 +51,13 @@ const handleEntry = async (
       },
       customer._id
     );
-    console.log(newEntry);
+    // console.log(newEntry);
     if (newEntry.status === "success") {
       toast.success("Payment Received", {
         autoClose: 1000,
       });
       setCustomers((prev) => prev.filter((c) => c.uid !== customer.uid));
-      console.log(newEntry);
+      // console.log(newEntry);
     } else {
       toast.error("Error on Receive", {
         autoClose: 1000,
@@ -74,7 +74,7 @@ const handleEntry = async (
       },
       customer._id
     );
-    console.log(newEntry);
+    // console.log(newEntry);
     if (newEntry.status === "success") {
       toast.info("Payment in Pending", {
         autoClose: 1000,

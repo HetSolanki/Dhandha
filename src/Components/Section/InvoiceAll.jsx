@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
-import { cloudinaryHandler } from "@/Handlers/cloudinaryHandler";
 import { useUser } from "@/Context/UserContext";
 import { GetAllCustomerInvoice } from "@/Handlers/GetAllCustomerInvoice";
 import { Button } from "../UI/shadcn-UI/button";
@@ -10,7 +9,7 @@ import { useToast } from "../UI/shadcn-UI/use-toast";
 
 export const InvoiceAll = () => {
   const user = useUser();
-  console.log(user?.user?.shop_name);
+  // console.log(user?.user?.shop_name);
   const [customerInvoice, setCustomerInvoice] = useState(null);
   const [click, setClick] = useState(false);
 
@@ -41,18 +40,18 @@ export const InvoiceAll = () => {
   }, []);
 
   const handleClick = async () => {
-    setClick(true);
     // console.log(customerInvoice);
     // alert("Generating PDF...");
-
-    // const confirmation = confirm(
-    //   "Are you sure you want to send invoice to all customers?"
-    // );
-
-    // if (!confirmation) {
-    //   return;
-    // } else {
-    // alert("Send Invoice to All Customers");
+    
+    const confirmation = confirm(
+        "Are you sure you want to send invoice to all customers?"
+      );
+      
+      if (!confirmation) {
+          return;
+        } else {
+          alert("Send Invoice to All Customers");
+          setClick(true);
 
     customerInvoice.map((customer, index) => {
       const partitionSize = Math.ceil(
@@ -151,7 +150,7 @@ export const InvoiceAll = () => {
         secondPartCustomers?.length,
         thirdPartCustomers?.length
       );
-      console.log(maxRows);
+      // console.log(maxRows);
 
       for (let i = 0; i < maxRows; i++) {
         if (firstPartCustomers[i]) {
@@ -242,7 +241,7 @@ export const InvoiceAll = () => {
       img.src = user?.user?.image_url;
       pdf.addImage(img, "png", 130, yOffset + 5, 50, 50);
 
-      console.log(user);
+      // console.log(user);
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(12);
       yOffset += 10;
@@ -277,15 +276,15 @@ export const InvoiceAll = () => {
           }
 
           const responseData = await response.json();
-          console.log(
-            `PDF uploaded! Download it from ${responseData.secure_url}`
-          );
+          // console.log(
+          //   `PDF uploaded! Download it from ${responseData.secure_url}`
+          // );
 
-          console.log(
-            customer?.customerDetails?.cphone_number,
-            total_amount,
-            customer?.customerDetails?.caddress
-          );
+          // console.log(
+          //   customer?.customerDetails?.cphone_number,
+          //   total_amount,
+          //   customer?.customerDetails?.caddress
+          // );
 
           const date = new Date();
           const res = await fetch(
@@ -374,7 +373,7 @@ export const InvoiceAll = () => {
 
       reader.readAsDataURL(pdfBlob);
     });
-    // }
+    }
   };
 
   return (

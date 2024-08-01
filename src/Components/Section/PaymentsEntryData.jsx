@@ -25,7 +25,6 @@ import { useEffect, useState } from "react";
 import { DataTable } from "@/Components/DataTables/PaymentEntryDatatable";
 import { columns1 } from "@/ColumnsSchema/PaymentsEntryDataColumns";
 import { useLocation, useNavigate } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReportPDFGenarator from "./ReportPDFGenarator";
 import { useUser } from "@/Context/UserContext";
@@ -42,8 +41,11 @@ const PaymentsEntryData = () => {
     if (intialdata === undefined || intialdata.length === 0) {
       navigate("/paymentdetails");
     }
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
   }, [intialdata, navigate]);
-  
+
   const pdfdata = paymentEntrys.map((data) => {
     return {
       Customer_Name: data.cid.cname,
@@ -55,7 +57,7 @@ const PaymentsEntryData = () => {
     };
   });
 
-  const pdfColumns = [    
+  const pdfColumns = [
     {
       header: "Customer Name",
       accessorKey: "Customer_Name",
@@ -63,7 +65,7 @@ const PaymentsEntryData = () => {
     {
       header: "Phone Number",
       accessorKey: "Phone_Number",
-    },   
+    },
     {
       header: "Bottle Price",
       accessorKey: "Bottle_Price",
@@ -81,7 +83,25 @@ const PaymentsEntryData = () => {
       accessorKey: "Payment_Status",
     },
   ];
-  
+
+  const [receivedcheck, setReceivedcheck] = useState(false);
+  const [pendingcheck, setPendingcheck] = useState(false);
+
+  const getallfilteredcustomers = (status) => {
+    if (status === "Received") {
+      const receivedcustomers = intialdata.filter(
+        (customer) => customer.payment_status === "Received"
+      );
+      setPaymentEntrys(receivedcustomers);
+    } else if (status === "Pending") {
+      const pendingcustomers = intialdata.filter(
+        (customer) => customer.payment_status === "Pending"
+      );
+      setPaymentEntrys(pendingcustomers);
+    } else {
+      setPaymentEntrys(intialdata);
+    }
+  };
 
   return (
     <>
@@ -93,121 +113,113 @@ const PaymentsEntryData = () => {
               <Tabs defaultValue="all">
                 <TabsContent value="all">
                   <Card x-chunk="dashboard-06-chunk-0">
-                    {paymentEntrys.length ? (
-                      <CardHeader>
-                        <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between"><span
-                            className="
+                    <CardHeader>
+                      <CardTitle className="flex-col sm:flex-row sm:flex sm:items-center sm:justify-between">
+                        <span
+                          className="
                             text-xl
                             font-semibold
                             text-primary
                             sm:text-2xl"
-                          >
+                        >
                           Payment Entry Data
-                          </span>
-                          <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                        </span>
+                        <div className=" flex mt-5 sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                           <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="h-8 gap-1"
-                                >
-                                  <ListFilter className="h-3.5 w-3.5" />
-                                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                    Filter
-                                  </span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuCheckboxItem
-                                  // checked={presentcheck}
-                                  onClick={() => {
-                                    // setPresentcheck(!presentcheck);
-                                    // if (!presentcheck === true) {
-                                    //   getallfilteredcustomers("Present");
-                                    // }
-                                    // else{
-                                    //   getallfilteredcustomers("All");
-                                    // }
-                                  }}
-                                >
-                                  Present
-                                </DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem
-                                  // checked={absentcheck}
-                                  onClick={() => {
-                                    // setAbsentcheck(!absentcheck);
-                                    // if (!absentcheck === true) {
-                                    //   getallfilteredcustomers("Absent");
-                                    // }else{
-                                    //   getallfilteredcustomers("All");
-                                    // }
-                                    console.log("Absent");
-                                  }}
-                                >
-                                  Absent
-                                </DropdownMenuCheckboxItem>
-                                {/* <DropdownMenuCheckboxItem>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 gap-1"
+                              >
+                                <ListFilter className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                  Filter
+                                </span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuCheckboxItem
+                                checked={receivedcheck}
+                                onClick={() => {
+                                  setReceivedcheck(!receivedcheck);
+                                  if (!receivedcheck === true) {
+                                    getallfilteredcustomers("Received");
+                                  } else {
+                                    getallfilteredcustomers("All");
+                                  }
+                                }}
+                              >
+                                Received
+                              </DropdownMenuCheckboxItem>
+                              <DropdownMenuCheckboxItem
+                                checked={pendingcheck}
+                                onClick={() => {
+                                  setPendingcheck(!pendingcheck);
+                                  if (!pendingcheck === true) {
+                                    getallfilteredcustomers("Pending");
+                                  } else {
+                                    getallfilteredcustomers("All");
+                                  }
+                                }}
+                              >
+                                Pending
+                              </DropdownMenuCheckboxItem>
+                              {/* <DropdownMenuCheckboxItem>
                                 Archived
                               </DropdownMenuCheckboxItem> */}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                            <PDFDownloadLink
-                                document={<ReportPDFGenarator data={pdfdata} columns={pdfColumns} table_name={"Customer Data"}  shop_name={user?.shop_name} logo={logo} />}
-                                fileName="Payment_data.pdf"
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                          <PDFDownloadLink
+                            document={
+                              <ReportPDFGenarator
+                                data={pdfdata}
+                                columns={pdfColumns}
+                                table_name={"Customer Data"}
+                                shop_name={user?.shop_name}
+                                logo={logo}
+                              />
+                            }
+                            fileName="Payment_data.pdf"
+                          >
+                            {({ loading }) => (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-8 gap-1"
+                                disabled={loading}
                               >
-                                {({ loading }) => (
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 gap-1"
-                                    disabled={loading}
-                                  >
-                                    <File className="h-3.5 w-3.5" />
-                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                      Export
-                                    </span>
-                                  </Button>
-                                )}
-                              </PDFDownloadLink>
-                              <span
-                                onClick={() => {
-                                  navigate("/paymentdetails");
-                                }}
-                              > 
-                                  <Button size="sm" className="h-8 gap-1">
-                                Back to Entry
+                                <File className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                  Export
+                                </span>
+                              </Button>
+                            )}
+                          </PDFDownloadLink>
+                          <span
+                            onClick={() => {
+                              navigate("/paymentdetails");
+                            }}
+                          >
+                            <Button size="sm" className="h-8 gap-1">
+                              Back to Entry
                             </Button>
-                              </span>
-                          </div>
-                        </CardTitle>
-                        <CardDescription className="hidden sm:block">
-                          <div className="mt-4 flex items-center gap-1 float-end">
-                            {/* <DatePickerForm /> */}
-                          </div>
-                          List of all the customers and their entries
-                        </CardDescription>
-                      </CardHeader>
-                    ) : (
-                      <div className="mt-4 py-3 px-4">
-                        <Skeleton className="h-[90px]" enableAnimation={true} />
-                      </div>
-                    )}
+                          </span>
+                        </div>
+                      </CardTitle>
+                      <CardDescription className="hidden sm:block">
+                        <div className="mt-4 flex items-center gap-1 float-end">
+                          {/* <DatePickerForm /> */}
+                        </div>
+                        List of all the customers and their entries
+                      </CardDescription>
+                    </CardHeader>
 
-                    {paymentEntrys.length ? (
-                      <CardContent>
-                        <DataTable data={paymentEntrys} columns={columns1} />
-                      </CardContent>
-                    ) : (
-                      <div className="py-3 px-4 mb-4">
-                        <Skeleton
-                          className="h-[300px]"
-                          enableAnimation={true}
-                        />
-                      </div>
-                    )}
+                    <CardContent>
+                      <DataTable data={paymentEntrys} columns={columns1} />
+                    </CardContent>
 
                     {/* <CardFooter>
                       <div className="text-xs text-muted-foreground">
