@@ -43,6 +43,7 @@ router.post(
     body("payment_status").exists(),
   ],
   inputErrorHandler,
+  protect,
   createPaymentEntry
 );
 
