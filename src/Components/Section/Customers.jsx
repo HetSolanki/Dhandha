@@ -46,6 +46,8 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReportPDFGenarator from "./ReportPDFGenarator";
 import { useUser } from "@/Context/UserContext";
 import logo from "@/assets/paniwalalogo.png";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Customers = () => {
   const { customer } = useCustomer();
@@ -56,9 +58,16 @@ const Customers = () => {
     queryFn: fetchCustomers,
   });
 
-  if (!customers.isLoading) {
-    console.log("Customer", customers.data.data);
-  }
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // if (!customers.isLoading) {
+  //   // console.log("Customer", customers.data.data);
+  // }
 
   const pdfData = customers.data?.data.map((customer) => {
     return {  
@@ -123,7 +132,7 @@ const Customers = () => {
                           </span>
                           <div className="mt-4 sm:mt-0 flex sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
                             <InvoiceAll />
-                            <DropdownMenu>
+                            {/* <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -149,7 +158,7 @@ const Customers = () => {
                                   Archived
                                 </DropdownMenuCheckboxItem>
                               </DropdownMenuContent>
-                            </DropdownMenu>
+                            </DropdownMenu> */}
                             <PDFDownloadLink
                                 document={<ReportPDFGenarator data={pdfData} columns={pdfColumns} table_name={"Customer Data"} shop_name={user?.shop_name} logo={logo} />}
                                 fileName="customers_data.pdf"

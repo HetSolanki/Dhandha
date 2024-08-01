@@ -52,6 +52,7 @@ export const getAllCustomerEntryCurrentMonth = async (req, res) => {
         $gte: firstDay,
         $lt: lastDay,
       },
+      uid: req.user.id
     }).populate("cid");
     if (!allCustomerEntry) {
       return res.json({
@@ -538,7 +539,7 @@ export const getdashboardData = async (req, res) => {
           from: "customers",
           localField: "cid",
           foreignField: "_id",
-          as: "customerDetails",
+          as: "customerDetails",          
         },
       },
       {

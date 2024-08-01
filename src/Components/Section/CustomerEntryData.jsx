@@ -22,12 +22,11 @@ import Navbar from "./Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DatePickerForm } from "../UI/UI-Components/Datepicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "@/Components/DataTables/CustomerEntryDatadatatable";
 import { columns1 } from "@/ColumnsSchema/CustomersEntryDataColums";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReportPDFGenarator from "./ReportPDFGenarator";
 import { useUser } from "@/Context/UserContext";
@@ -41,6 +40,14 @@ const CustomerEntryData = () => {
   const [customers, setCustomers] = useState([...intialdata]);
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
+
+  
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
 
   const pdfData = customers.map((customer) => {
     return {
@@ -74,35 +81,22 @@ const CustomerEntryData = () => {
     },
   ];
 
-  console.log("PDF Data", pdfData);
-  const getallfilteredcustomers = (option) => {
-    if (option === "Absent") {
-      const absentcustomers = customers.filter((customer) => {
-        return customer?.delivery_status === "Absent";
-      });
-
-      setCustomers(absentcustomers);
-      return;
-    }
-
-    if (option === "Present") {
-      const presentcustomers = customers.filter((customer) => {
-        return customer?.delivery_status === "Present";
-      });
-
+  const getallfilteredcustomers = (status) => {
+    if (status === "Present") {
+      const presentcustomers = intialdata.filter(
+        (customer) => customer.delivery_status === "Present"
+      );
       setCustomers(presentcustomers);
-      return;
+    } else if (status === "Absent") {
+      const absentcustomers = intialdata.filter(
+        (customer) => customer.delivery_status === "Absent"
+      );
+      setCustomers(absentcustomers);
+    } else {
+      setCustomers(intialdata);
     }
+  }
 
-    if (option === "All") {
-      setCustomers(customers);
-      return;
-    }
-
-    return;
-  };
-
-  console.log(customers?.[0]?.Message === "No Data");
 
   return (
     <>

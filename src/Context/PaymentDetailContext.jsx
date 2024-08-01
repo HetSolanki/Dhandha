@@ -20,7 +20,7 @@ export default function PaymentDetailProvider({ children }) {
       );
       const paymentRes = await paymentDetails.json();
       setPaymentdata(paymentRes.data);
-      console.log(paymentRes.data);
+      // console.log(paymentRes.data);
     };
     if (token)
       fetchPaymentData();

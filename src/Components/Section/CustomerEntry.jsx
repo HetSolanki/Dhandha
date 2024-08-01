@@ -13,6 +13,7 @@ import { Button } from "../UI/shadcn-UI/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
@@ -20,9 +21,16 @@ export default function CustomerEntry() {
   const navigate = useNavigate();
   const { customer } = useCustomer();
 
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+
   const handleNavigate = async () => {      
     const data = getintialdata();
-    console.log(await data);
+    // console.log(await data);
     navigate("/customerentrydata", { state: await data });
   };    
 
@@ -48,7 +56,8 @@ export default function CustomerEntry() {
       });
       return todayscustomer;
     } else {
-      console.log(res);
+      // console.log(res);
+      return [];
     }
   };
 
