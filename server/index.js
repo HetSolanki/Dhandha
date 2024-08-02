@@ -7,8 +7,7 @@ env.config();
 const port = process.env.PORT || 4000;
 
 connect(process.env.MONGO_CONNECTION).then(() => {
-  app.listen(port, () => {
+  app.listen(4000, () => {
     console.log(`Server is running on PORT:${port}`);
   });
 });
-  

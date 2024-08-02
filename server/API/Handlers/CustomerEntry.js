@@ -158,7 +158,7 @@ export const getCustomerForPayment = async (req, res) => {
     const allCustomers = await CustomerEntry.aggregate([
       {
         $match: {
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -189,6 +189,7 @@ export const getCustomerForPayment = async (req, res) => {
       },
     ]);
 
+    console.log(allCustomers);
     return res.json({ message: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });
@@ -213,7 +214,7 @@ export const getCustomerInvoice = async (req, res) => {
             $gt: firstDate,
             $lt: lastDate,
           },
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -279,7 +280,7 @@ export const getAllCustomerInvoice = async (req, res) => {
             $gt: firstDate,
             $lt: lastDate,
           },
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -542,7 +543,7 @@ export const getdashboardData = async (req, res) => {
     const totalCustomer = await CustomerEntry.aggregate([
       {
         $match: {
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -636,7 +637,7 @@ export const getdashboardData = async (req, res) => {
     const topCustomers = await CustomerEntry.aggregate([
       {
         $match: {
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -691,6 +692,7 @@ export const getdashboardData = async (req, res) => {
               1
             ),
           },
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -727,7 +729,7 @@ export const getdashboardData = async (req, res) => {
       {
         $match: {
           payment_status: "Pending",
-          uid: req.user.id,
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {
@@ -746,6 +748,7 @@ export const getdashboardData = async (req, res) => {
       {
         $match: {
           payment_status: "Pending",
+          uid: new mongoose.Types.ObjectId(req.user.id),
         },
       },
       {

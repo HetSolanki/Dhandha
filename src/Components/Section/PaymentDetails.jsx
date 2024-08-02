@@ -54,14 +54,16 @@ export default function PaymentDetails() {
     }
   };
 
-  const transformedpaymentdata = data.map((customer, index) => ({
-    _id: customer.cid,
+  const transformedpaymentdata = data?.map((customer, index) => ({
+    _id: customer?.cid,
     id: index + 1,
-    cname: customer.customer.cname,
-    cphone_number: customer.customer.cphone_number,
-    caddress: customer.customer.caddress,
-    totalamount: customer.totalBottle * customer.customer.bottle_price,
+    cname: customer?.customer?.cname,
+    cphone_number: customer?.customer?.cphone_number,
+    caddress: customer?.customer?.caddress,
+    totalamount: customer?.totalBottle * customer?.customer?.bottle_price,
   }));
+
+  console.log(transformedpaymentdata);
 
   const getintialdata = async () => {
     const token = localStorage.getItem("token");
