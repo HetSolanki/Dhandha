@@ -167,7 +167,7 @@ export default function SignIn() {
               <CardHeader>
                 <CardTitle className="text-2xl font-[700]">Login</CardTitle>
                 <CardDescription>
-                  Enter your email below to login to your account
+                  Enter your phone number below to login to your account
                 </CardDescription>
               </CardHeader>
               <CardContent>
