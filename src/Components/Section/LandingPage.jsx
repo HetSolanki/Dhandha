@@ -31,11 +31,7 @@ const LandingPage = () => {
               <Button
                 className="mr-2 text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-700 dark:hover:bg-blue-700 dark:focus:ring-primary-800"
                 onClick={() => {
-                  if (localStorage.getItem("token")) {
-                    navigate("/dashboard");
-                  } else {
-                    navigate("/signin");
-                  }
+                  navigate("/signin");
                 }}
               >
                 Log in
@@ -98,7 +94,7 @@ const LandingPage = () => {
               From customer management to monthly billing, Paani Wale simplifies
               your water bottle supply billing system.
             </p>
-            <Link
+            <a
               href="/signin"
               className="inline-flex justify-center items-center py-3 px-5 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
             >
@@ -115,7 +111,7 @@ const LandingPage = () => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </Link>
+            </a>
             <a
               href="tel:+916355459412"
               className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
@@ -580,7 +576,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section> */}
-{/* 
+      {/* 
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
