@@ -154,7 +154,6 @@ export const deleteCustomerEntry = async (req, res) => {
 
 export const getCustomerForPayment = async (req, res) => {
   try {
-    console.log(req.user.id);
     const allCustomers = await CustomerEntry.aggregate([
       {
         $match: {
