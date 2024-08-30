@@ -15,6 +15,7 @@ import { fetchCustomerEnteries } from "@/Hooks/fetchCustomerEnteries";
 import { fetchCustomer } from "@/Hooks/fetchCustomer";
 import { InvoiceX } from "@/Components/Section/Invoicex";
 import Skeleton from "react-loading-skeleton";
+import { useTheme } from "@/Context/ThemeProviderContext ";
 
 export default function GetInvoice({ cid }) {
   const [customerEntry, setCustomerEntry] = useState(null);
@@ -80,6 +81,8 @@ export default function GetInvoice({ cid }) {
   //   // pageStyle: "@page { size: auto;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
   // });
 
+  const { theme } = useTheme();
+
   return (
     <div className="cursor-pointer w-5 h-5">
       <Sheet>
@@ -91,7 +94,9 @@ export default function GetInvoice({ cid }) {
             setCustomer(customerRes.data);
           }}
         >
-          <EyeIcon strokeWidth={3} />
+          <EyeIcon
+            strokeWidth={3}
+          />
         </SheetTrigger>
         <SheetContent className="p-6 w-full">
           <SheetHeader>

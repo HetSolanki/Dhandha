@@ -7,12 +7,14 @@ import { Loader2, Send } from "lucide-react";
 import { Button } from "../UI/shadcn-UI/button";
 import { useToast } from "../UI/shadcn-UI/use-toast";
 import { ToastAction } from "../UI/shadcn-UI/toast";
+import { useTheme } from "@/Context/ThemeProviderContext ";
 
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
   const [click, setClick] = useState(false);
   const { toast } = useToast();
 
+  const { theme } = useTheme();
   const months = [
     "January",
     "February",
@@ -366,7 +368,13 @@ export const InvoiceX = ({ cid }) => {
     </Button>
   ) : (
     <Button onClick={handleClick} className="cursor-pointer items-center">
-      <Send size={24} color="white" width={17} height={17} className="mr-2" />
+      <Send
+        size={24}
+        color={`${theme === "dark" ? "black" : "white"}`}
+        width={17}
+        height={17}
+        className="mr-2"
+      />
       Send Invoice
     </Button>
   );

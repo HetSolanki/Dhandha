@@ -40,7 +40,7 @@ import { useCustomer } from "@/Context/CustomerContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InvoiceAll from "./InvoiceAll";
-import Skeleton from "react-loading-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReportPDFGenarator from "./ReportPDFGenarator";
@@ -48,10 +48,13 @@ import { useUser } from "@/Context/UserContext";
 import logo from "@/assets/paniwalalogo.png";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/Context/ThemeProviderContext ";
 
 const Customers = () => {
   const { customer } = useCustomer();
   const { user } = useUser();
+
+  const { theme } = useTheme();
 
   const customers = useQuery({
     queryKey: ["customers", customer],
@@ -70,7 +73,7 @@ const Customers = () => {
   // }
 
   const pdfData = customers.data?.data.map((customer) => {
-    return {  
+    return {
       delivery_sequence_number: customer.delivery_sequence_number,
       cname: customer.cname,
       cphone_number: customer.cphone_number,
@@ -104,35 +107,39 @@ const Customers = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex min-h-screen mx-auto flex-col bg-muted/40">
-        <TooltipProvider>
-          <div className="flex flex-col sm:gap-4 sm:py-4">
-            <main className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
-              <Tabs defaultValue="all">
-                <TabsContent value="all">
-                  <Card x-chunk="dashboard-06-chunk-0">
-                    {!customers.isLoading ? (
-                      <CardHeader className="px-2 sm:px-4">
-                        <CardTitle
-                          className="flex-col pt-4 px-2 sm:flex-row sm:flex sm:items-center 
+      <SkeletonTheme
+        baseColor={`${theme === "dark" ? "#1c1c1c" : ""}`}
+        highlightColor={`${theme === "dark" ? "#525252" : ""}`}
+      >
+        <Navbar />
+        <div className="flex min-h-screen mx-auto flex-col bg-muted/40">
+          <TooltipProvider>
+            <div className="flex flex-col sm:gap-4 sm:py-4">
+              <main className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
+                <Tabs defaultValue="all">
+                  <TabsContent value="all">
+                    <Card x-chunk="dashboard-06-chunk-0">
+                      {!customers.isLoading ? (
+                        <CardHeader className="px-2 sm:px-4">
+                          <CardTitle
+                            className="flex-col pt-4 px-2 sm:flex-row sm:flex sm:items-center 
                         sm:justify-between
                       "
-                        >
-                          <span
-                            className="
+                          >
+                            <span
+                              className="
                             text-xl
                             font-semibold
                             text-primary
                             sm:text-2xl
                             align-bottom
                           "
-                          >
-                            Customers
-                          </span>
-                          <div className="mt-4 sm:mt-0 flex sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
-                            <InvoiceAll />
-                            {/* <DropdownMenu>
+                            >
+                              Customers
+                            </span>
+                            <div className="mt-4 sm:mt-0 flex sm:flex-row items-start sm:items-center gap-2 sm:gap-2">
+                              <InvoiceAll />
+                              {/* <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -159,8 +166,16 @@ const Customers = () => {
                                 </DropdownMenuCheckboxItem>
                               </DropdownMenuContent>
                             </DropdownMenu> */}
-                            <PDFDownloadLink
-                                document={<ReportPDFGenarator data={pdfData} columns={pdfColumns} table_name={"Customer Data"} shop_name={user?.shop_name} logo={logo} />}
+                              <PDFDownloadLink
+                                document={
+                                  <ReportPDFGenarator
+                                    data={pdfData}
+                                    columns={pdfColumns}
+                                    table_name={"Customer Data"}
+                                    shop_name={user?.shop_name}
+                                    logo={logo}
+                                  />
+                                }
                                 fileName="customers_data.pdf"
                               >
                                 {({ loading }) => (
@@ -177,49 +192,53 @@ const Customers = () => {
                                   </Button>
                                 )}
                               </PDFDownloadLink>
-                            <Addcustomer />
-                          </div>
-                        </CardTitle>
-                        <CardDescription className="hidden sm:block px-2">
-                          Manage your customers and view their sales
-                          performance.
-                        </CardDescription>
-                      </CardHeader>
-                    ) : (
-                      <div className="mt-4 py-3 px-4">
-                        <Skeleton className="h-[90px]" enableAnimation={true} />
-                      </div>
-                    )}
-
-                    <CardContent className="py-3 px-2 sm:px-4" >
-                      {!customers.isLoading ? (
-                        <DataTable
-                          data={customers?.data?.data}
-                          columns={columns}
-                        />
+                              <Addcustomer />
+                            </div>
+                          </CardTitle>
+                          <CardDescription className="hidden sm:block px-2">
+                            Manage your customers and view their sales
+                            performance.
+                          </CardDescription>
+                        </CardHeader>
                       ) : (
-                        <div className="mb-4">
+                        <div className="mt-4 py-3 px-4">
                           <Skeleton
-                            className="h-[300px]"
+                            className="h-[90px]"
                             enableAnimation={true}
                           />
-                        </div>  
+                        </div>
                       )}
-                    </CardContent>
-                    {/* <CardFooter className="px-3 pb-4">
+
+                      <CardContent className="py-3 px-2 sm:px-4">
+                        {!customers.isLoading ? (
+                          <DataTable
+                            data={customers?.data?.data}
+                            columns={columns}
+                          />
+                        ) : (
+                          <div className="mb-4">
+                            <Skeleton
+                              className="h-[300px]"
+                              enableAnimation={true}
+                            />
+                          </div>
+                        )}
+                      </CardContent>
+                      {/* <CardFooter className="px-3 pb-4">
                       <div className="text-xs text-muted-foreground">
                         Showing <strong>1-10</strong> of <strong>32</strong>{" "}
                         customers
                       </div>
                     </CardFooter> */}
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </main>
-          </div>
-        </TooltipProvider>
-        <ToastContainer />
-      </div>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </main>
+            </div>
+          </TooltipProvider>
+          <ToastContainer />
+        </div>
+      </SkeletonTheme>
     </>
   );
 };

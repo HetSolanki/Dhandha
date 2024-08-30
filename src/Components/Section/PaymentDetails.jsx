@@ -13,7 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { useTheme } from "@/Context/ThemeProviderContext ";
 
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
@@ -21,6 +22,7 @@ export default function PaymentDetails() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
+  const {theme} = useTheme();
   useEffect(() => {
     fetchpaymentdata();
     if (!fetchpaymentdata) {
@@ -107,6 +109,10 @@ export default function PaymentDetails() {
 
   return (
     <>
+    <SkeletonTheme
+      baseColor={`${theme === "dark" ? "#1c1c1c" : ""}`}
+      highlightColor={`${theme === "dark" ? "#525252" : ""}`}
+    >
       <div>
         <Navbar />
         <div className="p-2 py-4 sm:p-8">
@@ -148,6 +154,7 @@ export default function PaymentDetails() {
         </div>
       </div>
       <ToastContainer />
+      </SkeletonTheme>
     </>
   );
 }
