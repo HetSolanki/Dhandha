@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { inputErrorHandler } from "./Module/middleware.js";
+import { inputErrorHandler } from "../Module/middleware.js";
 import {
   deleteShop,
   getShop,
   updateShop,
   createShop,
   uploadQR,
-} from "./Handlers/Shop.js";
-import { protect } from "./Module/auth.js";
+} from "../Handlers/Shop.js";
+import { protect } from "../Module/auth.js";
 
 const router = Router();
 

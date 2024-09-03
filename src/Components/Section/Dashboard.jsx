@@ -58,7 +58,7 @@ export function Dashboard() {
     <SkeletonTheme
       baseColor={`${theme === "dark" ? "#1c1c1c" : ""}`}
       highlightColor={`${theme === "dark" ? "#525252" : ""}`}
-    >
+    >     
       <div className="flex min-h-screen w-full flex-col">
         <Navbar />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

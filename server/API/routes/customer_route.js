@@ -7,10 +7,10 @@ import {
   updateCustomer,
   deleteCustomer,
   uploadFile,
-} from "./Handlers/Customer.js";
-import { inputErrorHandler } from "./Module/middleware.js";
+} from "../Handlers/Customer.js";
+import { inputErrorHandler } from "../Module/middleware.js";
 import cors from "cors";
-import { protect } from "./Module/auth.js";
+import { protect } from "../Module/auth.js";
 
 const router = Route();
 router.use(cors());

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createPaymentLink } from "./Handlers/Payment_Link.js";
+import { createPaymentLink } from "../Handlers/Payment_Link.js";
 import { body } from "express-validator";
-import { createPaymentLinkAll } from "./Handlers/Payment_Link_All.js";
+import { createPaymentLinkAll } from "../Handlers/Payment_Link_All.js";
 
 const router = Router();
 

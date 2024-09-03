@@ -301,7 +301,7 @@ export const InvoiceAll = () => {
                 to: `91${customer?.customerDetails?.cphone_number}`,
                 type: "template",
                 template: {
-                  name: "purchase_receipt_2",
+                  name: "purchase_receipt_1",
                   language: {
                     code: "en_US",
                   },

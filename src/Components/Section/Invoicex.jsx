@@ -296,7 +296,7 @@ export const InvoiceX = ({ cid }) => {
                       {
                         type: "document",
                         document: {
-                          link: responseData.secure_url,
+                          link: responseData?.secure_url,
                           filename: `${
                             months[date.getMonth()]
                           } - ${date.getFullYear()}`,
@@ -307,13 +307,31 @@ export const InvoiceX = ({ cid }) => {
                   {
                     type: "body",
                     parameters: [
-                      { type: "text", text: total_amount },
+                      { type: "text", text: "total_amount" },
                       {
                         type: "text",
-                        text: customerInvoice[0]?.customerDetails?.caddress,
+                        text: 'customerInvoice[0]?.customerDetails?.caddress',
                       },
                       { type: "text", text: "Invoice" },
                     ],
+                    // parameters: [
+                    //   { type: "text", text: "1000" },
+                    //   {
+                    //     type: "text",
+                    //     text: "Paaniwale",
+                    //   },
+                    //   { type: "text", text: "Invoice" },
+                    // ],
+                    // parameters: [
+                    //   {
+                    //     type: "text",
+                    //     text: customerInvoice[0]?.customerDetails?.cname,
+                    //   },
+                    //   {
+                    //     type: "text",
+                    //     text: user?.user?.shop_name,
+                    //   },
+                    // ],
                   },
                 ],
               },
@@ -322,6 +340,7 @@ export const InvoiceX = ({ cid }) => {
         );
 
         const data = await res.json();
+        console.log(data);
         if (!res.ok) {
           toast({
             variant: "destructive",

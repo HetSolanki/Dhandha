@@ -1,10 +1,10 @@
 import express from "express";
-import user_api from "./API/user_route.js";
-import customer_api from "./API/customer_route.js";
-import customerentry_api from "./API/customerEntry_route.js";
-import shop_api from "./API/shop_route.js";
-import payment_link_api from "./API/payment_link_route.js";
-import paymentdetails_api from "./API/paymentdetails_route.js";
+import user_api from "./routes/user_route.js";
+import customer_api from "./routes/customer_route.js";
+import customerentry_api from "./routes/customerEntry_route.js";
+import shop_api from "./routes/shop_route.js";
+import payment_link_api from "./routes/payment_link_route.js";
+import paymentdetails_api from "./routes/paymentdetails_route.js";
 import cors from "cors";
 
 const app = express();

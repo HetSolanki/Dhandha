@@ -1,8 +1,8 @@
 import { Router as Route } from "express";
 import { body } from "express-validator";
-import { inputErrorHandler } from "./Module/middleware.js";
+import { inputErrorHandler } from "../Module/middleware.js";
 import cors from "cors";
-import { protect } from "./Module/auth.js";
+import { protect } from "../Module/auth.js";
 import {
   createPaymentEntry,
   deletePaymentEntry,
@@ -10,7 +10,7 @@ import {
   getAllPaymentDetailsCurrentMonth,
   getAllPaymentEntrys,
   updatePaymentEntry,
-} from "./Handlers/PaymentDetials.js";
+} from "../Handlers/PaymentDetials.js";
 
 const router = Route();
 router.use(cors());
