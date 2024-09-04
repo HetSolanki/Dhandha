@@ -323,7 +323,7 @@ export const InvoiceAll = () => {
                     {
                       type: "body",
                       parameters: [
-                        { type: "text", text: total_amount },
+                        { type: "text", text: total_amount }, 
                         {
                           type: "text",
                           text: "Paaniwale",

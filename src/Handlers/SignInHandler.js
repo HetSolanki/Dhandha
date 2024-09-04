@@ -5,7 +5,6 @@ export const signinuser = async (data) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      authentication: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
       phone_number: data.phone_number,
