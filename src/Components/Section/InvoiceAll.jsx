@@ -323,11 +323,10 @@ export const InvoiceAll = () => {
                     {
                       type: "body",
                       parameters: [
-                        { type: "text", text: total_amount || "Amount" },
+                        { type: "text", text: total_amount },
                         {
                           type: "text",
-                          text:
-                            customer?.customerDetails?.caddress || "Address",
+                          text: "Paaniwale",
                         },
                         { type: "text", text: "Invoice" },
                       ],
