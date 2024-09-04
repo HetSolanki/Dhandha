@@ -38,6 +38,7 @@ export const InvoiceX = ({ cid }) => {
 
   useEffect(() => {
     const fetchCustomerData = async () => {
+      console.log(cid);
       const customerData = await GetCustomerInvoice(cid);
       if (customerData?.data) {
         setCustomerInvoice(customerData.data);
@@ -242,140 +243,145 @@ export const InvoiceX = ({ cid }) => {
     const pdfBlob = pdf.output("blob");
     const reader = new FileReader();
 
-    reader.onloadend = async () => {
-      const base64data = reader.result.split(",")[1];
+    customerInvoice &&
+      (reader.onloadend = async () => {
+        const base64data = reader.result.split(",")[1];
 
-      try {
-        const formData = new FormData();
-        formData.append("file", `data:application/pdf;base64,${base64data}`);
-        formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
-        formData.append("folder", "Dhandha");
+        try {
+          const formData = new FormData();
+          formData.append("file", `data:application/pdf;base64,${base64data}`);
+          formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
+          formData.append("folder", "Dhandha");
 
-        const response = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
-          { method: "POST", body: formData }
-        );
+          const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+            { method: "POST", body: formData }
+          );
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const responseData = await response.json();
-        // console.log(
-        //   `PDF uploaded! Download it from ${responseData.secure_url}`
-        // );
-
-        const date = new Date();
-
-        const total_amount =
-          customerInvoice?.[0]?.totalBottle *
-          customerInvoice?.[0]?.customerDetails?.bottle_price;
-
-        const res = await fetch(
-          `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer EAAMfDZCmvZCH4BOZCtP1QWHjVZBZBBqQZAJqr1aWLFanasj5GWsxxpXPtcDZAPVyLnSDCbXQ2T9yQm8BP89yWNx5isMZC7sKCX3awqjZAhZBKtXvnzTq99UKh9tfL6T182ZCpzH0YtVWMUtE9uNZAvelLX1PjtPW5JOqXcrnSGVBw9VUAxi6FqxPQAIW9vnnl3odfoPGPwZDZD`, // Use your access token
-            },
-            body: JSON.stringify({
-              messaging_product: "whatsapp",
-              recipient_type: "individual",
-              to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
-              type: "template",
-              template: {
-                name: "purchase_receipt_2",
-                language: {
-                  code: "en_US",
-                },
-                components: [
-                  {
-                    type: "header",
-                    parameters: [
-                      {
-                        type: "document",
-                        document: {
-                          link: responseData?.secure_url,
-                          filename: `${
-                            months[date.getMonth()]
-                          } - ${date.getFullYear()}`,
-                        },
-                      },
-                    ],
-                  },
-                  {
-                    type: "body",
-                    parameters: [
-                      { type: "text", text: "total_amount" },
-                      {
-                        type: "text",
-                        text: 'customerInvoice[0]?.customerDetails?.caddress',
-                      },
-                      { type: "text", text: "Invoice" },
-                    ],
-                    // parameters: [
-                    //   { type: "text", text: "1000" },
-                    //   {
-                    //     type: "text",
-                    //     text: "Paaniwale",
-                    //   },
-                    //   { type: "text", text: "Invoice" },
-                    // ],
-                    // parameters: [
-                    //   {
-                    //     type: "text",
-                    //     text: customerInvoice[0]?.customerDetails?.cname,
-                    //   },
-                    //   {
-                    //     type: "text",
-                    //     text: user?.user?.shop_name,
-                    //   },
-                    // ],
-                  },
-                ],
-              },
-            }),
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
-        );
 
-        const data = await res.json();
-        console.log(data);
-        if (!res.ok) {
+          const responseData = await response.json();
+          // console.log(
+          //   `PDF uploaded! Download it from ${responseData.secure_url}`
+          // );
+
+          const date = new Date();
+
+          const total_amount =
+            customerInvoice?.[0]?.totalBottle *
+            customerInvoice?.[0]?.customerDetails?.bottle_price;
+
+          console.log(customerInvoice);
+          const res =
+            (await fetch(
+              `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCtP1QWHjVZBZBBqQZAJqr1aWLFanasj5GWsxxpXPtcDZAPVyLnSDCbXQ2T9yQm8BP89yWNx5isMZC7sKCX3awqjZAhZBKtXvnzTq99UKh9tfL6T182ZCpzH0YtVWMUtE9uNZAvelLX1PjtPW5JOqXcrnSGVBw9VUAxi6FqxPQAIW9vnnl3odfoPGPwZDZD`, // Use your access token
+                },
+                body: JSON.stringify({
+                  messaging_product: "whatsapp",
+                  recipient_type: "individual",
+                  to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
+                  // to: "918849698524",
+                  type: "template",
+                  template: {
+                    name: "purchase_receipt_1",
+                    language: {
+                      code: "en_US",
+                    },
+                    components: [
+                      {
+                        type: "header",
+                        parameters: [
+                          {
+                            type: "document",
+                            document: {
+                              link: responseData?.secure_url ?? "Address",
+                              filename:
+                                `${
+                                  months[date?.getMonth()]
+                                } - ${date?.getFullYear()}` ?? "Invoice.pdf",
+                            },
+                          },
+                        ],
+                      },
+                      {
+                        type: "body",
+                        // parameters: [
+                        //   { type: "text", text: "total_amount" },
+                        //   {
+                        //     type: "text",
+                        //     text: "customerInvoice[0]?.customerDetails?.caddress",
+                        //   },
+                        //   { type: "text", text: "Invoice" },
+                        // ],
+                        parameters: [
+                          { type: "text", text: total_amount },
+                          {
+                            type: "text",
+                            text: "Paaniwale",
+                          },
+                          { type: "text", text: "Invoice" },
+                        ],
+                        // parameters: [
+                        //   {
+                        //     type: "text",
+                        //     text: customerInvoice[0]?.customerDetails?.cname,
+                        //   },
+                        //   {
+                        //     type: "text",
+                        //     text: user?.user?.shop_name,
+                        //   },
+                        // ],
+                      },
+                    ],
+                  },
+                }),
+              }
+            )) ?? {};
+
+          const data = await res.json();
+          console.log(data);
+          if (!res.ok) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: "Failed to send message!",
+            });
+            setClick(false);
+            throw new Error(`Error: ${data.error.message}`);
+          } else {
+            // console.log("Message sent successfully!", data);
+            toast({
+              title: "Success",
+              description: "Message sent successfully!",
+            });
+            setClick(false);
+          }
+
+          // const resDelete = await cloudinaryHandler(responseData.public_id);
+          // console.log(resDelete);
+        } catch (error) {
           toast({
             variant: "destructive",
             title: "Error",
             description: "Failed to send message!",
+            action: (
+              <ToastAction altText="Try again" onClick={handleClick}>
+                Try again
+              </ToastAction>
+            ),
           });
           setClick(false);
-          throw new Error(`Error: ${data.error.message}`);
-        } else {
-          // console.log("Message sent successfully!", data);
-          toast({
-            title: "Success",
-            description: "Message sent successfully!",
-          });
-          setClick(false);
+          console.error("Failed to upload PDF:", error);
+          alert("Failed to upload PDF.");
         }
-
-        // const resDelete = await cloudinaryHandler(responseData.public_id);
-        // console.log(resDelete);
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to send message!",
-          action: (
-            <ToastAction altText="Try again" onClick={handleClick}>
-              Try again
-            </ToastAction>
-          ),
-        });
-        setClick(false);
-        console.error("Failed to upload PDF:", error);
-        alert("Failed to upload PDF.");
-      }
-    };
+      });
 
     reader.readAsDataURL(pdfBlob);
   };

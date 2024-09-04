@@ -12,5 +12,7 @@ export const GetCustomerInvoice = async (cid) => {
     }
   );
 
-  return customerEntry.json();
+  const res = await customerEntry.json();
+  console.log(res);
+  return res;
 };
