@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "server/API/index.js",
   "scripts": {
     "dev": "vite --host",
     "server": "nodemon server/API/index.js",
