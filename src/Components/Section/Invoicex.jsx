@@ -38,14 +38,12 @@ export const InvoiceX = ({ cid }) => {
 
   useEffect(() => {
     const fetchCustomerData = async () => {
-      console.log(cid);
-      const customerData = await GetCustomerInvoice(cid);
+     const customerData = await GetCustomerInvoice(cid);
       if (customerData?.data) {
         setCustomerInvoice(customerData.data);
         const partitionSize = Math.ceil(
           customerData.data[0]?.customerEntry?.length / 3
         );
-        // console.log(partitionSize);
         setFirstPartCustomers(
           customerData.data[0]?.customerEntry?.slice(0, partitionSize)
         );
@@ -64,8 +62,7 @@ export const InvoiceX = ({ cid }) => {
   }, [cid]);
 
   const handleClick = async () => {
-    // console.log(customerInvoice);
-    setClick(true);
+  setClick(true);
     const pdf = new jsPDF();
 
     // Shop details
@@ -263,18 +260,14 @@ export const InvoiceX = ({ cid }) => {
           }
 
           const responseData = await response.json();
-          // console.log(
-          //   `PDF uploaded! Download it from ${responseData.secure_url}`
-          // );
-
+          
           const date = new Date();
 
           const total_amount =
             customerInvoice?.[0]?.totalBottle *
             customerInvoice?.[0]?.customerDetails?.bottle_price;
 
-          console.log(customerInvoice);
-          const res =
+         const res =
             (await fetch(
               `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
               {
@@ -346,7 +339,6 @@ export const InvoiceX = ({ cid }) => {
             )) ?? {};
 
           const data = await res.json();
-          console.log(data);
           if (!res.ok) {
             toast({
               variant: "destructive",
@@ -356,16 +348,13 @@ export const InvoiceX = ({ cid }) => {
             setClick(false);
             throw new Error(`Error: ${data.error.message}`);
           } else {
-            // console.log("Message sent successfully!", data);
-            toast({
+           toast({
               title: "Success",
               description: "Message sent successfully!",
             });
             setClick(false);
           }
 
-          // const resDelete = await cloudinaryHandler(responseData.public_id);
-          // console.log(resDelete);
         } catch (error) {
           toast({
             variant: "destructive",

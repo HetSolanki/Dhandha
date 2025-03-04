@@ -31,12 +31,11 @@ export default function CustomerEntry() {
 
   const handleNavigate = async () => {
     const data = getintialdata();
-    // console.log(await data);
     navigate("/customerentrydata", { state: await data });
   };
 
   const getintialdata = async () => {
-    alert(new Date(Date.now()).toISOString().split("T")[0]);
+    // alert(new Date(Date.now()).toISOString().split("T")[0]);
     const token = localStorage.getItem("token");
     const customers = await fetch(
       `${DOMAIN_NAME}/api/customerentry/getallcustomerentrys/`,
@@ -57,7 +56,6 @@ export default function CustomerEntry() {
       });
       return todayscustomer;
     } else {
-      // console.log(res);
       return [];
     }
   };

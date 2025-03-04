@@ -1,5 +1,4 @@
 import Razorpay from "razorpay";
-import { redirect } from "react-router-dom";
 
 const razorpay = new Razorpay({
   key_id: "rzp_test_5n8FafogJcMq5Q",

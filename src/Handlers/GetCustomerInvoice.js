@@ -13,6 +13,5 @@ export const GetCustomerInvoice = async (cid) => {
   );
 
   const res = await customerEntry.json();
-  console.log(res);
   return res;
 };

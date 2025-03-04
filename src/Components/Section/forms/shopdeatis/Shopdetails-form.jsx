@@ -43,7 +43,6 @@ export function ShopForm() {
 
   async function onSubmit(data) {
     const res = await uploadFileCloudinary(file);
-    // console.log(res.secure_url);
     const updatedUser = await updateshop(data, res.secure_url);
     updateUserContext();
     if (updatedUser.status === "success") {

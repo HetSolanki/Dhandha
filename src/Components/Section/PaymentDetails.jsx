@@ -47,12 +47,10 @@ export default function PaymentDetails() {
     const res = await paymentdata.json();
     console.log(res.message);
     setData(res.message);
-    // console.log(res.message);
     if (res.status === "success") {
       return res.data;
     } else {
-      // console.log(res);
-      return [];
+ return [];
     }
   };
 
@@ -92,19 +90,24 @@ export default function PaymentDetails() {
         );
       });
 
-      // console.log(thisMonthCustomers);
-      return thisMonthCustomers;
+       return thisMonthCustomers;
     } else {
-      // console.log(res);
-      return [];
+     return [];
     }
   };
 
   const handleNavigate = async () => {
     const data = getintialdata();
-    // console.log("payment view data")
-    // console.log(await data);
-    navigate("/paymentsdata", { state: await data });
+  
+    const paymentdata = await data;
+    console.log(paymentdata);
+
+    if (paymentdata.length === 0) {
+      alert("No Data Found");
+    }
+    else{ 
+      navigate("/paymentsdata", { state: await data });
+    }
   };
 
   return (

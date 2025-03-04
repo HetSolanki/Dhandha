@@ -13,8 +13,7 @@ export const getAllCustomerEntry = async (req, res) => {
         message: "No Customer's Entry Found",
         status: "error",
       });
-    }
-    console.log(allCustomerEntry);
+    }  
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: error });
@@ -188,7 +187,6 @@ export const getCustomerForPayment = async (req, res) => {
       },
     ]);
 
-    console.log(allCustomers);
     return res.json({ message: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });

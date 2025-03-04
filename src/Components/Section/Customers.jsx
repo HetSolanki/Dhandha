@@ -68,10 +68,7 @@ const Customers = () => {
     }
   }, [navigate]);
 
-  // if (!customers.isLoading) {
-  //   // console.log("Customer", customers.data.data);
-  // }
-
+  
   const pdfData = customers.data?.data.map((customer) => {
     return {
       delivery_sequence_number: customer.delivery_sequence_number,
@@ -79,6 +76,7 @@ const Customers = () => {
       cphone_number: customer.cphone_number,
       caddress: customer.caddress,
       bottle_price: customer.bottle_price,
+      
     };
   });
 
