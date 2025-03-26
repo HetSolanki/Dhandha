@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Router, useNavigate } from "react-router-dom";
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 const UserContext = createContext({

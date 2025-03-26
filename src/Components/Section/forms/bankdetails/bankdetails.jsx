@@ -13,6 +13,7 @@ import { Input } from "@/Components/UI/shadcn-UI/input";
 import { toast, ToastContainer } from "react-toastify";
 import { useUser } from "@/Context/UserContext";
 import { Button } from "@/Components/UI/shadcn-UI/button";
+import { updateUser } from "@/Handlers/UpdateUser";
 
 const bankdetailsFormSchema = z.object({
   branch_ifsc_code: z.string(),

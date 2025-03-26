@@ -24,8 +24,8 @@ export const createPaymentLinkAll = async (req, res) => {
   try {
     const responses = await Promise.all(
       customerResponse.message.map(async (user) => {
-        console.log("User");
-        console.log(user);
+        // console.log("User");
+        // console.log(user);
         try {
           const { description, smsnotify, emailnotify, reminder_enable } =
             req.body;
@@ -80,7 +80,7 @@ export const createPaymentLinkAll = async (req, res) => {
           const response = await razorpay.paymentLink.create(options);
 
           if (response) {
-            console.log(response.customer);
+            // console.log(response.customer);
             res.json({ data: response, status: "success" });
           } else {
             res.json({ data: "Payment Link creation failed", status: "error" });
@@ -100,7 +100,7 @@ export const createPaymentLinkAll = async (req, res) => {
     res.json({ data: responses, status: "success" });
   } catch (error) {
     res.json({ data: error.message, status: "error", error: error });
-    console.log(error);
-    console.log(error.message);
+    // console.log(error);
+    // console.log(error.message);
   }
 };

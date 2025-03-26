@@ -45,7 +45,7 @@ export default function PaymentDetails() {
       }
     );
     const res = await paymentdata.json();
-    console.log(res.message);
+    // console.log(res.message);
     setData(res.message);
     // console.log(res.message);
     if (res.status === "success") {
@@ -65,7 +65,7 @@ export default function PaymentDetails() {
     totalamount: customer?.totalBottle * customer?.customer?.bottle_price,
   }));
 
-  console.log(transformedpaymentdata);
+  // console.log(transformedpaymentdata);
 
   const getintialdata = async () => {
     const token = localStorage.getItem("token");
