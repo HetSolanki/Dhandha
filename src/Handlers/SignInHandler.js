@@ -1,4 +1,5 @@
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+console.log("VITE_DOMAIN_NAME:", import.meta.env.VITE_DOMAIN_NAME);
+const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME || "http://localhost:4000";
 
 export const signinuser = async (data) => {
   const user = await fetch(`${DOMAIN_NAME}/api/auth/signin`, {
