@@ -1,8 +1,8 @@
 services:
   api:
     build:
-      context: .
-      dockerfile: server/API/Dockerfile
+      context: ./server/API
+      dockerfile: Dockerfile
     ports:
       - "4000:4000"
     env_file:

@@ -1,15 +1,11 @@
-FROM node:20
-
-USER node
-
-RUN mkdir /home/node/code
+FROM node:20-alpine
 
 WORKDIR /home/node/code
 
-COPY --chown=node:node package-lock.json package.json ./
+COPY package*.json ./
 
-RUN npm ci
+RUN npm ci 
 
-COPY --chown=node:node ./server/API .
+COPY . .
 
 CMD ["node", "index.js"]
