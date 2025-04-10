@@ -38,7 +38,8 @@ export const InvoiceX = ({ cid }) => {
 
   useEffect(() => {
     const fetchCustomerData = async () => {
-     const customerData = await GetCustomerInvoice(cid);
+      // console.log(cid);
+      const customerData = await GetCustomerInvoice(cid);
       if (customerData?.data) {
         setCustomerInvoice(customerData.data);
         const partitionSize = Math.ceil(
@@ -267,7 +268,8 @@ export const InvoiceX = ({ cid }) => {
             customerInvoice?.[0]?.totalBottle *
             customerInvoice?.[0]?.customerDetails?.bottle_price;
 
-         const res =
+          // console.log(customerInvoice);
+          const res =
             (await fetch(
               `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
               {
@@ -339,6 +341,7 @@ export const InvoiceX = ({ cid }) => {
             )) ?? {};
 
           const data = await res.json();
+          // console.log(data);
           if (!res.ok) {
             toast({
               variant: "destructive",

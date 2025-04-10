@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import mainimg from "@/assets/main.png";
 import subimg1 from "@/assets/sub1.png";
 import subimg2 from "@/assets/sub2.png";

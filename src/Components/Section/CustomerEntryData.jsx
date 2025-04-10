@@ -41,13 +41,11 @@ const CustomerEntryData = () => {
   const [presentcheck, setPresentcheck] = useState(false);
   const [absentcheck, setAbsentcheck] = useState(false);
 
-  
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
   }, [navigate]);
-
 
   const pdfData = customers.map((customer) => {
     return {
@@ -95,8 +93,7 @@ const CustomerEntryData = () => {
     } else {
       setCustomers(intialdata);
     }
-  }
-
+  };
 
   return (
     <>

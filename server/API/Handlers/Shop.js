@@ -24,7 +24,7 @@ export const createShop = async (req, res) => {
 };
 
 export const updateShop = async (req, res) => {
-  console.log(req.body.image_url);
+  // console.log(req.body.image_url);
   const updatedShop = await Shop.findOneAndUpdate(
     { uid: req.user.id },
     {

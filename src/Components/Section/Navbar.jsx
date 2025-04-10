@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CircleUser, Menu, Search } from "lucide-react";
+import { CircleUser, Menu } from "lucide-react";
 import { Button } from "@/Components/UI/shadcn-UI/button";
 import {
   DropdownMenu,

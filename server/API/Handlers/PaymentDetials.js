@@ -13,7 +13,7 @@ export const getAllPaymentDetails = async (req, res) => {
         status: "error",
       });
     }
-    console.log(allpaymentdetails);
+    // console.log(allpaymentdetails);
     res.json({ data: allpaymentdetails, status: "success" });
   } catch (error) {
     res.json({ message: error });
@@ -42,7 +42,7 @@ export const getAllPaymentDetailsCurrentMonth = async (req, res) => {
   const firstDay = new Date(date.getFullYear(), date.getMonth() + 1, -28);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
-  console.log(firstDay, lastDay);
+  // console.log(firstDay, lastDay);
 
   try {
     const allpaymentdetails = await PaymentDetail.find({
@@ -81,7 +81,7 @@ export const createPaymentEntry = async (req, res) => {
     const monthStart = new Date(year, month, 1);
     const monthEnd = new Date(year, month + 1, 0, 23, 59, 59, 999);
 
-    console.log(monthStart, monthEnd);
+    // console.log(monthStart, monthEnd);
 
     const newPaymentEntry = await PaymentDetail.findOneAndUpdate(
       {

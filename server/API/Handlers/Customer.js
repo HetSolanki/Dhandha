@@ -80,7 +80,7 @@ export const deleteCustomer = async (req, res) => {
 
 export const uploadFile = async (req, res) => {
   try {
-    console.log(req.params.publicid);
+    // console.log(req.params.publicid);
     const obj = main(req.params.publicid);
     res.json({ message: obj });
   } catch (error) {

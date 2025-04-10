@@ -7,18 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/UI/shadcn-UI/card";
-import { Tabs, TabsContent } from "@/Components/UI/shadcn-UI/tabs";
-import { TooltipProvider } from "@/Components/UI/shadcn-UI/tooltip";
-import { useQuery } from "@tanstack/react-query";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-
-// Custom components
+import {
+  Tabs,
+  TabsContent,
+  // TabsList,
+  // TabsTrigger,
+} from "@/Components/UI/shadcn-UI/tabs";
+import {
+  // Tooltip,
+  // TooltipContent,
+  // TooltipTrigger,
+  TooltipProvider,
+} from "@/Components/UI/shadcn-UI/tooltip";
 import Navbar from "./Navbar";
 import { Addcustomer } from "../UI/UI-Components/Addcustomer";
 import { DataTable } from "@/Components/DataTables/CustomerDataTable";

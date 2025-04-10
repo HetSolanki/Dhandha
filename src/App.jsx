@@ -10,7 +10,7 @@ import SettingsShopDetailsPage from "./Components/Section/forms/shopdeatis/page"
 import SettingsSettingsDisplayPage from "./Components/Section/forms/display/page";
 import CustomerEntry from "./Components/Section/CustomerEntry";
 import CustomerEntryData from "./Components/Section/CustomerEntryData";
-import { ThemeProvider, useTheme } from "./Context/ThemeProviderContext ";
+import { ThemeProvider } from "./Context/ThemeProviderContext ";
 import Invoice from "./Components/Section/Invoice";
 import { useEffect, useState } from "react";
 import SettingsNotificationsPage from "./Components/Section/forms/notifications/page";
@@ -33,8 +33,7 @@ function App() {
     }
   }, []);
 
-
-  return (    
+  return (
     <>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <SkeletonTheme

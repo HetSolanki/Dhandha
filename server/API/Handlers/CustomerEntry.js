@@ -13,7 +13,8 @@ export const getAllCustomerEntry = async (req, res) => {
         message: "No Customer's Entry Found",
         status: "error",
       });
-    }  
+    }
+    // console.log(allCustomerEntry);
     res.json({ data: allCustomerEntry, status: "success" });
   } catch (error) {
     res.json({ message: error });
@@ -42,7 +43,7 @@ export const getAllCustomerEntryCurrentMonth = async (req, res) => {
   const firstDay = new Date(date.getFullYear(), date.getMonth() + 1, -28);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
-  console.log(firstDay, lastDay);
+  // console.log(firstDay, lastDay);
 
   try {
     const allCustomerEntry = await CustomerEntry.find({
@@ -93,7 +94,7 @@ export const createCustomerEntry = async (req, res) => {
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
 
-    console.log(todayStart, todayEnd);
+    // console.log(todayStart, todayEnd);
     const newCustomerEntry = await CustomerEntry.findOneAndUpdate(
       {
         cid: req.body.cid,
@@ -187,6 +188,7 @@ export const getCustomerForPayment = async (req, res) => {
       },
     ]);
 
+    // console.log(allCustomers);
     return res.json({ message: allCustomers, status: "success" });
   } catch (error) {
     res.json({ message: "Error" });

@@ -1,3 +1,4 @@
+console.log("VITE_DOMAIN_NAME:", import.meta.env.VITE_DOMAIN_NAME);
 const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
 
 export const signinuser = async (data) => {
