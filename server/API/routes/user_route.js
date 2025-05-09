@@ -76,26 +76,4 @@ router.post(
   signIn
 );
 
-router.post("/sendotp", async (req, res) => {
-  const verification = await client.verify.v2
-    .services(verifySid)
-    .verifications.create({
-      to: `+91${req.body.phone_number}`,
-      channel: "sms",
-    });
-
-  res.json({ message: verification });
-});
-
-router.post("/verifyotp", async (req, res) => {
-  const verification_check = await client.verify.v2
-    .services(verifySid)
-    .verificationChecks.create({
-      to: `+91${req.body.phone_number}`,
-      code: req.body.otp,
-    });
-
-  res.json({ message: verification_check });
-});
-
 export default router;

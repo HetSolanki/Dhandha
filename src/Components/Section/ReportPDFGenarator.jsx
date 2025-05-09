@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 
 const ReportPDFGenarator = ({ data, columns, table_name, shop_name,logo }) => {
   const today = new Date().toLocaleDateString();
-  const website_name = "https://dhandha.vercel.app";
+  const website_name = "https://paaniwale.com/";
   return (
     <Document>
       <Page size="A4" style={styles.page}>
