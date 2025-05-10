@@ -77,7 +77,6 @@ export default function SignIn() {
     resolver: zodResolver(formSchema),
   });
 
-
   // const [cookies, setCookie] = useCookies(["token"]);
   let phone_numberInput = document.getElementById("phone_number");
   let passwordInput = document.getElementById("password");
@@ -98,7 +97,7 @@ export default function SignIn() {
   const formSubmit = async (data) => {
     setClick(true);
     const signin = await signinuser(data);
-    
+
     if (signin.success === true) {
       localStorage.setItem("token", signin.token);
 
@@ -110,9 +109,18 @@ export default function SignIn() {
       toast({
         title: "Login Sucessfully",
       });
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 800);
+
+      if (signin.is_admin === true) {
+        localStorage.setItem("is_admin", signin.is_admin);
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 800);
+      } else {
+        localStorage.setItem("is_admin", signin.is_admin);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 800);
+      }
     } else if (signin.data === "Invalid Credentials") {
       toast({
         variant: "destructive",

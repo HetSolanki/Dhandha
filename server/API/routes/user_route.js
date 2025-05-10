@@ -8,19 +8,21 @@ import {
   deleteUser,
   signIn,
   updateBankDetails,
+  getAdmindashboardData
 } from "../Handlers/User.js";
 import { inputErrorHandler } from "../Module/middleware.js";
-const accountSid = "AC7d6926caa8ace8f5820150f5d89fb768";
-const authToken = "b51a77e0a6b00760f5ff44a59af76677";
-const verifySid = "VA097428b48fdc2b4d8b0ba5eb4f26c7f6";
-import twilio from "twilio";
-//     ^ this will select default export
+import { protect, requireRole } from "../Module/auth.js";
+// const accountSid = "AC7d6926caa8ace8f5820150f5d89fb768";
+// const authToken = "b51a77e0a6b00760f5ff44a59af76677";
+// const verifySid = "VA097428b48fdc2b4d8b0ba5eb4f26c7f6";
+// import twilio from "twilio";
 
-const client = twilio(accountSid, authToken);
+// const client = twilio(accountSid, authToken);
+
 
 const router = Router();
 // Get All the Users
-router.get("/userall", getAllUser);
+router.get("/userall",protect,requireRole(true),getAllUser);
 
 // Get User by it's id
 router.get("/user/:id", getOneUser);
@@ -54,7 +56,7 @@ router.put(
 );
 
 // Delete User
-router.delete("/user/:id", deleteUser);
+router.delete("/user/:id",protect,requireRole(true) ,deleteUser);
 
 // Bank Details
 router.put(
@@ -75,5 +77,8 @@ router.post(
   inputErrorHandler,
   signIn
 );
+
+router.get("/admin/admindashboardData",protect,requireRole(true), getAdmindashboardData);
+
 
 export default router;

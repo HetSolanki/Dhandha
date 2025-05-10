@@ -32,7 +32,15 @@ const userSchema = new mongoose.Schema({
     benificiary_name: {
       type: String,
     },
-  },
+  }, 
+  is_admin: {
+    type: Boolean,
+    default: false,
+  },  
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },    
 });
 
 export default mongoose.model("User", userSchema);
