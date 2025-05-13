@@ -97,28 +97,83 @@ export function Addcustomer() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [verifying, setVerifying] = useState(false);
+  let otpgenerated = Math.floor(100000 + Math.random() * 900000);
+  
 
-  // Dummy OTP send/verify handlers (replace with real API)
   const handleSendOtp = async (phone) => {
-    try {    
-      // Replace this with your real API call
-      // Example: const response = await apiSendOtp({ phone });
-      const response = sendOtp({ phone });
+    try {
+      console.log(otpSent);
+      console.log(otpgenerated);
+      const res =
+        (await fetch(
+          `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer EAAMfDZCmvZCH4BO2bVmZA8HoD3O0TrCX9rHRYmCuHSZCRc2ot0JIyJDdMmPvGkaDgrZCMkd1q619abd4py14BFtsTW55qcSwfMC3dPtIynTCzu2FICP9sfcKXWx3uaFRS6Tb2bf8WHaFGnnjv5g8rkofzZAjIcl2OakmuC9PYUpvQlwgT2QKcg7ACHZAjJnA04rFJNGh2xIl8nu6KtPMZCrQiYcap51G7jBYpqlncQWrHOAbY063k4cZD", // Use your access token
+            },
+            body: JSON.stringify({
+              messaging_product: "whatsapp",
+              // recipient_type: "individual",
+              to: `91${phone}`,
+              // to: "918849698524",
+              type: "template",
+              template: {
+                name: "otp_verification",
+                language: {
+                  code: "en_US",
+                },
+                components: [
+                  {
+                    type: "body",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: `${otpgenerated}`,
+                      },
+                    ],
+                  },
+                  {
+                    type: "button",
+                    sub_type: "url",
+                    index: "0",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: `${otpgenerated}`,
+                      },
+                    ],
+                  },
+                ],
+              },
+            }),
+          }
+        )) ?? {};
 
-      if (!response.ok) {
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Failed to send OTP. Please try again.",
+          description: "Failed to send message!",
         });
-        return;
+        throw new Error(`Error: ${data.error.message}`);
+      } else {
+        // console.log("Message sent successfully!", data);
+        toast({
+          title: "Success",
+          description: "OTP sent successfully!",
+        });
       }
       setOtpSent(true);
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to send OTP. Please try again.",        
+        description: "Failed to send OTP. Please try again.",
       });
       return;
     }
@@ -129,14 +184,12 @@ export function Addcustomer() {
   const handleVerifyOtp = async () => {
     setVerifying(true);
     try {
-      // Replace this with your real API call
-      // Example: const response = await apiVerifyOtp({ phone: form.getValues("cphone_number"), otp });
-      const response = await verifyOtp({
-        phone: form.getValues("cphone_number"),
-        otp: otp,
-      });
-
-      if (response.status === "success") {
+      console.log(otp);
+      if (     
+        otp.length !== 6 ||
+        isNaN(otp) ||
+        otp !== otpgenerated.toString()      
+      ) {
         setIsVerified(true);
         toast({
           title: "Success",
@@ -240,7 +293,9 @@ export function Addcustomer() {
                                     "cphone_number"
                                   );
                                   if (valid) {
-                                    handleSendOtp(form.getValues("cphone_number"));
+                                    handleSendOtp(
+                                      form.getValues("cphone_number")
+                                    );
                                   } else {
                                     toast({
                                       variant: "destructive",

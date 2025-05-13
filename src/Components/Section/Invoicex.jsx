@@ -281,7 +281,8 @@ export const InvoiceX = ({ cid }) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer EAAMfDZCmvZCH4BO66E4l7cDIcXX8KcLKudmKzZBcuSTDWKpR0fEpu3eTCZBhYSq8uxRG0iqUTwvi9E6S8UwdhrWoDYEDztJ6k8Q7Jr5VuYP90WZCr1aNkb5heH5cIyw8tzjCssDCPDCs9Epe0dq8ZCqZB8zZAoKazEcOYCnfxUlGtVaHN3sHpCOlmS0OpWKaFkk9FRElGY287oHS16VdlIEbFNhxG5ZAQNZAKSLVK0JyohhAtOdE9fOgEZD`, // Use your access token
+                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCW4CIMIXm6XkDUxscfAJqb7w0af6FFVB8w5zidk3D1vlLv2ZAfiGmfvKnhEZAZCfmsddSdXbkfkHH2A8cO72kwatSx8nDT1ZAZAGRQ66BRuzzAH3QrEoQg1LHov8aKJOOg37eBROFAZBXfTKfOgitPW6KF9QznCdZAjph5gkEgCXky6difzCYX34DMq9OxE0eBismSbjnEFlkHq5m3ZA78lWFhuXS3X8smR0O8z9k4ZD`, // Use your access token
+                  // Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`, // Use your access token
                 },
                 body: JSON.stringify({
                   messaging_product: "whatsapp",
