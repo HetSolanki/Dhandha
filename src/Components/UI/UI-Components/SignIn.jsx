@@ -74,47 +74,33 @@ export default function SignIn() {
     },
   });
 
+
   const navigate = useNavigate();
   const { updateUserContext } = useUser();
   const [click, setClick] = useState(false);
   const { toast } = useToast();
 
   const formSubmit = async (data) => {
-    try {
-      setClick(true);
-      const signin = await signinuser(data);
+    setClick(true);
+    const signin = await signinuser(data);
 
-      if (signin.success === true) {
-        localStorage.setItem("token", signin.token);
+    if (signin.success === true) {
+      localStorage.setItem("token", signin.token);
+      
+        updateUserContext();                   
 
-        updateUserContext();
-
-        if (rmCheck) {
-          localStorage.setItem("phone_number", data.phone_number);
-          localStorage.setItem("password", data.password);
-        }
-        
-        toast({
-          title: "Login Successfully",
-        });
+      if (signin.is_admin === true) {
+        localStorage.setItem("is_admin", signin.is_admin);
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 800);
+      } else {
+        localStorage.setItem("is_admin", signin.is_admin);
         setTimeout(() => {
           navigate("/dashboard");
         }, 800);
-      } else {
-        handleSignInError(signin.data);
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Login Error",
-        description: "An unexpected error occurred",
-      });
-      setClick(false);
-    }
-  };
-
-  const handleSignInError = (error) => {
-    if (error === "Invalid Credentials") {
+    } else if (signin.data === "Invalid Credentials") {  
       toast({
         variant: "destructive",
         title: "Login Error",
@@ -134,15 +120,6 @@ export default function SignIn() {
       });
     }
     setClick(false);
-  };
-
-  const [rmCheck, setRmCheck] = useState(false);
-  const handlecheckchange = (event) => {
-    if (event.target.checked) {
-      setRmCheck(true);
-    } else {
-      setRmCheck(false);
-    }
   };
 
   return (

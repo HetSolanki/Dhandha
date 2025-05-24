@@ -15,6 +15,7 @@ export const createJWT = (user) => {
     {
       id: user.id,
       username: user.phone_number,
+      is_admin: user.is_admin,
     },
     process.env.JWT_SECRET
   );
@@ -23,6 +24,7 @@ export const createJWT = (user) => {
 };
 
 export const protect = (req, res, next) => {
+  console.log(req.user)
   const bearer = req.headers.authorization;
   // console.log("Bearer = " + bearer);
   if (!bearer) {
@@ -49,3 +51,16 @@ export const protect = (req, res, next) => {
     return;
   }
 };
+
+export const requireRole = (role) => {
+  return (req, res, next) => {
+    console.log("Role Middleware");
+    console.log(req.user);
+    // Assuming req.user is set after authentication
+    if (!req.user || req.user.is_admin !== role) {
+      return res.status(403).json({ message: "Forbidden: Insufficient role" });
+    }
+    next();
+  };
+};
+

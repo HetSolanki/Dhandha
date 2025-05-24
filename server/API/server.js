@@ -5,6 +5,7 @@ import customerentry_api from "./routes/customerEntry_route.js";
 import shop_api from "./routes/shop_route.js";
 import payment_link_api from "./routes/payment_link_route.js";
 import paymentdetails_api from "./routes/paymentdetails_route.js";
+import otpRoutes from "./routes/otpRoutes.js";
 import cors from "cors";
 import moment from "moment";
 import morgan from "morgan";
@@ -44,6 +45,7 @@ app.use("/api/customerentry", customerentry_api);
 app.use("/api/shop", shop_api);
 app.use("/api/paymentlink", payment_link_api);
 app.use("/api/paymentdetails", paymentdetails_api);
+app.use("/api/otp", otpRoutes);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {

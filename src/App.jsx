@@ -22,6 +22,9 @@ import PaymentDetails from "./Components/Section/PaymentDetails";
 import PaymentsEntryData from "./Components/Section/PaymentsEntryData";
 import LandingPage from "./Components/Section/LandingPage";
 import { SkeletonTheme } from "react-loading-skeleton";
+import AdminDashboard from "./Components/Admin/Admindashboard";
+import AdminLayout from "./Components/Admin/AdminLayout";
+import UserManagement from "./Components/Admin/UserManagement";
 
 function App() {
   const [defaultRoute, setDefaultRoute] = useState("/mainpage");
@@ -46,6 +49,8 @@ function App() {
                 path="/"
                 element={<Navigate to={defaultRoute} replace />}
               />
+
+              {/* User Routes */}
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signupdp" element={<SignUp />} />
@@ -59,6 +64,34 @@ function App() {
               <Route path="/paymentsdata" element={<PaymentsEntryData />} />
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/invoicex" element={<Invoicex />} />
+
+              {/* Admin Routes */}
+              <Route
+                path="/admin/"
+                element={<AdminLayout />}
+              >
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="users" element={<UserManagement />} />
+                <Route path="customers" element={<Customers />} />
+                <Route path="customerentrydata" element={<CustomerEntryData />} />
+                <Route path="paymentdetails" element={<PaymentDetails />} />
+                <Route path="paymentsdata" element={<PaymentsEntryData />} />
+                <Route path="*" element={<UnderConstructionPage />} />
+              </Route>
+              <Route path="/admindashboard" element={<AdminDashboard />} />
+              <Route path="/admincustomers" element={<Customers />} />
+              <Route path="/admincustomerentry" element={<CustomerEntry />} />
+              <Route
+                path="/admincustomerentrydata"
+                element={<CustomerEntryData />}
+              />
+              <Route path="/adminpaymentdetails" element={<PaymentDetails />} />
+              <Route
+                path="/adminpaymentsdata"
+                element={<PaymentsEntryData />}
+              />
+
+              {/* Common Routes */}
               <Route path="/mainpage" element={<LandingPage />} />
               <Route
                 path="/profile"
