@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useCookies } from "react-cookie";
 import { signinuser } from "@/Handlers/SignInHandler";
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn-UI/button";
@@ -66,33 +65,20 @@ const formSchema = z.object({
     }),
 });
 
-const formSchema1 = z.object({
-  pin: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-});
-
 export default function SignIn() {
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      phone_number: localStorage.getItem("phone_number") || "",
+      password: localStorage.getItem("password") || "",
+    },
   });
 
-  // const [cookies, setCookie] = useCookies(["token"]);
-  let phone_numberInput = document.getElementById("phone_number");
-  let passwordInput = document.getElementById("password");
 
   const navigate = useNavigate();
   const { updateUserContext } = useUser();
   const [click, setClick] = useState(false);
   const { toast } = useToast();
-
-  // useEffect(() => {
-  //   if (cookies.token) {
-  //     navigate("/dashboard");
-  //   } else {
-  //     navigate("/signin");
-  //   }
-  // }, []);
 
   const formSubmit = async (data) => {
     setClick(true);
@@ -100,15 +86,8 @@ export default function SignIn() {
 
     if (signin.success === true) {
       localStorage.setItem("token", signin.token);
-
-      updateUserContext();
-
-      phone_numberInput = data.phone_number;
-      passwordInput = data.password;
-      // lsRememberMe(phone_numberInput, passwordInput);
-      toast({
-        title: "Login Sucessfully",
-      });
+      
+        updateUserContext();                   
 
       if (signin.is_admin === true) {
         localStorage.setItem("is_admin", signin.is_admin);
@@ -121,50 +100,27 @@ export default function SignIn() {
           navigate("/dashboard");
         }, 800);
       }
-    } else if (signin.data === "Invalid Credentials") {
+    } else if (signin.data === "Invalid Credentials") {  
       toast({
         variant: "destructive",
         title: "Login Error",
         description: "Invalid Credentials",
       });
-      setClick(false);
-    } else if (signin.data === "Invalid Phone Number") {
+    } else if (error === "Invalid Phone Number") {
       toast({
         variant: "destructive",
         title: "Login Error",
         description: "Invalid Phone Number",
       });
-      setClick(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Login Error",
+        description: "An unexpected error occurred",
+      });
     }
+    setClick(false);
   };
-
-  // const [rmCheck, setRmCheck] = useState(false);
-  // const handlecheckchange = (event) => {
-  //   if (event.target.checked) {
-  //     setRmCheck(true);
-  //   } else {
-  //     setRmCheck(false);
-  //   }
-  // };
-
-  // const lsRememberMe = (phone_number, password) => {
-  //   let expiresdate = new Date();
-  //   expiresdate.setTime(expiresdate.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-  //   if (
-  //     rmCheck === true &&
-  //     phone_number.value !== "" &&
-  //     password.value !== ""
-  //   ) {
-  //     // setCookie("token", localStorage.getItem("token"), {
-  //     //   path: "/",
-  //     //   expires: expiresdate,
-  //     // });
-  //     // console.log("Cookies Set");
-  //   } else {
-  //     // console.log("Not checked");
-  //   }
-  // };
 
   return (
     <>
@@ -236,7 +192,7 @@ export default function SignIn() {
                       )}
                     />
                   </div>
-                  {/* <div className="flex items-center gap-x-1">
+                  <div className="flex items-center gap-x-1">
                     <input
                       type="checkbox"
                       value="remember"
@@ -244,7 +200,7 @@ export default function SignIn() {
                       onChange={handlecheckchange}
                     />
                     <span className="mb-[.1rem]">Remember me</span>
-                  </div> */}
+                  </div>
                   {!click ? (
                     <Button type="submit" className="w-full font-semibold">
                       Sign in
@@ -255,16 +211,15 @@ export default function SignIn() {
                       Please wait
                     </Button>
                   )}
-                  {/* <Button variant="outline" className="w-full font-semibold">
+                  <Button variant="outline" className="w-full font-semibold">
                     Signin with Google
-                  </Button> */}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </form>
         </Form>
       </div>
-      {/* <ToastContainer /> */}
       <Toaster />
     </>
   );

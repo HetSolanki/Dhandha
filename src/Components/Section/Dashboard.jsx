@@ -42,8 +42,7 @@ export function Dashboard() {
     });
   }, [navigate]);
 
-  // console.log(data);
-
+  
   const transformedTopCustomers =
     data?.topCustomers?.map((customer, index) => ({
       _id: customer.cid,

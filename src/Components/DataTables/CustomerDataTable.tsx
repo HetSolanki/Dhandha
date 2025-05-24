@@ -18,61 +18,64 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import './customerdatatable.css';
 import { Button } from "../UI/shadcn-UI/button";
 
+interface DataTableProps {
+  data: any[];
+  columns: ColumnDef<any>[];
+}
 
-export function DataTable({ data, columns }) {
+export function DataTable({ data, columns }: DataTableProps) {
+  // State for table features
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // Initialize table with configuration
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
     },
+    // Event handlers for table state changes
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    // Feature models
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
-  React.useEffect(() => {
-    function handleResize() {
-        if (window.innerWidth <= 768) {
-            setColumnVisibility({
-                bottle_price: false,
-                delivery_sequence_number: false,
-                cname: true,
-                caddress: false,
-                actions: true,
-            });
-        } else {
-            setColumnVisibility({
-                bottle_price: true,
-                delivery_sequence_number: true,
-                cname: true,
-                caddress: true,
-                actions: true,
-            });
-        }
-    }
 
-    handleResize(); // Call on mount to set the initial state
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-}, []);
+  // Handle responsive column visibility
+  React.useEffect(() => {
+    const handleResponsiveColumns = () => {
+      const isMobile = window.innerWidth <= 768;
+      
+      setColumnVisibility({
+        bottle_price: !isMobile,
+        delivery_sequence_number: !isMobile,
+        cname: true, // Always visible
+        caddress: !isMobile,
+        actions: true, // Always visible
+      });
+    };
+
+    // Set initial visibility and listen for window resizes
+    handleResponsiveColumns();
+    window.addEventListener("resize", handleResponsiveColumns);
+    
+    return () => window.removeEventListener("resize", handleResponsiveColumns);
+  }, []);
+
   return (
     <div className="w-full">
+      {/* Search Filter */}
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Customers..."
@@ -82,53 +85,30 @@ export function DataTable({ data, columns }) {
           }
           className="max-w-sm"
         />
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
+
+      {/* Main Table */}
       <div className="rounded-md border">
         <Table>
+          {/* Table Header */}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
+
+          {/* Table Body */}
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -159,6 +139,8 @@ export function DataTable({ data, columns }) {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination Controls */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}

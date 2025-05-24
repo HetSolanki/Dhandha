@@ -21,6 +21,14 @@ import { protect, requireRole } from "../Module/auth.js";
 
 
 const router = Router();
+
+// auth route
+router.get("/", (req, res) => {
+  res.json({
+    message: "Auth Route",
+  });
+});
+
 // Get All the Users
 router.get("/userall",protect,requireRole(true),getAllUser);
 
