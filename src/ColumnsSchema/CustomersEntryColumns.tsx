@@ -60,7 +60,6 @@ const handleEntry = async (
             autoClose: 1000,
           });
           setCustomers((prev) => prev.filter((c) => c.uid !== customer.uid));
-          // console.log(newEntry);
         } else {
           toast.error("Entry could not be added", {
             autoClose: 1000,
@@ -70,8 +69,7 @@ const handleEntry = async (
         toast.error("Please enter a valid quantity", {
           autoClose: 1000,
         });
-        // console.log(customer);
-        no_of_bottles.value = 0;
+       no_of_bottles.value = 0;
       }
     } else {
       toast.error("Please enter the quantity", {
@@ -89,8 +87,7 @@ const handleEntry = async (
       },
       customer._id
     );
-    // console.log(newEntry);
-    if (newEntry.status === "success") {
+   if (newEntry.status === "success") {
       toast.success("Entry added successfully", {
         autoClose: 1000,
       });

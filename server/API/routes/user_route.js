@@ -19,6 +19,14 @@ import twilio from "twilio";
 const client = twilio(accountSid, authToken);
 
 const router = Router();
+
+// auth route
+router.get("/", (req, res) => {
+  res.json({
+    message: "Auth Route",
+  });
+});
+
 // Get All the Users
 router.get("/userall", getAllUser);
 
