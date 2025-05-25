@@ -2,29 +2,33 @@ pipeline {
   agent any
 
   environment {
-    REMOTE_HOST = "root@128.199.19.208"
-    PROJECT_DIR = "/home/paani-wale" // path on server
+    PROJECT_DIR = "/home/paani-wale" // The directory where your project is cloned
   }
 
   stages {
-    stage('Checkout Code') {
+    stage('Pull Latest Code') {
       steps {
-        echo 'Cloning repository...'
-        checkout scm
+        dir("$PROJECT_DIR") {
+          echo '📥 Pulling latest code from Git...'
+          sh 'git pull origin main'
+        }
       }
     }
 
-    stage('Deploy to DigitalOcean') {
+    stage('Build Docker Image') {
       steps {
-        sshagent(credentials: ['paani-ssh']) {
-          sh """
-            ssh -o StrictHostKeyChecking=no $REMOTE_HOST << 'EOF'
-              cd $PROJECT_DIR
-              git pull origin main
-              docker compose down
-              docker compose up -d --build
-            EOF
-          """
+        dir("$PROJECT_DIR") {
+          echo '🐳 Building Docker image...'
+          sh 'docker compose build'
+        }
+      }
+    }
+
+    stage('Run Docker Container') {
+      steps {
+        dir("$PROJECT_DIR") {
+          echo '🚀 Starting Docker containers...'
+          sh 'docker compose down && docker compose up -d'
         }
       }
     }
@@ -32,7 +36,7 @@ pipeline {
 
   post {
     success {
-      echo '✅ Deployment Complete!'
+      echo '✅ Deployment Successful!'
     }
     failure {
       echo '❌ Deployment Failed!'
