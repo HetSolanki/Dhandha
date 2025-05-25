@@ -1,50 +1,42 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    PROJECT_DIR = "/home/paani-wale" // The directory where your project is cloned
-  }
-  
-  stages {
-    stage('Clone Repository') {
-      steps {
-        echo '📥 Cloning repository...'
-        checkout([$class: 'GitSCM',
-          branches: [[name: '*/main']],
-          userRemoteConfigs: [[
-            url: 'https://github.com/HetSolanki/Dhandha.git',
-            credentialsId: 'github-https-het'
-          ]]
-        ])
-      }
+    environment {
+        WORKDIR = "/home/paani-wale"
     }
 
-
-    stage('Build Docker Image') {
-      steps {
-        dir("$PROJECT_DIR") {
-          echo '🐳 Building Docker image...'
-          sh 'docker compose build'
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                echo '🧼 Cleaning previous workspace...'
+                sh "rm -rf $WORKDIR"
+            }
         }
-      }
-    }
 
-    stage('Run Docker Container') {
-      steps {
-        dir("$PROJECT_DIR") {
-          echo '🚀 Starting Docker containers...'
-          sh 'docker compose down && docker compose up -d'
+        stage('Clone Repository') {
+            steps {
+                echo '📥 Cloning repository into $WORKDIR...'
+                sh "git clone https://github.com/dhruvp66572/paani-wale.git $WORKDIR"
+            }
         }
-      }
-    }
-  }
 
-  post {
-    success {
-      echo '✅ Deployment Successful!'
+        stage('Run Docker Compose') {
+            steps {
+                echo '🐳 Running docker-compose up...'
+                dir("$WORKDIR") {
+                    sh "docker-compose down" // stop old containers (optional)
+                    sh "docker-compose up -d --build"
+                }
+            }
+        }
     }
-    failure {
-      echo '❌ Deployment Failed!'
+
+    post {
+        success {
+            echo '✅ Deployment Successful via Docker Compose!'
+        }
+        failure {
+            echo '❌ Deployment Failed!'
+        }
     }
-  }
 }
