@@ -8,8 +8,11 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                echo '🧼 Cleaning previous workspace...'
-                sh "rm -rf $WORKDIR"
+                echo "🧼 Cleaning previous workspace..."
+        sh '''
+        mkdir -p /home/paani-wale
+        rm -rf /home/paani-wale/*
+        '''
             }
         }
 
