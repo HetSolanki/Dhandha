@@ -6,14 +6,23 @@ pipeline {
   }
 
   stages {
-    stage('Pull Latest Code') {
+   pipeline {
+  agent any
+
+  stages {
+    stage('Clone Repository') {
       steps {
-        dir("$PROJECT_DIR") {
-          echo '📥 Pulling latest code from Git...'
-          sh 'git pull origin main'
-        }
+        echo '📥 Cloning repository...'
+        checkout([$class: 'GitSCM',
+          branches: [[name: '*/main']],
+          userRemoteConfigs: [[
+            url: 'https://github.com/HetSolanki/Dhandha.git',
+            credentialsId: 'github-https-het'
+          ]]
+        ])
       }
     }
+
 
     stage('Build Docker Image') {
       steps {
