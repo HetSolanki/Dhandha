@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    environment {
-        WORKDIR = "/home/paani-wale"
+    environment {  
+        WORKDIR = "${env.WORKSPACE}" // Use Jenkins workspace
     }
 
     stages {
