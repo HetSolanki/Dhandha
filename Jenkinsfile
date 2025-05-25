@@ -9,10 +9,7 @@ pipeline {
         stage('Clean Workspace') {
             steps {
                 echo "🧼 Cleaning previous workspace..."
-        sh '''
-        mkdir -p /home/paani-wale
-        rm -rf /home/paani-wale/*
-        '''
+                cleanWs()
             }
         }
 
@@ -27,7 +24,7 @@ pipeline {
             steps {
                 echo '🐳 Running docker-compose up...'
                 dir("$WORKDIR") {
-                    sh "docker-compose down" // stop old containers (optional)
+                    sh "docker-compose down || true" // stop old containers (optional)
                     sh "docker-compose up -d --build"
                 }
             }
