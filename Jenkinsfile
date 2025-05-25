@@ -16,12 +16,12 @@ pipeline {
             }
         }
 
-        stage('Clone Repository') {
-            steps {
-                echo '📥 Cloning repository into $WORKDIR...'
-                sh "git clone https://github.com/HetSolanki/Dhandha.git $WORKDIR"
-            }
-        }
+       stage('Clone Repository') {
+  steps {
+    git credentialsId: 'github-het', url: 'https://github.com/HetSolanki/Dhandha.git', branch: 'main'
+  }
+}
+
 
         stage('Run Docker Compose') {
             steps {
