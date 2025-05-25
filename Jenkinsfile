@@ -4,11 +4,7 @@ pipeline {
   environment {
     PROJECT_DIR = "/home/paani-wale" // The directory where your project is cloned
   }
-
-  stages {
-   pipeline {
-  agent any
-
+  
   stages {
     stage('Clone Repository') {
       steps {
