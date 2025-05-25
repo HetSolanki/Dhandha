@@ -16,7 +16,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo '📥 Cloning repository into $WORKDIR...'
-                sh "git clone https://github.com/dhruvp66572/paani-wale.git $WORKDIR"
+                sh "git clone https://github.com/HetSolanki/Dhandha.git $WORKDIR"
             }
         }
 
