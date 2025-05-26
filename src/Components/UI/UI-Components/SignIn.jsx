@@ -71,7 +71,7 @@ export default function SignIn() {
     defaultValues: {
       phone_number: localStorage.getItem("phone_number") || "",
       password: localStorage.getItem("password") || "",
-    },
+    },    
   });
 
 
@@ -106,7 +106,7 @@ export default function SignIn() {
         title: "Login Error",
         description: "Invalid Credentials",
       });
-    } else if (error === "Invalid Phone Number") {
+    } else if ( signin.data  === "Invalid Phone Number") {
       toast({
         variant: "destructive",
         title: "Login Error",
@@ -121,6 +121,35 @@ export default function SignIn() {
     }
     setClick(false);
   };
+
+  const [rmCheck, setRmCheck] = useState(
+    localStorage.getItem("remember_me") === "true"
+  );
+
+  const handlecheckchange = (e) => {
+    setRmCheck(e.target.checked);
+    if (e.target.checked) {
+      localStorage.setItem("remember_me", "true");
+      localStorage.setItem("phone_number", form.getValues("phone_number"));
+      localStorage.setItem("password", form.getValues("password"));
+    } else {
+      localStorage.removeItem("remember_me");
+      localStorage.removeItem("phone_number");
+      localStorage.removeItem("password");
+    }
+  }
+
+  // If remember me is checked, set the default values for phone number and password
+  if (rmCheck) {
+    form.setValue("phone_number", localStorage.getItem("phone_number") || "");
+    form.setValue("password", localStorage.getItem("password") || "");
+  } else {
+    form.setValue("phone_number", "");
+    form.setValue("password", "");
+  }
+    
+
+  
 
   return (
     <>
