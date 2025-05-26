@@ -7,7 +7,7 @@ services:
       - "4000:4000"
     env_file:
       - .env
-    db:restart: unless-stopped
+    restart: unless-stopped
 
   web:
     build:
