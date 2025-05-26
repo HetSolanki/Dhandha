@@ -17,8 +17,19 @@ pipeline {
           steps {
                 git credentialsId: 'het-github-auth', url: 'https://github.com/HetSolanki/Dhandha.git', branch: 'main'
               }
-        }
+        }       
 
+        stage('Prepare .env') {
+            steps {
+                withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
+                    sh '''
+                        cp $ENV_FILE ${WORKDIR}/.env'
+                        echo ".env file copied to workspace:"
+                        ls -la
+                    '''
+                }
+            }
+        }
 
         stage('Run Docker Compose') {
             steps {
