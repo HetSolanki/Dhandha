@@ -23,8 +23,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
                     sh '''
-                        cp "$ENV_FILE" "${WORKDIR}/.env"
-                        echo ".env file copied to workspace:"
+                        cp "$ENV_FILE" "${WORKDIR}/.env.production"
+                        echo ".env.production file copied to workspace:"
                         ls -la
                     '''
                 }

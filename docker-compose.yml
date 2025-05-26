@@ -7,14 +7,12 @@ services:
       - "4000:4000"
     env_file:
       - .env
-    restart: unless-stopped
 
   web:
     build:
       context: .
       dockerfile: src/Dockerfile
     env_file:
-      - .env
+      - .env.production
     ports:
       - "3000:80"
-    restart: unless-stopped
