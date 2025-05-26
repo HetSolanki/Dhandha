@@ -1,4 +1,4 @@
-FROM node:20-alpine as node_builder
+FROM node:20-alpine As node_builder
 WORKDIR /build
 COPY package*.json .
 RUN npm ci
