@@ -32,6 +32,7 @@ export function Dashboard() {
 
   const { theme } = useTheme();
 
+  // const [data, setData] = useState({});
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
