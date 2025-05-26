@@ -7,7 +7,8 @@ services:
       - "4000:4000"
     env_file:
       - .env
-    restart: always
+    db:restart: unless-stopped
+
   web:
     build:
       context: .
@@ -16,4 +17,4 @@ services:
       - .env
     ports:
       - "3000:80"
-    restart: always
+    restart: unless-stopped
