@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {  
-        WORKDIR = "${env.WORKSPACE}" // Use Jenkins workspace
+        WORKDIR = "/var/lib/jenkins/workspace/Paani-Wale-CI-CD" // Use Jenkins workspace
     }
 
     stages {
