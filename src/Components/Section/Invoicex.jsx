@@ -273,7 +273,7 @@ export const InvoiceX = ({ cid }) => {
             customerInvoice?.[0]?.totalBottle *
             customerInvoice?.[0]?.customerDetails?.bottle_price;
 
-          // console.log(customerInvoice);
+          console.log(responseData.secure_url);
           const res =
             (await fetch(
               `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
@@ -281,13 +281,12 @@ export const InvoiceX = ({ cid }) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCtP1QWHjVZBZBBqQZAJqr1aWLFanasj5GWsxxpXPtcDZAPVyLnSDCbXQ2T9yQm8BP89yWNx5isMZC7sKCX3awqjZAhZBKtXvnzTq99UKh9tfL6T182ZCpzH0YtVWMUtE9uNZAvelLX1PjtPW5JOqXcrnSGVBw9VUAxi6FqxPQAIW9vnnl3odfoPGPwZDZD`, // Use your access token
+                  Authorization: `Bearer EAAMfDZCmvZCH4BO2Xw78dZBH2FAthDD5hZCZBcRIV9KSwuIGKqyWQae7sVK2tfBsu4U6pXapZCFZBHSVEZBn7gTgYwrnb5qZCPUJCatp9mZAAaoZCUikt0C11uy65XZBFE6gR5LvXSYKJj4ilMf1kDDi1n4WkaXWYdB6ZBFrOpseJsj9WVPszis8ri1i3oUpyZCKpleCdlEZCkOZAeKLAQyZCfNx2SKvkIWcrONsArLD1rkiPrI8nHJGMwDkAIEgZD`, // Use your access token
                 },
                 body: JSON.stringify({
                   messaging_product: "whatsapp",
                   recipient_type: "individual",
-                  to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
-                  // to: "918849698524",
+                  to: `+91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
                   type: "template",
                   template: {
                     name: "purchase_receipt_1",
@@ -321,7 +320,7 @@ export const InvoiceX = ({ cid }) => {
                         //   { type: "text", text: "Invoice" },
                         // ],
                         parameters: [
-                          { type: "text", text: total_amount },
+                          { type: "text", text: total_amount + "" },
                           {
                             type: "text",
                             text: "Paaniwale",
