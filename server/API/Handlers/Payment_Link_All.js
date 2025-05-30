@@ -1,10 +1,13 @@
 import Razorpay from "razorpay";
+
+
 const razorpay = new Razorpay({
   key_id: "rzp_test_5n8FafogJcMq5Q",
   key_secret: "wIVSrlvxmgCl17Oyt36Aaali",
 });
 
 const DOMAIN_NAME = process.env.VITE_DOMAIN_NAME;
+
 
 // Create a new payment link
 

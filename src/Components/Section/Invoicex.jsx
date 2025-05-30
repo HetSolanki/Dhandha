@@ -45,7 +45,6 @@ export const InvoiceX = ({ cid }) => {
         const partitionSize = Math.ceil(
           customerData.data[0]?.customerEntry?.length / 3
         );
-        // console.log(partitionSize);
         setFirstPartCustomers(
           customerData.data[0]?.customerEntry?.slice(0, partitionSize)
         );
@@ -64,8 +63,7 @@ export const InvoiceX = ({ cid }) => {
   }, [cid]);
 
   const handleClick = async () => {
-    // console.log(customerInvoice);
-    setClick(true);
+  setClick(true);
     const pdf = new jsPDF();
 
     // Shop details
@@ -263,10 +261,7 @@ export const InvoiceX = ({ cid }) => {
           }
 
           const responseData = await response.json();
-          // console.log(
-          //   `PDF uploaded! Download it from ${responseData.secure_url}`
-          // );
-
+          
           const date = new Date();
 
           const total_amount =
@@ -281,7 +276,8 @@ export const InvoiceX = ({ cid }) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer EAAMfDZCmvZCH4BO2Xw78dZBH2FAthDD5hZCZBcRIV9KSwuIGKqyWQae7sVK2tfBsu4U6pXapZCFZBHSVEZBn7gTgYwrnb5qZCPUJCatp9mZAAaoZCUikt0C11uy65XZBFE6gR5LvXSYKJj4ilMf1kDDi1n4WkaXWYdB6ZBFrOpseJsj9WVPszis8ri1i3oUpyZCKpleCdlEZCkOZAeKLAQyZCfNx2SKvkIWcrONsArLD1rkiPrI8nHJGMwDkAIEgZD`, // Use your access token
+                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCW4CIMIXm6XkDUxscfAJqb7w0af6FFVB8w5zidk3D1vlLv2ZAfiGmfvKnhEZAZCfmsddSdXbkfkHH2A8cO72kwatSx8nDT1ZAZAGRQ66BRuzzAH3QrEoQg1LHov8aKJOOg37eBROFAZBXfTKfOgitPW6KF9QznCdZAjph5gkEgCXky6difzCYX34DMq9OxE0eBismSbjnEFlkHq5m3ZA78lWFhuXS3X8smR0O8z9k4ZD`, // Use your access token
+                  // Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`, // Use your access token
                 },
                 body: JSON.stringify({
                   messaging_product: "whatsapp",
@@ -355,16 +351,13 @@ export const InvoiceX = ({ cid }) => {
             setClick(false);
             throw new Error(`Error: ${data.error.message}`);
           } else {
-            // console.log("Message sent successfully!", data);
-            toast({
+           toast({
               title: "Success",
               description: "Message sent successfully!",
             });
             setClick(false);
           }
 
-          // const resDelete = await cloudinaryHandler(responseData.public_id);
-          // console.log(resDelete);
         } catch (error) {
           toast({
             variant: "destructive",

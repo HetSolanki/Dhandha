@@ -29,6 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "../shadcn-UI/toaster";
 import { useToast } from "../shadcn-UI/use-toast";
 import { useState } from "react";
+import { sendOtp, verifyOtp } from "@/Handlers/OtpHandler";
 
 const formSchema = z.object({
   cname: z
@@ -81,7 +82,7 @@ export function Addcustomer() {
       toast({
         title: "Success",
         description: "Customer added successfully.",
-      }); 
+      });
       setClick(false);
       updateCustomerContext();
       form.reset();
@@ -92,11 +93,134 @@ export function Addcustomer() {
     form.reset();
   };
 
+  const [isVerified, setIsVerified] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  let otpgenerated = Math.floor(100000 + Math.random() * 900000);
+  
+
+  const handleSendOtp = async (phone) => {
+    try {
+      console.log(otpSent);
+      console.log(otpgenerated);
+      const res =
+        (await fetch(
+          `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer EAAMfDZCmvZCH4BO2bVmZA8HoD3O0TrCX9rHRYmCuHSZCRc2ot0JIyJDdMmPvGkaDgrZCMkd1q619abd4py14BFtsTW55qcSwfMC3dPtIynTCzu2FICP9sfcKXWx3uaFRS6Tb2bf8WHaFGnnjv5g8rkofzZAjIcl2OakmuC9PYUpvQlwgT2QKcg7ACHZAjJnA04rFJNGh2xIl8nu6KtPMZCrQiYcap51G7jBYpqlncQWrHOAbY063k4cZD", // Use your access token
+            },
+            body: JSON.stringify({
+              messaging_product: "whatsapp",
+              // recipient_type: "individual",
+              to: `91${phone}`,
+              // to: "918849698524",
+              type: "template",
+              template: {
+                name: "otp_verification",
+                language: {
+                  code: "en_US",
+                },
+                components: [
+                  {
+                    type: "body",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: `${otpgenerated}`,
+                      },
+                    ],
+                  },
+                  {
+                    type: "button",
+                    sub_type: "url",
+                    index: "0",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: `${otpgenerated}`,
+                      },
+                    ],
+                  },
+                ],
+              },
+            }),
+          }
+        )) ?? {};
+
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to send message!",
+        });
+        throw new Error(`Error: ${data.error.message}`);
+      } else {
+        // console.log("Message sent successfully!", data);
+        toast({
+          title: "Success",
+          description: "OTP sent successfully!",
+        });
+      }
+      setOtpSent(true);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to send OTP. Please try again.",
+      });
+      return;
+    }
+
+    toast({ title: "OTP Sent", description: `OTP sent to ${phone}` });
+  };
+
+  const handleVerifyOtp = async () => {
+    setVerifying(true);
+    try {
+      console.log(otp);
+      if (     
+        otp.length !== 6 ||
+        isNaN(otp) ||
+        otp !== otpgenerated.toString()      
+      ) {
+        setIsVerified(true);
+        toast({
+          title: "Success",
+          description: "Phone number verified successfully.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Invalid OTP. Please try again.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to verify OTP. Please try again.",
+      });
+    } finally {
+      setVerifying(false);
+    }
+  };
+
   return (
     <>
       <Dialog
         onOpenChange={() => {
-          clearfield;
+          clearfield();
+          setIsVerified(false);
+          setOtpSent(false);
+          setOtp("");
         }}
       >
         <DialogTrigger asChild>
@@ -152,17 +276,73 @@ export function Addcustomer() {
                           Customer Phone Number
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            id="cphone_number"
-                            type="text"
-                            placeholder="Customer Phone Number"
-                            {...field}
-                          />
+                          <div className="flex gap-2">
+                            <Input
+                              id="cphone_number"
+                              type="text"
+                              placeholder="Customer Phone Number"
+                              {...field}
+                              disabled={isVerified}
+                            />
+                            {!otpSent && (
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={async () => {
+                                  const valid = await form.trigger(
+                                    "cphone_number"
+                                  );
+                                  if (valid) {
+                                    handleSendOtp(
+                                      form.getValues("cphone_number")
+                                    );
+                                  } else {
+                                    toast({
+                                      variant: "destructive",
+                                      title: "Invalid Phone",
+                                      description:
+                                        "Enter valid phone number first.",
+                                    });
+                                  }
+                                }}
+                              >
+                                Send OTP
+                              </Button>
+                            )}
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  {otpSent && !isVerified && (
+                    <div className="flex gap-2 mt-2">
+                      <Input
+                        type="text"
+                        placeholder="Enter OTP"
+                        value={otp}
+                        maxLength={6}
+                        onChange={(e) => setOtp(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={handleVerifyOtp}
+                        disabled={verifying || otp.length !== 6}
+                      >
+                        {verifying ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          "Verify OTP"
+                        )}
+                      </Button>
+                    </div>
+                  )}
+                  {isVerified && (
+                    <div className="text-green-600 text-xs mt-1">
+                      Phone number verified
+                    </div>
+                  )}
                 </div>
                 <div className="grid gap-2 items-center ">
                   <FormField
@@ -239,7 +419,12 @@ export function Addcustomer() {
               </div>
               <DialogFooter className="flex-row flex justify-between">
                 {!click ? (
-                  <Button type="submit" className="font-semibold">
+                  <Button
+                    type="submit"
+                    className="font-semibold"
+                    disabled={!isVerified}
+                    title={!isVerified ? "Verify phone number first" : ""}
+                  >
                     Add Customer
                   </Button>
                 ) : (

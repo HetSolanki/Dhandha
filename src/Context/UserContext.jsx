@@ -53,6 +53,7 @@ export default function UserProvider({ children }) {
       }
     );
     const userRes = await userDetails.json();
+    console.log(userRes);
     setUser(userRes.data);
   };
 

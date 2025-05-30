@@ -43,7 +43,6 @@ export function ShopForm() {
 
   async function onSubmit(data) {
     const res = await uploadFileCloudinary(file);
-    // console.log(res.secure_url);
     const updatedUser = await updateshop(data, res.secure_url);
     updateUserContext();
     if (updatedUser.status === "success") {
@@ -108,10 +107,23 @@ export function ShopForm() {
             <FormField
               control={form.control}
               name="payment_qr_code"
-              defaultValue={user?.payment_qr_code}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Payment QR Code</FormLabel>
+                  <div>
+                    <img
+                      src={user?.image_url}
+                      alt="QR Code"
+                      className="w-20 h-20 rounded-md cursor-pointer  hover:scale-150 transition-transform duration-200"                     
+                    />
+                  </div>
+                  {file && (
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt="Selected File"
+                      className="w-20 h-20 rounded-md"
+                    />
+                  )}
                   <FormControl>
                     <Input
                       type="file"

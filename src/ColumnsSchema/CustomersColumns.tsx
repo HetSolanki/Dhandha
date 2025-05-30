@@ -18,10 +18,11 @@ import React from "react";
 import GetInvoice from "@/Components/UI/UI-Components/GetInvoice";
 import { InvoiceX } from "@/Components/Section/Invoicex";
 
-export type Customer = {
+// Define the Customer type interface for better type safety
+export interface Customer {
   _id: number;
   id: number;
-  cname: string;
+  cname: string; 
   cphone_number: number;
   caddress: string;
   bottle_price: number;
@@ -29,109 +30,106 @@ export type Customer = {
   uid: {
     fname: string;
   };
-};
+}
 
+// Define table columns configuration
 export const columns: ColumnDef<Customer>[] = [
+  // Delivery Sequence Number Column
   {
     accessorKey: "delivery_sequence_number",
-    header: ({ column }) => {
-      return (
-        <div
-          className="
-        "
-        >
-          <Button
-            variant="ghost"
-            className="px-0 
-            text-center sm:text-left         
-            "
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sequence <br />
-            Number
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="px-0 text-center sm:text-left"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Sequence <br />
+        Number
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="lowercase text-left ">
+      <span className="lowercase text-left">
         {row.getValue("delivery_sequence_number")}
-      </div>
+      </span>
     ),
   },
+
+  // Customer Name Column
   {
     accessorKey: "cname",
     header: () => (
-      <div className="text-center sm:text-left">Customer Names</div>
+      <span className="text-center sm:text-left">Customer Names</span>
     ),
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("cname")}</div>
+      <span className="capitalize">
+        {row.getValue("cname")}
+      </span>
     ),
   },
+
+  // Phone Number Column
   {
     accessorKey: "cphone_number",
-    header: ({ column }) => {
-      return (
-        <div className="text-center sm:text-left w-10  ">
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Phone <br /> Number
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="px-0 text-center sm:text-left w-10"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Phone <br /> Number
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="capitalize text-left">
+      <span className="capitalize text-left">
         {row.getValue("cphone_number")}
-      </div>
+      </span>
     ),
   },
+
+  // Address Column
   {
     accessorKey: "caddress",
-    header: () => <div className="text-center sm:text-left">Address</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="lowercase text-left">{row.getValue("caddress")}</div>
-      );
-    },
+    header: () => (
+      <span className="text-center sm:text-left">Address</span>
+    ),
+    cell: ({ row }) => (
+      <span className="lowercase text-left">
+        {row.getValue("caddress")}
+      </span>
+    ),
   },
+
+  // Bottle Price Column
   {
     accessorKey: "bottle_price",
-    header: () => "Bottle Price",
+    header: () => <span>Bottle Price</span>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("bottle_price"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
+      const formatted = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
       }).format(amount);
 
-      return <div className="font-medium">{formatted}</div>;
+      return <span className="font-medium">{formatted}</span>;
     },
   },
 
+  // Actions Column
   {
-    header: () => <div className="text-center sm:text-left">Actions</div>,
+    header: () => <span className="text-center sm:text-left">Actions</span>,
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const customer = row.original;
-
+      
       return (
-        <>
-          <div className="flex gap-x-2">
-            <Editcustomer id={customer._id} />
-            <DeleteCustomer cid={customer._id} />
-            <GetInvoice cid={customer._id} />
-          </div>
-        </>
+        <span className="flex gap-x-2">
+          <Editcustomer id={customer._id} />
+          <DeleteCustomer cid={customer._id} />
+          <GetInvoice cid={customer._id} />
+        </span>
       );
     },
   },

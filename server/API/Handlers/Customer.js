@@ -1,5 +1,7 @@
 import { main } from "../Module/cloudinaryHandler.js";
 import Customer from "../Schema/customer.js";
+import customerEntry from "../Schema/customerEntry.js";
+import PaymentDetail from "../Schema/PaymentDetail.js";
 
 export const getAllCustomer = async (req, res) => {
   try {
@@ -67,6 +69,10 @@ export const updateCustomer = async (req, res) => {
 export const deleteCustomer = async (req, res) => {
   try {
     const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
+
+    customerEntry.deleteMany({ cid: req.params.id });
+
+    PaymentDetail.deleteMany({ cid: req.params.id });
 
     if (!deletedCustomer) {
       return res.json({ data: "No Customer Found", status: "failed" });
