@@ -8,7 +8,6 @@ import { Button } from "../UI/shadcn-UI/button";
 import { useToast } from "../UI/shadcn-UI/use-toast";
 import { ToastAction } from "../UI/shadcn-UI/toast";
 import { useTheme } from "@/Context/ThemeProviderContext ";
-
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
   const [click, setClick] = useState(false);
@@ -63,7 +62,7 @@ export const InvoiceX = ({ cid }) => {
   }, [cid]);
 
   const handleClick = async () => {
-  setClick(true);
+    setClick(true);
     const pdf = new jsPDF();
 
     // Shop details
@@ -248,11 +247,13 @@ export const InvoiceX = ({ cid }) => {
         try {
           const formData = new FormData();
           formData.append("file", `data:application/pdf;base64,${base64data}`);
-          formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
+          // formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
+          formData.append("upload_preset", "wnjb2gh7");
           formData.append("folder", "Dhandha");
 
           const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+            // `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+            `https://api.cloudinary.com/v1_1/dikxaelvp/image/upload`,
             { method: "POST", body: formData }
           );
 
@@ -261,7 +262,7 @@ export const InvoiceX = ({ cid }) => {
           }
 
           const responseData = await response.json();
-          
+
           const date = new Date();
 
           const total_amount =
@@ -271,12 +272,14 @@ export const InvoiceX = ({ cid }) => {
           console.log(responseData.secure_url);
           const res =
             (await fetch(
-              `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+              // `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+              `https://graph.facebook.com/v20.0/414743431715403/messages`,
+              
               {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCW4CIMIXm6XkDUxscfAJqb7w0af6FFVB8w5zidk3D1vlLv2ZAfiGmfvKnhEZAZCfmsddSdXbkfkHH2A8cO72kwatSx8nDT1ZAZAGRQ66BRuzzAH3QrEoQg1LHov8aKJOOg37eBROFAZBXfTKfOgitPW6KF9QznCdZAjph5gkEgCXky6difzCYX34DMq9OxE0eBismSbjnEFlkHq5m3ZA78lWFhuXS3X8smR0O8z9k4ZD`, // Use your access token
+                  Authorization: `Bearer EAAMfDZCmvZCH4BOxtgRTAoh6R2KtPcYtE4wS2w1CXkWuZBZC0uY5KrOxmgVgbsv40WyO8JTqMMJxvxuML49tfYCRxhxm7lrb9ZCveUcDH3L4Qb48Yu84rlUqeVZBhqXNSZAmkeeMEROJf5T86vZAF5B5QCuTPLKPLtSYTLx21TySuq2KslR3UHeI0B9Tb7eZAIxcsIwZDZD`, // Use your access token
                   // Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`, // Use your access token
                 },
                 body: JSON.stringify({
@@ -351,13 +354,12 @@ export const InvoiceX = ({ cid }) => {
             setClick(false);
             throw new Error(`Error: ${data.error.message}`);
           } else {
-           toast({
+            toast({
               title: "Success",
               description: "Message sent successfully!",
             });
             setClick(false);
           }
-
         } catch (error) {
           toast({
             variant: "destructive",
