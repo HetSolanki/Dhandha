@@ -276,7 +276,7 @@ export const InvoiceX = ({ cid }) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer EAAMfDZCmvZCH4BOZCW4CIMIXm6XkDUxscfAJqb7w0af6FFVB8w5zidk3D1vlLv2ZAfiGmfvKnhEZAZCfmsddSdXbkfkHH2A8cO72kwatSx8nDT1ZAZAGRQ66BRuzzAH3QrEoQg1LHov8aKJOOg37eBROFAZBXfTKfOgitPW6KF9QznCdZAjph5gkEgCXky6difzCYX34DMq9OxE0eBismSbjnEFlkHq5m3ZA78lWFhuXS3X8smR0O8z9k4ZD`, // Use your access token
+                  Authorization: `Bearer EAAMfDZCmvZCH4BOxtgRTAoh6R2KtPcYtE4wS2w1CXkWuZBZC0uY5KrOxmgVgbsv40WyO8JTqMMJxvxuML49tfYCRxhxm7lrb9ZCveUcDH3L4Qb48Yu84rlUqeVZBhqXNSZAmkeeMEROJf5T86vZAF5B5QCuTPLKPLtSYTLx21TySuq2KslR3UHeI0B9Tb7eZAIxcsIwZDZD`, // Use your access token
                   // Authorization: `Bearer ${process.env.WHASTAPP_USER_ACCESS_TOKEN}`, // Use your access token
                 },
                 body: JSON.stringify({

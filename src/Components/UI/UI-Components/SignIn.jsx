@@ -74,7 +74,6 @@ export default function SignIn() {
     },    
   });
 
-
   const navigate = useNavigate();
   const { updateUserContext } = useUser();
   const [click, setClick] = useState(false);
@@ -84,10 +83,13 @@ export default function SignIn() {
     setClick(true);
     const signin = await signinuser(data);
 
+    console.log("SignIn Response:", signin);
+
     if (signin.success === true) {
       localStorage.setItem("token", signin.token);
       
         updateUserContext();                   
+
 
       if (signin.is_admin === true) {
         localStorage.setItem("is_admin", signin.is_admin);

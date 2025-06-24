@@ -1,9 +1,8 @@
-console.log("VITE_DOMAIN_NAME:", import.meta.env.VITE_DOMAIN_NAME);
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+  
 
 export const signinuser = async (data) => {
   try {
-    const response = await fetch(`${DOMAIN_NAME}/api/auth/signin`, {
+    const response = await fetch(`${import.meta.env.VITE_DOMAIN_NAME}/api/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +14,7 @@ export const signinuser = async (data) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+      console.log("SignIn Error:", response.status, response.statusText);
     }
 
     const result = await response.json();

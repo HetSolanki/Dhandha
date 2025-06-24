@@ -78,9 +78,9 @@ function App() {
                 <Route path="paymentsdata" element={<PaymentsEntryData />} />
                 <Route path="*" element={<UnderConstructionPage />} />
               </Route>
-              <Route path="/admindashboard" element={<AdminDashboard />} />
+              {/* <Route path="/admindashboard" element={<AdminDashboard />} />
               <Route path="/admincustomers" element={<Customers />} />
-              <Route path="/admincustomerentry" element={<CustomerEntry />} />
+              <Route path="/admincustomerentry" element={<CustomerEntry />} /> */}
               <Route
                 path="/admincustomerentrydata"
                 element={<CustomerEntryData />}
