@@ -98,7 +98,6 @@ export function Addcustomer() {
   const [otp, setOtp] = useState("");
   const [verifying, setVerifying] = useState(false);
   let otpgenerated = Math.floor(100000 + Math.random() * 900000);
-  
 
   const handleSendOtp = async (phone) => {
     try {
@@ -106,7 +105,7 @@ export function Addcustomer() {
       console.log(otpgenerated);
       const res =
         (await fetch(
-          `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+          `https://graph.facebook.com/v20.0/414743431715403/messages`,
           {
             method: "POST",
             headers: {
@@ -185,11 +184,7 @@ export function Addcustomer() {
     setVerifying(true);
     try {
       console.log(otp);
-      if (     
-        otp.length !== 6 ||
-        isNaN(otp) ||
-        otp !== otpgenerated.toString()      
-      ) {
+      if (otp.length !== 6 || isNaN(otp) || otp !== otpgenerated.toString()) {
         setIsVerified(true);
         toast({
           title: "Success",

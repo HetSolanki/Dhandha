@@ -8,7 +8,6 @@ import { Button } from "../UI/shadcn-UI/button";
 import { useToast } from "../UI/shadcn-UI/use-toast";
 import { ToastAction } from "../UI/shadcn-UI/toast";
 import { useTheme } from "@/Context/ThemeProviderContext ";
-
 export const InvoiceX = ({ cid }) => {
   const user = useUser();
   const [click, setClick] = useState(false);
@@ -63,7 +62,7 @@ export const InvoiceX = ({ cid }) => {
   }, [cid]);
 
   const handleClick = async () => {
-  setClick(true);
+    setClick(true);
     const pdf = new jsPDF();
 
     // Shop details
@@ -248,11 +247,13 @@ export const InvoiceX = ({ cid }) => {
         try {
           const formData = new FormData();
           formData.append("file", `data:application/pdf;base64,${base64data}`);
-          formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
+          // formData.append("upload_preset", process.env.CLOUD_UPLOAD_PRESET);
+          formData.append("upload_preset", "wnjb2gh7");
           formData.append("folder", "Dhandha");
 
           const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+            // `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`,
+            `https://api.cloudinary.com/v1_1/dikxaelvp/image/upload`,
             { method: "POST", body: formData }
           );
 
@@ -261,17 +262,19 @@ export const InvoiceX = ({ cid }) => {
           }
 
           const responseData = await response.json();
-          
+
           const date = new Date();
 
           const total_amount =
             customerInvoice?.[0]?.totalBottle *
             customerInvoice?.[0]?.customerDetails?.bottle_price;
 
-          // console.log(customerInvoice);
+          console.log(responseData.secure_url);
           const res =
             (await fetch(
-              `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+              // `https://graph.facebook.com/${process.env.WHATSAPP_API_VERSION}/${process.env.WHASTAPP_PHONE_NUMBER_ID}/messages`,
+              `https://graph.facebook.com/v20.0/414743431715403/messages`,
+              
               {
                 method: "POST",
                 headers: {
@@ -282,8 +285,7 @@ export const InvoiceX = ({ cid }) => {
                 body: JSON.stringify({
                   messaging_product: "whatsapp",
                   recipient_type: "individual",
-                  to: `91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
-                  // to: "918849698524",
+                  to: `+91${customerInvoice?.[0]?.customerDetails?.cphone_number}`,
                   type: "template",
                   template: {
                     name: "purchase_receipt_1",
@@ -317,7 +319,7 @@ export const InvoiceX = ({ cid }) => {
                         //   { type: "text", text: "Invoice" },
                         // ],
                         parameters: [
-                          { type: "text", text: total_amount },
+                          { type: "text", text: total_amount + "" },
                           {
                             type: "text",
                             text: "Paaniwale",
@@ -352,13 +354,12 @@ export const InvoiceX = ({ cid }) => {
             setClick(false);
             throw new Error(`Error: ${data.error.message}`);
           } else {
-           toast({
+            toast({
               title: "Success",
               description: "Message sent successfully!",
             });
             setClick(false);
           }
-
         } catch (error) {
           toast({
             variant: "destructive",
