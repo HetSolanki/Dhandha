@@ -100,7 +100,7 @@ export const signIn = async (req, res) => {
     const user = await User.findOne({ phone_number: req.body.phone_number });
 
     if (user) {
-      if (await comparePassword(req.body.password, user.password)) {
+      if (await comparePassword(req.body.password, user.password)) {        
         const token = createJWT(user);
         res.json({
           token,
