@@ -101,8 +101,8 @@ export function Addcustomer() {
 
   const handleSendOtp = async (phone) => {
     try {
-      console.log(otpSent);
-      console.log(otpgenerated);
+      // console.log(otpSent);
+      // console.log(otpgenerated);
       const res =
         (await fetch(
           `https://graph.facebook.com/v20.0/414743431715403/messages`,
@@ -183,7 +183,7 @@ export function Addcustomer() {
   const handleVerifyOtp = async () => {
     setVerifying(true);
     try {
-      console.log(otp);
+      // console.log(otp);
       if (otp.length !== 6 || isNaN(otp) || otp !== otpgenerated.toString()) {
         setIsVerified(true);
         toast({

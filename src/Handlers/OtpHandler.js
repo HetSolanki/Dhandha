@@ -1,5 +1,5 @@
-console.log("VITE_DOMAIN_NAME:", import.meta.env.VITE_DOMAIN_NAME);
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 export const sendOtp = async (data) => {
   const response = await fetch(`${DOMAIN_NAME}/api/otp/send`, {

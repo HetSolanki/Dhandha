@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 const UserContext = createContext({
   user: null,
@@ -53,7 +53,7 @@ export default function UserProvider({ children }) {
       }
     );
     const userRes = await userDetails.json();
-    console.log(userRes);
+    // console.log(userRes);
     setUser(userRes.data);
   };
 

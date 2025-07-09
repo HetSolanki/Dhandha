@@ -19,7 +19,7 @@ import { useToast } from "../shadcn-UI/use-toast";
 import { useState } from "react";
 import { Button } from "../shadcn-UI/button";
 
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 export default function DeleteCustomer({ cid }) {
   const { updateCustomerContext } = useCustomer();

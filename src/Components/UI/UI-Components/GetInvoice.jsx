@@ -33,12 +33,12 @@ export default function GetInvoice({ cid }) {
 
   const sendinvoicelink = async () => {
     alert("Sending Invoice Link");
-    console.log(invoicedata);
+    // console.log(invoicedata);
     const cname = invoicedata.data.cname;
     const cphone_number = invoicedata.data.cphone_number;
     const amount =
       invoicedata.data.bottle_price * invoicedata.total_bottles;
-    console.log(amount, cname, cphone_number);
+    // console.log(amount, cname, cphone_number);
     const data = {
       amount: amount,
       description: "Payment for Bottles",
@@ -49,21 +49,21 @@ export default function GetInvoice({ cid }) {
       emailnotify: false,
       reminder_enable: false,
     };
-    console.log("Data to be sent");
-    console.log(data);
+    // console.log("Data to be sent");
+    // console.log(data);
     const newpaymentlink = await createPaymentLink(data);
 
     if (newpaymentlink.status === "success") {
       alert("Payment Link Created");
-      console.log(newpaymentlink);
-      console.log(newpaymentlink.data.short_url);
+      // console.log(newpaymentlink);
+      // console.log(newpaymentlink.data.short_url);
 
       setInvoicedata({
         ...invoicedata,
         shorturl: newpaymentlink.data.short_url,        
       });
     } else {
-      console.log(newpaymentlink);
+      // console.log(newpaymentlink);
     }
   };
 
@@ -76,8 +76,8 @@ export default function GetInvoice({ cid }) {
             setCustomerEntry(customerEntryRes.data);
             const customerRes = await fetchCustomer({ queryKey: ["", cid] });
             setCustomer(customerRes.data);
-            console.log(customerRes.data);
-            console.log(customerEntryRes.data);
+            // console.log(customerRes.data);
+            // console.log(customerEntryRes.data);
             const total_bottles = customerEntryRes.data.reduce(
               (acc, item) => acc + item.bottle_count,
               0

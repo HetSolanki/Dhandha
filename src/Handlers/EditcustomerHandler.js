@@ -1,4 +1,4 @@
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 export const editcustomer = async (data, id) => {
   const customer = await fetch(`${DOMAIN_NAME}/api/customers/customer/${id}`, {

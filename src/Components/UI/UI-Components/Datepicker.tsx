@@ -26,7 +26,7 @@ import {
 import { useContext } from "react";
 import CustomerEntryContext from "@/Context/CustomerEntryContext";
 
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 const FormSchema = z.object({
   delivery_date: z.date({
