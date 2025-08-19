@@ -43,13 +43,13 @@ router.post("/send", async (req, res) => {
       });
     }
 
-    console.log(axiosRes)
+    // console.log(axiosRes)
 
     res.json({
       success: true,
       message: "OTP sent successfully",
     });
-    console.log("OTP sent successfully:", axiosRes.data);
+    // console.log("OTP sent successfully:", axiosRes.data);
   } catch (error) {
     res.status(500).json({
       success: false,

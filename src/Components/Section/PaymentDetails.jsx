@@ -16,7 +16,7 @@ import { ToastContainer } from "react-toastify";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useTheme } from "@/Context/ThemeProviderContext ";
 
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 export default function PaymentDetails() {
   const navigate = useNavigate();

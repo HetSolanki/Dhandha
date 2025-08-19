@@ -6,7 +6,7 @@ const razorpay = new Razorpay({
   key_secret: "wIVSrlvxmgCl17Oyt36Aaali",
 });
 
-const DOMAIN_NAME = process.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = process.env.VITE_API_BASE_URL;
 
 
 // Create a new payment link

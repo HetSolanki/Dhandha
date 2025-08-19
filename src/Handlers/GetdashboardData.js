@@ -1,4 +1,4 @@
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
+const DOMAIN_NAME = import.meta.env.VITE_API_BASE_URL;
 
 export const GetdashboardData = async () => {
   const data = await fetch(
