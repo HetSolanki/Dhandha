@@ -7,7 +7,6 @@ import payment_link_api from "./routes/payment_link_route.js";
 import paymentdetails_api from "./routes/paymentdetails_route.js";
 import otpRoutes from "./routes/otpRoutes.js";
 import cors from "cors";
-import moment from "moment";
 import morgan from "morgan";
 
 const app = express();
